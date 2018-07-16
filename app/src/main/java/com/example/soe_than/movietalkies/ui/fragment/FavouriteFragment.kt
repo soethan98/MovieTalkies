@@ -1,4 +1,4 @@
-package com.example.soe_than.movietalkies.fragment
+package com.example.soe_than.movietalkies.ui.fragment
 
 
 import android.os.Bundle
@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.example.soe_than.movietalkies.R
-import com.example.soe_than.movietalkies.data.network.MovieNetworkDataSource
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -19,14 +18,13 @@ private const val ARG_PARAM2 = "param2"
  * A simple [Fragment] subclass.
  *
  */
-class TopRatedFragment : Fragment() {
+class FavouriteFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        val view =  inflater.inflate(R.layout.fragment_top_rated, container, false)
-        var mv = MovieNetworkDataSource()
-        mv.getTopRatedMovies()
+        val view = inflater.inflate(R.layout.fragment_favourite, container, false)
+
         return view
     }
 

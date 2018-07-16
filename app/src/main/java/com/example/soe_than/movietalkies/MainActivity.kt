@@ -3,10 +3,8 @@ package com.example.soe_than.movietalkies
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.view.ViewPager
-import com.example.soe_than.movietalkies.Utils.Constants
 import com.example.soe_than.movietalkies.adapter.ViewPagerAdapter
-import com.example.soe_than.movietalkies.data.network.MovieNetworkDataSource
-import com.example.soe_than.movietalkies.fragment.*
+import com.example.soe_than.movietalkies.ui.fragment.*
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {

@@ -18,10 +18,10 @@ import com.example.soe_than.movietalkies.data.local.Daos.UpComingDao
         PopularVo::class,TopRatedVo::class), version = 1)
 abstract class MovieDatabase:RoomDatabase() {
 
-    abstract val popularDao: PopularDao
-    abstract val topRatedDao:TopRatedDao
-    abstract val upcomingDao:UpComingDao
-    abstract val nowShowingDao:NowShowingDao
+    abstract fun popularDao(): PopularDao
+    abstract fun upcomingDao():UpComingDao
+    abstract fun nowshowingDao():NowShowingDao
+    abstract fun topratedDao():TopRatedDao
 
     companion object {
         @Volatile

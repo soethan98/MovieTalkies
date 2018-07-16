@@ -35,51 +35,51 @@ class MovieNetworkDataSource {
 
     }
 
-    fun getPopularMovies(): LiveData<List<PopularVo>> {
-        apiService.getPopularMovies(Constants.API_KEY)
-                .subscribeOn(Schedulers.io())
-                .toObservable()
-                .map { popularResponse -> popularResponse.popularResponse }
-                .subscribe({ popularList: List<PopularVo> -> popularLiveData.postValue(popularList) },
-                        { t: Throwable -> Log.i("error: %s", t.message) })
-
-        return popularLiveData
-    }
-
-    fun getTopRatedMovies(): LiveData<List<TopRatedVo>> {
-        apiService.getTopRatedMovies(Constants.API_KEY)
-                .subscribeOn(Schedulers.io())
-                .toObservable()
-                .map { topRatedResponse -> topRatedResponse.topRatedResponse }
-                .subscribe({ topRatedList: List<TopRatedVo> -> topRatedLiveData.postValue(topRatedList) },
-                        { t: Throwable -> Log.i("error: %s", t.message) })
-
-        return topRatedLiveData
-
-    }
-
-    fun getNowShowingMovies(): LiveData<List<NowShowingVo>> {
-        apiService.getNowShowingMovies(Constants.API_KEY)
-                .subscribeOn(Schedulers.io())
-                .toObservable()
-                .map { nowshowingResponse: NowShowingResponse -> nowshowingResponse.nowShowingResponse }
-                .subscribe({ nowShowingList: List<NowShowingVo> -> nowShowingLiveData.postValue(nowShowingList) },
-                        { t: Throwable -> Log.i("error: %s", t.message) })
-
-        return nowShowingLiveData
-    }
-
-    fun getUpComingMovies(): LiveData<List<UpComingVo>> {
-
-        apiService.getUpComingMovies(Constants.API_KEY)
-                .subscribeOn(Schedulers.io())
-                .toObservable()
-                .map { upcomingResponse: UpcomingResponse -> upcomingResponse.upComingVo }
-                .subscribe({ upcomingList: List<UpComingVo> -> upComingLiveData.postValue(upcomingList) },
-                        { t: Throwable -> Log.i("error: %s", t.message) })
-
-        return upComingLiveData
-    }
+//    fun getPopularMovies(): LiveData<List<PopularVo>> {
+//        apiService.getPopularMovies(Constants.API_KEY)
+//                .subscribeOn(Schedulers.io())
+//                .toObservable()
+//                .map { popularResponse -> popularResponse.popularResponse }
+//                .subscribe({ popularList: List<PopularVo> -> popularLiveData.postValue(popularList) },
+//                        { t: Throwable -> Log.i("error: %s", t.message) })
+//
+//        return popularLiveData
+//    }
+//
+//    fun getTopRatedMovies(): LiveData<List<TopRatedVo>> {
+//        apiService.getTopRatedMovies(Constants.API_KEY)
+//                .subscribeOn(Schedulers.io())
+//                .toObservable()
+//                .map { topRatedResponse -> topRatedResponse.topRatedResponse }
+//                .subscribe({ topRatedList: List<TopRatedVo> -> topRatedLiveData.postValue(topRatedList) },
+//                        { t: Throwable -> Log.i("error: %s", t.message) })
+//
+//        return topRatedLiveData
+//
+//    }
+//
+//    fun getNowShowingMovies(): LiveData<List<NowShowingVo>> {
+//        apiService.getNowShowingMovies(Constants.API_KEY)
+//                .subscribeOn(Schedulers.io())
+//                .toObservable()
+//                .map { nowshowingResponse: NowShowingResponse -> nowshowingResponse.nowShowingResponse }
+//                .subscribe({ nowShowingList: List<NowShowingVo> -> nowShowingLiveData.postValue(nowShowingList) },
+//                        { t: Throwable -> Log.i("error: %s", t.message) })
+//
+//        return nowShowingLiveData
+//    }
+//
+//    fun getUpComingMovies(): LiveData<List<UpComingVo>> {
+//
+//        apiService.getUpComingMovies(Constants.API_KEY)
+//                .subscribeOn(Schedulers.io())
+//                .toObservable()
+//                .map { upcomingResponse: UpcomingResponse -> upcomingResponse.upComingVo }
+//                .subscribe({ upcomingList: List<UpComingVo> -> upComingLiveData.postValue(upcomingList) },
+//                        { t: Throwable -> Log.i("error: %s", t.message) })
+//
+//        return upComingLiveData
+//    }
 
 }
 
