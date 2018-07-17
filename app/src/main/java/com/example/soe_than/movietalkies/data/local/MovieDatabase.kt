@@ -8,10 +8,7 @@ import com.example.soe_than.movietalkies.data.Vo.NowShowingVo
 import com.example.soe_than.movietalkies.data.Vo.PopularVo
 import com.example.soe_than.movietalkies.data.Vo.TopRatedVo
 import com.example.soe_than.movietalkies.data.Vo.UpComingVo
-import com.example.soe_than.movietalkies.data.local.Daos.NowShowingDao
-import com.example.soe_than.movietalkies.data.local.Daos.PopularDao
-import com.example.soe_than.movietalkies.data.local.Daos.TopRatedDao
-import com.example.soe_than.movietalkies.data.local.Daos.UpComingDao
+import com.example.soe_than.movietalkies.data.local.Daos.*
 
 
 @Database(entities = arrayOf(NowShowingVo::class,UpComingVo::class,
@@ -22,6 +19,9 @@ abstract class MovieDatabase:RoomDatabase() {
     abstract fun upcomingDao():UpComingDao
     abstract fun nowshowingDao():NowShowingDao
     abstract fun topratedDao():TopRatedDao
+
+
+    abstract fun movieDao():MovieDao
 
     companion object {
         @Volatile

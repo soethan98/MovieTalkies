@@ -37,9 +37,9 @@ private const val ARG_PARAM2 = "param2"
  */
 class PopularFragment : Fragment(),PopularDelegate {
     override fun onTapPopular(popularVo: PopularVo) {
-//        var intent = Intent(activity,DetailActivity::class.java)
-//        intent.putExtra("MOVIE",popularVo)
-//        startActivity(intent)
+        var intent = Intent(activity,DetailActivity::class.java)
+        intent.putExtra("MOVIE",popularVo)
+        startActivity(intent)
     }
 
     private lateinit var viewModel: PopularViewModel

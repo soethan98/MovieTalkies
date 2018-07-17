@@ -62,9 +62,9 @@ class UpcomingFragment : Fragment(), UpComingDelegate {
     }
 
     override fun onTapUpComingDelegate(upComingVo: UpComingVo) {
-//        val intent = Intent(activity, DetailActivity::class.java)
-//        intent.putExtra("MOVIEID", upComingId)
-//        startActivity(intent)
+        val intent = Intent(activity, DetailActivity::class.java)
+        intent.putExtra("MOVIE", upComingVo)
+        startActivity(intent)
     }
 
 

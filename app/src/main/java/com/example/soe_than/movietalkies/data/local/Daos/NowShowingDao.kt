@@ -12,7 +12,6 @@ interface NowShowingDao {
     @Query("SELECT * FROM nowshowing")
     fun getAllMovies(): LiveData<List<NowShowingVo>>
 
-
     @Delete
     fun clear(movies: List<NowShowingVo>)
 

@@ -4,12 +4,13 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.ViewModel
 import com.example.soe_than.movietalkies.data.Vo.PopularVo
 import com.example.soe_than.movietalkies.data.Vo.UpComingVo
+import com.example.soe_than.movietalkies.data.repository.MoviesRepository
 import com.example.soe_than.movietalkies.data.repository.UpComingRepository
 
-class UpComingViewModel(val upComingRepository: UpComingRepository) : ViewModel() {
+class UpComingViewModel(val moviesRepository: MoviesRepository) : ViewModel() {
 
     fun getUpComingMovies(): LiveData<List<UpComingVo>> {
-        return upComingRepository.getUpComingMovies()
+        return moviesRepository.getUpComingMovies()
 
     }
 }

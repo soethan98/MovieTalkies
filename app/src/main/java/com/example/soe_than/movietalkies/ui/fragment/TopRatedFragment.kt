@@ -37,9 +37,9 @@ private const val ARG_PARAM2 = "param2"
 class TopRatedFragment : Fragment(),TopRatedDelegate {
     override fun onTapTopRated(topRatedVo: TopRatedVo) {
 
-//        var intent = Intent(activity,DetailActivity::class.java)
-//        intent.putExtra("MOVIEID",topRatedId)
-//        startActivity(intent)
+        var intent = Intent(activity,DetailActivity::class.java)
+        intent.putExtra("MOVIEID",topRatedVo)
+        startActivity(intent)
     }
 
     private lateinit var viewModel: TopRatedViewModel
