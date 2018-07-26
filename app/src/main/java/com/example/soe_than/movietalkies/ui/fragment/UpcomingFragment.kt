@@ -13,16 +13,13 @@ import android.view.ViewGroup
 
 import com.example.soe_than.movietalkies.R
 import com.example.soe_than.movietalkies.Utils.InjectorUtils
-import com.example.soe_than.movietalkies.adapter.NowShowingRecyclerAdapter
 import com.example.soe_than.movietalkies.adapter.UpComingRecyclerAdapter
 import com.example.soe_than.movietalkies.data.Vo.UpComingVo
-import com.example.soe_than.movietalkies.delegate.UpComingDelegate
-import com.example.soe_than.movietalkies.ui.ViewModel.NowShowingViewModel
+import com.example.soe_than.movietalkies.delegate.MovieDelegate
 import com.example.soe_than.movietalkies.ui.ViewModel.UpComingViewModel
-import com.example.soe_than.movietalkies.ui.ViewModelFactory.NowShowingViewFactory
 import com.example.soe_than.movietalkies.ui.ViewModelFactory.UpComingViewFactory
 import com.example.soe_than.movietalkies.ui.detail.DetailActivity
-import kotlinx.android.synthetic.main.fragment_now_showing.view.*
+import kotlinx.android.synthetic.main.fragment_upcoming.*
 import kotlinx.android.synthetic.main.fragment_upcoming.view.*
 
 // TODO: Rename parameter arguments, choose names that match
@@ -34,7 +31,13 @@ private const val ARG_PARAM2 = "param2"
  * A simple [Fragment] subclass.
  *
  */
-class UpcomingFragment : Fragment(), UpComingDelegate {
+class UpcomingFragment : Fragment(), MovieDelegate {
+    override fun onTapMovie(id: Int) {
+        val intent = Intent(activity, DetailActivity::class.java)
+        intent.putExtra("ID", id)
+        intent.putExtra("TYPE", "upcoming")
+        startActivity(intent)
+    }
 
 
     private lateinit var viewModel: UpComingViewModel
@@ -51,21 +54,23 @@ class UpcomingFragment : Fragment(), UpComingDelegate {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(UpComingViewModel::class.java)
         setUpRecyclerView(view)
 
-        viewModel.getUpComingMovies().observe(activity!!, Observer { upComingList -> upComingAdapter.setNewData(upComingList as MutableList<UpComingVo>) })
+        viewModel.getUpComingMovies().observe(activity!!, Observer { upComingList ->
+            if (upComingList!!.size != 0 && upComingList != null) {
+                upProgress.visibility = View.GONE
+
+                upComingAdapter.setNewData(upComingList as MutableList<UpComingVo>)
+            }
+        })
         return view
     }
 
     private fun setUpRecyclerView(view: View) {
-        view.upcomingRecyclerView.layoutManager = GridLayoutManager(activity, 3)
-        upComingAdapter = UpComingRecyclerAdapter(context!!,this)
+        view.upcomingRecyclerView.layoutManager = GridLayoutManager(activity, 2)
+        upComingAdapter = UpComingRecyclerAdapter(context!!, this)
         view.upcomingRecyclerView.adapter = upComingAdapter
     }
 
-    override fun onTapUpComingDelegate(upComingVo: UpComingVo) {
-        val intent = Intent(activity, DetailActivity::class.java)
-        intent.putExtra("MOVIE", upComingVo)
-        startActivity(intent)
-    }
+
 
 
 }

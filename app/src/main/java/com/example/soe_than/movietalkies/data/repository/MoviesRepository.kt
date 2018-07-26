@@ -1,37 +1,37 @@
 package com.example.soe_than.movietalkies.data.repository
 
 import android.arch.lifecycle.LiveData
-import android.graphics.Movie
+import android.arch.lifecycle.MutableLiveData
+import android.content.Context
 import android.util.Log
 import com.example.soe_than.movietalkies.Utils.Constants
+import com.example.soe_than.movietalkies.Utils.Utility
 import com.example.soe_than.movietalkies.api.ApiService
-import com.example.soe_than.movietalkies.data.Vo.NowShowingVo
-import com.example.soe_than.movietalkies.data.Vo.PopularVo
-import com.example.soe_than.movietalkies.data.Vo.TopRatedVo
-import com.example.soe_than.movietalkies.data.Vo.UpComingVo
+import com.example.soe_than.movietalkies.data.Vo.*
 import com.example.soe_than.movietalkies.data.local.Daos.MovieDao
-import com.example.soe_than.movietalkies.data.local.Daos.NowShowingDao
 import io.reactivex.schedulers.Schedulers
 
-class MoviesRepository(val movieDao: MovieDao) {
+class MoviesRepository(val movieDao: MovieDao, val context: Context) {
 
     var apiService: ApiService
+    var trailerData: MutableLiveData<List<TrailerVo>>
 
     init {
 
         apiService = ApiService.create()
+        trailerData = MutableLiveData()
     }
 
     companion object {
         var sInstance: MoviesRepository? = null
         val LOCK = Object()
 
-        fun getInstance(movieDao: MovieDao): MoviesRepository? {
+        fun getInstance(movieDao: MovieDao, context: Context): MoviesRepository? {
             Log.d(Constants.LOG_TAG, "Getting the repository")
             if (sInstance == null) {
                 synchronized(LOCK) {
 
-                    sInstance = MoviesRepository(movieDao)
+                    sInstance = MoviesRepository(movieDao, context)
                     Log.d(Constants.LOG_TAG, "Made new repository")
 
                 }
@@ -84,6 +84,18 @@ class MoviesRepository(val movieDao: MovieDao) {
                         { t: Throwable -> Log.i("error: %s", t.message) })
 
         return movieDao.getAllUpComingMovies()
+    }
+
+    fun getTrailers(id: Int): LiveData<List<TrailerVo>>? {
+        if (Utility.isNetworkAvailable(context)) {
+            apiService.getTrailers(id, Constants.API_KEY)
+                    .subscribeOn(Schedulers.io()).toObservable().map { trailerResponse -> trailerResponse.results }
+                    .subscribe({ trailerList: List<TrailerVo> -> trailerData.postValue(trailerList) }, { t: Throwable -> Log.i("error: %s", t.message) })
+            return trailerData
+        } else {
+            return null
+        }
+
     }
 
     fun getPopularMovieDetails(id: Int): LiveData<PopularVo> {

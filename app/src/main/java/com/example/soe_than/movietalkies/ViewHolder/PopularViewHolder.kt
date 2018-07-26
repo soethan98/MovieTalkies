@@ -1,25 +1,31 @@
 package com.example.soe_than.movietalkies.ViewHolder
 
+import android.util.Log
 import android.view.View
 import com.bumptech.glide.Glide
 import com.example.soe_than.movietalkies.Utils.Constants
-import com.example.soe_than.movietalkies.data.Vo.NowShowingVo
 import com.example.soe_than.movietalkies.data.Vo.PopularVo
-import com.example.soe_than.movietalkies.delegate.NowShowingDelegate
-import com.example.soe_than.movietalkies.delegate.PopularDelegate
+import com.example.soe_than.movietalkies.delegate.MovieDelegate
 import kotlinx.android.synthetic.main.movies_content.view.*
 
-class PopularViewHolder( itemView: View,val mPopularDelegate: PopularDelegate):BaseViewHolder<PopularVo>(itemView) {
+class PopularViewHolder( itemView: View,val mMovieDelegate: MovieDelegate):BaseViewHolder<PopularVo>(itemView) {
 
 
-    private val posterImage = itemView.moviePoster
+    private val posterCard = itemView.movieImageCard
+    private val posterImage = itemView.movieImage
+    private val movieRating = itemView.ratingCircle
+    private val movieTitle = itemView.movie_title
 
 
 
     override fun bind(data: PopularVo) {
+        Log.i("Hi",data.title + data.posterPath)
+
         Glide.with(itemView.context).load("${Constants.IMAGES_BASE_URL+data.posterPath}").into(posterImage)
-        itemView.setOnClickListener(View.OnClickListener {
-            mPopularDelegate.onTapPopular(data)
+        movieRating.setText("${data.voteAverage}")
+        movieTitle.setText(data.title)
+        posterCard.setOnClickListener(View.OnClickListener {
+            mMovieDelegate.onTapMovie(data.id)
         })
 
 

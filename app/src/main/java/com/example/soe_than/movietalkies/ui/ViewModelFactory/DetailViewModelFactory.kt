@@ -9,10 +9,10 @@ import com.example.soe_than.movietalkies.ui.ViewModel.NowShowingViewModel
 import com.example.soe_than.movietalkies.ui.detail.DetailActivity
 import java.lang.reflect.Type
 
-class DetailViewModelFactory<T>(val moviesRepository: MoviesRepository,  val vo :T): ViewModelProvider.NewInstanceFactory() {
+class DetailViewModelFactory(val moviesRepository: MoviesRepository, var id: Int) : ViewModelProvider.NewInstanceFactory() {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
-        return DetailViewModel(moviesRepository,vo) as T
+        return DetailViewModel(moviesRepository, id) as T
     }
 }

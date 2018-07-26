@@ -36,42 +36,4 @@ data class UpComingVo(@PrimaryKey
 
                       @ColumnInfo(name = "backdrop_path")
                       @SerializedName("backdrop_path")
-                      var backdrop_path: String? = null
-
-):Parcelable {
-    constructor(parcel: Parcel) : this(
-            parcel.readInt(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readDouble(),
-            parcel.readString()) {
-    }
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeInt(id)
-        parcel.writeString(posterPath)
-        parcel.writeString(overview)
-        parcel.writeString(title)
-        parcel.writeString(releasedDate)
-        parcel.writeDouble(voteAverage)
-        parcel.writeString(backdrop_path)
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    companion object CREATOR : Parcelable.Creator<UpComingVo> {
-        override fun createFromParcel(parcel: Parcel): UpComingVo {
-            return UpComingVo(parcel)
-        }
-
-        override fun newArray(size: Int): Array<UpComingVo?> {
-            return arrayOfNulls(size)
-        }
-    }
-
-
-}
+                      var backdrop_path: String? = null)

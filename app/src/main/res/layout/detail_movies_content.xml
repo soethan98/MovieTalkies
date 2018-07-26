@@ -13,13 +13,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
         <ImageView
-            android:transitionName="ivPoster"
             android:id="@+id/poster_image"
             android:layout_width="180dp"
-            android:layout_height="180dp"
             android:layout_marginTop="10dp" />
+
 
         <TextView
             android:id="@+id/movie_title"
@@ -78,16 +76,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/overview_label"
-            android:lineSpacingMultiplier="1.2"
             android:layout_margin="16dp"
+            android:lineSpacingMultiplier="1.2"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1" />
 
-        <!--<include-->
-            <!--layout="@layout/trailers"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_below="@id/movie_overview"-->
-            <!--android:layout_margin="16dp" />-->
+        <include
+            layout="@layout/trailers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/movie_overview"
+            android:layout_margin="16dp" />
 
 
     </RelativeLayout>

@@ -2,10 +2,8 @@ package com.example.soe_than.movietalkies.ui.ViewModel
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.ViewModel
-import com.example.soe_than.movietalkies.data.Vo.PopularVo
 import com.example.soe_than.movietalkies.data.Vo.TopRatedVo
 import com.example.soe_than.movietalkies.data.repository.MoviesRepository
-import com.example.soe_than.movietalkies.data.repository.TopRatedRepository
 
 class TopRatedViewModel(val moviesRepository: MoviesRepository):ViewModel() {
 

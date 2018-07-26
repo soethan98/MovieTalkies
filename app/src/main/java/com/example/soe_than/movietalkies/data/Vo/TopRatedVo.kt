@@ -35,38 +35,4 @@ data class TopRatedVo( @PrimaryKey
 
                        @ColumnInfo(name = "backdrop_path")
                        @SerializedName("backdrop_path")
-                       var backdrop_path: String? = null):Parcelable {
-    constructor(parcel: Parcel) : this(
-            parcel.readInt(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readDouble(),
-            parcel.readString()) {
-    }
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeInt(id)
-        parcel.writeString(posterPath)
-        parcel.writeString(overview)
-        parcel.writeString(title)
-        parcel.writeString(releasedDate)
-        parcel.writeDouble(voteAverage)
-        parcel.writeString(backdrop_path)
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    companion object CREATOR : Parcelable.Creator<TopRatedVo> {
-        override fun createFromParcel(parcel: Parcel): TopRatedVo {
-            return TopRatedVo(parcel)
-        }
-
-        override fun newArray(size: Int): Array<TopRatedVo?> {
-            return arrayOfNulls(size)
-        }
-    }
-}
+                       var backdrop_path: String? = null)

@@ -27,7 +27,7 @@ object InjectorUtils {
     fun provideMoviesRepository(context: Context):MoviesRepository?
     {
         val database = MovieDatabase.getInstance(context)
-        return MoviesRepository.getInstance(database.movieDao())
+        return MoviesRepository.getInstance(database.movieDao(),context)
     }
 
 //    fun provideTopRatedRepository(context: Context): TopRatedRepository? {
@@ -66,7 +66,12 @@ object InjectorUtils {
     fun provideTopRatedViewFactory(context: Context): TopRatedViewFactory {
         val moviesRepository = provideMoviesRepository(context)
         return TopRatedViewFactory(moviesRepository!!)
+    }
 
+    fun provideDetailViewFactory(context: Context,id:Int):DetailViewModelFactory
+    {
+        val moviesRepository = provideMoviesRepository(context)
+        return DetailViewModelFactory(moviesRepository!!,id)
     }
 
 
