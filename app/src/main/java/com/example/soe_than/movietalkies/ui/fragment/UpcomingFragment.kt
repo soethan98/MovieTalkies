@@ -70,6 +70,11 @@ class UpcomingFragment : Fragment(), MovieDelegate {
         view.upcomingRecyclerView.adapter = upComingAdapter
     }
 
+    private fun getFavouriteMovies()
+    {
+
+    }
+
 
 
 

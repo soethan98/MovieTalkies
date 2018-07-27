@@ -15,11 +15,13 @@ class MoviesRepository(val movieDao: MovieDao, val context: Context) {
 
     var apiService: ApiService
     var trailerData: MutableLiveData<List<TrailerVo>>
+    var favouriteData: MutableLiveData<List<FavouriteVo>>
 
     init {
 
         apiService = ApiService.create()
         trailerData = MutableLiveData()
+        favouriteData = MutableLiveData()
     }
 
     companion object {
@@ -98,6 +100,17 @@ class MoviesRepository(val movieDao: MovieDao, val context: Context) {
 
     }
 
+    fun getFavourites(): LiveData<List<FavouriteVo>> {
+        movieDao.getAllFavouriteMovies().subscribeOn(Schedulers.io()).toObservable().map { t: List<FavouriteVo> -> t }
+                .subscribe({ favouriteList -> favouriteData.postValue(favouriteList) }, { t: Throwable -> Log.i("error: %s", t.message) })
+
+        return favouriteData
+    }
+
+    fun addFavouriteMovie(favouriteVo: FavouriteVo) {
+        movieDao.saveFavouriteMovies(favouriteVo)
+    }
+
     fun getPopularMovieDetails(id: Int): LiveData<PopularVo> {
         return movieDao.getPopularMovieById(id.toString())
     }
@@ -113,4 +126,6 @@ class MoviesRepository(val movieDao: MovieDao, val context: Context) {
     fun getUpComingMovieDetails(id: Int): LiveData<UpComingVo> {
         return movieDao.getUpComingMovieById(id.toString())
     }
+
+
 }

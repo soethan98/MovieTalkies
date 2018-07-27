@@ -2,9 +2,11 @@ package com.example.soe_than.movietalkies.ui.ViewModel
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.ViewModel
+import android.util.Log
 import android.view.View
 import com.example.soe_than.movietalkies.data.Vo.*
 import com.example.soe_than.movietalkies.data.repository.MoviesRepository
+import io.reactivex.Completable
 
 class DetailViewModel(val moviesRepository: MoviesRepository, var id: Int) : ViewModel() {
 
@@ -30,6 +32,43 @@ class DetailViewModel(val moviesRepository: MoviesRepository, var id: Int) : Vie
 
     fun getTrailers(): LiveData<List<TrailerVo>>? {
         return moviesRepository.getTrailers(id)
+    }
+
+    fun addFavouriteMovie(upComingVo: UpComingVo): Completable {
+        return Completable.fromAction {
+            var favourite = FavouriteVo(upComingVo.id, upComingVo.posterPath, upComingVo.overview, upComingVo.title, upComingVo.releasedDate, upComingVo.voteAverage, upComingVo.backdrop_path)
+            moviesRepository.addFavouriteMovie(favourite)
+        }
+    }
+
+    fun addFavouriteMovie(topRatedVo: TopRatedVo):Completable {
+        return Completable.fromAction{
+            var favourite = FavouriteVo(topRatedVo.id, topRatedVo.posterPath, topRatedVo.overview, topRatedVo.title, topRatedVo.releasedDate, topRatedVo.voteAverage, topRatedVo.backdrop_path)
+            moviesRepository.addFavouriteMovie(favourite)
+
+        }
+
+
+
+    }
+
+    fun addFavouriteMovie(popularVo: PopularVo): Completable {
+        return Completable.fromAction {
+            var favourite = FavouriteVo(popularVo.id, popularVo.posterPath, popularVo.overview, popularVo.title, popularVo.releasedDate, popularVo.voteAverage, popularVo.backdrop_path)
+            moviesRepository.addFavouriteMovie(favourite)
+
+        }
+
+    }
+
+    fun addFavouriteMovie(nowShowingVo: NowShowingVo): Completable {
+        return Completable.fromAction {
+            val favourite = FavouriteVo(nowShowingVo.id, nowShowingVo.posterPath, nowShowingVo.overview, nowShowingVo.title, nowShowingVo.releasedDate, nowShowingVo.voteAverage, nowShowingVo.backdrop_path)
+            moviesRepository.addFavouriteMovie(favourite)
+
+        }
+
+
     }
 
 

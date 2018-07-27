@@ -23,25 +23,30 @@ import kotlinx.android.synthetic.main.detail_movies_content.*
 import kotlinx.android.synthetic.main.trailers.*
 import android.content.Intent
 import android.net.Uri
-import android.support.design.widget.CoordinatorLayout.Behavior.setTag
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable
-import android.view.LayoutInflater
 import android.widget.ImageView
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.RequestOptions.bitmapTransform
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
-import java.security.AccessController.getContext
 
 
 class DetailActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
-        val videoUrl = v!!.getTag(R.id.glide_tag) as String
-        val playVideoIntent = Intent(Intent.ACTION_VIEW, Uri.parse(videoUrl))
+        var url = v!!.getTag(R.id.glide_tag)
+        val playVideoIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url.toString()))
         startActivity(playVideoIntent)
     }
 
     private lateinit var viewModel: DetailViewModel
     private lateinit var viewModelFactory: DetailViewModelFactory
+    private val disposable = CompositeDisposable()
+
+    var nowShowingVo: NowShowingVo? = null
+    var popularVo: PopularVo? = null
+    var topRatedVo: TopRatedVo? = null
+    var upComingVo: UpComingVo? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,7 +57,7 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener {
         var movieType = intent.getStringExtra("TYPE")
 
 
-        Log.i("Check", "${Utility.isNetworkAvailable(this)}")
+
 
         viewModelFactory = InjectorUtils.provideDetailViewFactory(this, movieId)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(DetailViewModel::class.java)
@@ -61,25 +66,40 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener {
         when (movieType) {
             "nowshowing" -> {
                 viewModel.getNowShowingMovieDetails().observe(this, Observer { nowShowingDetails ->
-                    if (nowShowingDetails != null)
+                    if (nowShowingDetails != null) {
+                        nowShowingVo = nowShowingDetails
                         bindNowShowingMovie(nowShowingDetails)
+
+
+                    }
 
                 })
             }
             "popular" -> {
                 viewModel.getPopularMovieDetails().observe(this, Observer { popularDetails ->
-                    if (popularDetails != null) bindPopularMovie(popularDetails)
+                    if (popularDetails != null) {
+                        bindPopularMovie(popularDetails)
+                        popularVo = popularDetails
+                    }
                 })
             }
             "toprated" -> {
                 viewModel.getTopRatedMovieDetails().observe(this, Observer { topRatedDetails ->
-                    if (topRatedDetails != null) bindTopRatedMovie(topRatedDetails)
+                    if (topRatedDetails != null) {
+                        bindTopRatedMovie(topRatedDetails)
+                        topRatedVo = topRatedDetails
+
+
+                    }
                 })
             }
 
             "upcoming" -> {
                 viewModel.getUpComingMOvieDetails().observe(this, Observer { upcomingDetails ->
-                    if (upcomingDetails != null) bindUpComingMovie(upcomingDetails)
+                    if (upcomingDetails != null) {
+                        bindUpComingMovie(upcomingDetails)
+                        upComingVo = upcomingDetails
+                    }
                 })
             }
 
@@ -93,6 +113,46 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener {
                 bindTrailers(trailerList!!)
             }
         })
+
+        add_favourite.setOnCheckedChangeListener { buttonView, isChecked ->
+            Log.i("Hi", "Clicked")
+
+            when (movieType) {
+                "nowshowing" -> {
+                    disposable.add(viewModel.addFavouriteMovie(nowShowingVo!!)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe({ add_favourite.isChecked = true },
+                                    { error -> Log.e("Hello", "Unable to add movie", error) }))
+
+                }
+                "popular" -> {
+                    disposable.add(viewModel.addFavouriteMovie(popularVo!!)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe({ add_favourite.isChecked = true },
+                                    { error -> Log.e("Hello", "Unable to add movie", error) }))
+                }
+                "toprated" -> {
+                    disposable.add(viewModel.addFavouriteMovie(topRatedVo!!)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe({ add_favourite.isChecked = true }, { error ->
+                                Log.i("Hello", "Unable to add movie", error)
+                            }))
+                }
+                "upcoming" -> {
+                    disposable.add(viewModel.addFavouriteMovie(upComingVo!!)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe({ add_favourite.isChecked = true }, { error ->
+                                Log.i("Hello", "Unable to add movie", error)
+                            }))
+                }
+
+
+            }
+        }
     }
 
 
@@ -148,26 +208,27 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener {
         this.trailer_container.removeAllViews()
 
         val layoutInflater = this.layoutInflater
-//        val options = RequestOptions()
-//                .placeholder(R.color.colorPrimary)
-//                .centerCrop()
-//                .override(150, 150)
+        val options = RequestOptions()
+                .placeholder(R.color.colorPrimary)
+                .centerCrop()
+                .override(150, 150)
 
         for (trailer in trailerList) {
             val thumbContainer = layoutInflater.inflate(R.layout.trailers_content, this.trailer_container, false)
             val thubview = thumbContainer.findViewById(R.id.video_thumb) as ImageView
             thubview.clipToOutline = true
 
-//            thubview.setTag(R.id.glide_tag, Utility.getUrl(trailer));
             thubview.requestLayout();
             thubview.setOnClickListener(this);
 
 
 
             if (trailer.type.equals("Trailer", true) || trailer.type.equals("Teaser", true)) {
+//                thubview.setTag(R.id.glide_tag, Utility.getUrl(trailer))
 
                 Glide.with(this)
                         .load(Utility.getThumbnailUrl(trailer))
+                        .apply(options)
                         .into(thubview)
 
 
@@ -177,6 +238,12 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener {
 
 
         }
+    }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        disposable.clear()
     }
 
 

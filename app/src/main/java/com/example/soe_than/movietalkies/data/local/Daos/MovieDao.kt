@@ -3,10 +3,8 @@ package com.example.soe_than.movietalkies.data.local.Daos
 import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
 import com.example.soe_than.movietalkies.ViewHolder.PopularViewHolder
-import com.example.soe_than.movietalkies.data.Vo.NowShowingVo
-import com.example.soe_than.movietalkies.data.Vo.PopularVo
-import com.example.soe_than.movietalkies.data.Vo.TopRatedVo
-import com.example.soe_than.movietalkies.data.Vo.UpComingVo
+import com.example.soe_than.movietalkies.data.Vo.*
+import io.reactivex.Single
 
 
 @Dao
@@ -23,6 +21,9 @@ interface MovieDao {
 
     @Query("SELECT * FROM upcoming")
     fun getAllUpComingMovies(): LiveData<List<UpComingVo>>
+
+    @Query("SELECT * FROM favourite")
+    fun getAllFavouriteMovies(): Single<List<FavouriteVo>>
 
     @Delete
     fun clearNowShowingMovies(movies: List<NowShowingVo>)
@@ -48,6 +49,9 @@ interface MovieDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun saveAllUpComingMovies(movies: List<UpComingVo>)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun saveFavouriteMovies(favouriteVo: FavouriteVo)
+
     @Query("SELECT * FROM nowshowing WHERE id=:id")
     fun getNowShowingMovieById(id: String): LiveData<NowShowingVo>
 
@@ -59,4 +63,7 @@ interface MovieDao {
 
     @Query("SELECT * FROM upcoming WHERE id=:id")
     fun getUpComingMovieById(id: String): LiveData<UpComingVo>
+
+    @Query("SELECT * FROM favourite WHERE id=:id")
+    fun getFavouriteMovieById(id: String): LiveData<FavouriteVo>
 }

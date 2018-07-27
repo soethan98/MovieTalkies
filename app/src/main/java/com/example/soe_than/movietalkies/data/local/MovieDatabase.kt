@@ -4,15 +4,12 @@ import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.content.Context
-import com.example.soe_than.movietalkies.data.Vo.NowShowingVo
-import com.example.soe_than.movietalkies.data.Vo.PopularVo
-import com.example.soe_than.movietalkies.data.Vo.TopRatedVo
-import com.example.soe_than.movietalkies.data.Vo.UpComingVo
+import com.example.soe_than.movietalkies.data.Vo.*
 import com.example.soe_than.movietalkies.data.local.Daos.*
 
 
 @Database(entities = arrayOf(NowShowingVo::class,UpComingVo::class,
-        PopularVo::class,TopRatedVo::class), version = 1)
+        PopularVo::class,TopRatedVo::class,FavouriteVo::class), version = 1)
 abstract class MovieDatabase:RoomDatabase() {
 
     abstract fun popularDao(): PopularDao

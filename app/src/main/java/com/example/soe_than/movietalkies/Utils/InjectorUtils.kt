@@ -8,47 +8,27 @@ import com.example.soe_than.movietalkies.data.local.Daos.TopRatedDao
 import com.example.soe_than.movietalkies.data.local.Daos.UpComingDao
 import com.example.soe_than.movietalkies.data.local.MovieDatabase
 import com.example.soe_than.movietalkies.data.repository.*
-import com.example.soe_than.movietalkies.ui.ViewModelFactory.NowShowingViewFactory
-import com.example.soe_than.movietalkies.ui.ViewModelFactory.PopularViewFactory
-import com.example.soe_than.movietalkies.ui.ViewModelFactory.TopRatedViewFactory
-import com.example.soe_than.movietalkies.ui.ViewModelFactory.UpComingViewFactory
-import com.example.soe_than.movietalkies.ui.ViewModelFactory.DetailViewModelFactory
-
+import com.example.soe_than.movietalkies.ui.ViewModelFactory.*
 
 
 object InjectorUtils {
 
 
-//    fun providePopularRepository(context: Context): PopularRepository? {
-//        val database = MovieDatabase.getInstance(context)
-//        return PopularRepository.getInstance(database.popularDao())
-//    }
-
-    fun provideMoviesRepository(context: Context):MoviesRepository?
-    {
+    fun provideMoviesRepository(context: Context): MoviesRepository? {
         val database = MovieDatabase.getInstance(context)
-        return MoviesRepository.getInstance(database.movieDao(),context)
+        return MoviesRepository.getInstance(database.movieDao(), context)
     }
 
-//    fun provideTopRatedRepository(context: Context): TopRatedRepository? {
-//        val database = MovieDatabase.getInstance(context)
-//        return TopRatedRepository.getInstance(database.topratedDao())
-//    }
-//
-//    fun provideUpComingRepository(context: Context): UpComingRepository? {
-//        val database = MovieDatabase.getInstance(context)
-//        return UpComingRepository.getInstance(database.upcomingDao())
-//    }
-//
-//    fun provideNowShowingRepository(context: Context): NowShowingRepository? {
-//        val database = MovieDatabase.getInstance(context)
-//        return NowShowingRepository.getInstance(database.nowshowingDao())
-//    }
 
     fun provideUpComingViewFactory(context: Context): UpComingViewFactory {
         val moviesRepository = provideMoviesRepository(context)
         return UpComingViewFactory(moviesRepository!!)
 
+    }
+
+    fun provideFavouriteViewFactory(context: Context): FavouriteViewFactory {
+        val moviesRepository = provideMoviesRepository(context)
+        return FavouriteViewFactory(moviesRepository!!)
     }
 
     fun provideNowShowingViewFactory(context: Context): NowShowingViewFactory {
@@ -68,12 +48,10 @@ object InjectorUtils {
         return TopRatedViewFactory(moviesRepository!!)
     }
 
-    fun provideDetailViewFactory(context: Context,id:Int):DetailViewModelFactory
-    {
+    fun provideDetailViewFactory(context: Context, id: Int): DetailViewModelFactory {
         val moviesRepository = provideMoviesRepository(context)
-        return DetailViewModelFactory(moviesRepository!!,id)
+        return DetailViewModelFactory(moviesRepository!!, id)
     }
-
 
 
 }
