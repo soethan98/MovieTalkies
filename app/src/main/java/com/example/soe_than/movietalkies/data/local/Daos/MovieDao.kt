@@ -26,16 +26,8 @@ interface MovieDao {
     fun getAllFavouriteMovies(): Single<List<FavouriteVo>>
 
     @Delete
-    fun clearNowShowingMovies(movies: List<NowShowingVo>)
+    fun clearFavoutireMoive(movies: FavouriteVo)
 
-    @Delete
-    fun clearPopularMovies(movies: List<PopularVo>)
-
-    @Delete
-    fun clearTopRatedMovies(movies: List<TopRatedVo>)
-
-    @Delete
-    fun clearUpComingMovies(movies: List<UpComingVo>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun saveAllNowShowingMovies(movies: List<NowShowingVo>)

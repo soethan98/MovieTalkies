@@ -48,6 +48,10 @@ object InjectorUtils {
         return TopRatedViewFactory(moviesRepository!!)
     }
 
+    fun provideMovieViewModelFactory(context: Context): MovieViewModelFactory {
+        val moviesRepository = provideMoviesRepository(context)
+        return MovieViewModelFactory(moviesRepository!!)
+    }
     fun provideDetailViewFactory(context: Context, id: Int): DetailViewModelFactory {
         val moviesRepository = provideMoviesRepository(context)
         return DetailViewModelFactory(moviesRepository!!, id)

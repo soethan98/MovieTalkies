@@ -6,6 +6,7 @@ import com.bumptech.glide.Glide
 import com.example.soe_than.movietalkies.Utils.Constants
 import com.example.soe_than.movietalkies.data.Vo.PopularVo
 import com.example.soe_than.movietalkies.delegate.MovieDelegate
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.movies_content.view.*
 
 class PopularViewHolder( itemView: View,val mMovieDelegate: MovieDelegate):BaseViewHolder<PopularVo>(itemView) {
@@ -19,9 +20,8 @@ class PopularViewHolder( itemView: View,val mMovieDelegate: MovieDelegate):BaseV
 
 
     override fun bind(data: PopularVo) {
-        Log.i("Hi",data.title + data.posterPath)
 
-        Glide.with(itemView.context).load("${Constants.IMAGES_BASE_URL+data.posterPath}").into(posterImage)
+        Picasso.with(itemView.context).load("${Constants.IMAGES_BASE_URL + data.posterPath}").into(posterImage)
         movieRating.setText("${data.voteAverage}")
         movieTitle.setText(data.title)
         posterCard.setOnClickListener(View.OnClickListener {

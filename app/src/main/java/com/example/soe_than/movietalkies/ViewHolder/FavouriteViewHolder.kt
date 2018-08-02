@@ -7,6 +7,9 @@ import com.example.soe_than.movietalkies.Utils.Constants
 import com.example.soe_than.movietalkies.data.Vo.FavouriteVo
 import com.example.soe_than.movietalkies.data.Vo.NowShowingVo
 import com.example.soe_than.movietalkies.delegate.MovieDelegate
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.activity_detail.*
+import kotlinx.android.synthetic.main.detail_movies_content.*
 import kotlinx.android.synthetic.main.movies_content.view.*
 
 class FavouriteViewHolder(itemView: View, val mMovieDelegate: MovieDelegate) : BaseViewHolder<FavouriteVo>(itemView) {
@@ -23,7 +26,7 @@ class FavouriteViewHolder(itemView: View, val mMovieDelegate: MovieDelegate) : B
 
     override fun bind(data: FavouriteVo) {
         Log.i("Hi",data.title + data.posterPath)
-        Glide.with(itemView.context).load("${Constants.IMAGES_BASE_URL + data.posterPath}").into(posterImage)
+        Picasso.with(itemView.context).load("${Constants.IMAGES_BASE_URL + data.posterPath}").into(posterImage)
         movieRating.setText("${data.voteAverage}")
         movieTitle.setText(data.title)
 

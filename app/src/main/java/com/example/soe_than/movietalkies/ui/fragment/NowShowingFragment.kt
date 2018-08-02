@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
 import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +20,7 @@ import com.example.soe_than.movietalkies.adapter.NowShowingRecyclerAdapter
 import com.example.soe_than.movietalkies.data.Vo.NowShowingVo
 import com.example.soe_than.movietalkies.delegate.MovieDelegate
 import com.example.soe_than.movietalkies.ui.detail.DetailActivity
+import kotlinx.android.synthetic.main.fragment_detail.*
 import kotlinx.android.synthetic.main.fragment_now_showing.view.*
 
 
@@ -70,11 +72,14 @@ class NowShowingFragment : Fragment(), MovieDelegate {
     }
 
 
+
     override fun onTapMovie(id: Int) {
+
         var intent = Intent(activity, DetailActivity::class.java)
         intent.putExtra("ID", id)
         intent.putExtra("TYPE", "nowshowing")
         startActivity(intent)
+
     }
 
 

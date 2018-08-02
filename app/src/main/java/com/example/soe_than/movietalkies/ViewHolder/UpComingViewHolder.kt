@@ -5,6 +5,7 @@ import com.bumptech.glide.Glide
 import com.example.soe_than.movietalkies.Utils.Constants
 import com.example.soe_than.movietalkies.data.Vo.UpComingVo
 import com.example.soe_than.movietalkies.delegate.MovieDelegate
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.movies_content.view.*
 
 class UpComingViewHolder(itemView: View, val mMovieDelegate: MovieDelegate) : BaseViewHolder<UpComingVo>(itemView) {
@@ -16,7 +17,7 @@ class UpComingViewHolder(itemView: View, val mMovieDelegate: MovieDelegate) : Ba
 
 
     override fun bind(data: UpComingVo) {
-        Glide.with(itemView.context).load("${Constants.IMAGES_BASE_URL + data.posterPath}").into(posterImage)
+        Picasso.with(itemView.context).load("${Constants.IMAGES_BASE_URL + data.posterPath}").into(posterImage)
         movieRating.setText("${data.voteAverage}")
         movieTitle.setText(data.title)
 

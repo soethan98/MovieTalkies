@@ -6,35 +6,32 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import com.bumptech.glide.Glide
 import com.example.soe_than.movietalkies.R
 import com.example.soe_than.movietalkies.Utils.Constants
 import com.example.soe_than.movietalkies.Utils.InjectorUtils
 import com.example.soe_than.movietalkies.Utils.Utility
 import com.example.soe_than.movietalkies.data.Vo.*
 import com.example.soe_than.movietalkies.ui.ViewModel.DetailViewModel
-import com.example.soe_than.movietalkies.ui.ViewModel.NowShowingViewModel
-import com.example.soe_than.movietalkies.ui.ViewModel.PopularViewModel
 import com.example.soe_than.movietalkies.ui.ViewModelFactory.DetailViewModelFactory
-import com.example.soe_than.movietalkies.ui.ViewModelFactory.NowShowingViewFactory
-import com.example.soe_than.movietalkies.ui.ViewModelFactory.PopularViewFactory
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.detail_movies_content.*
 import kotlinx.android.synthetic.main.trailers.*
 import android.content.Intent
 import android.net.Uri
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.ImageView
-import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.RequestOptions.bitmapTransform
+import com.example.soe_than.movietalkies.ui.search.SearchActivity
+import com.squareup.picasso.Picasso
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation
+import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
 
 
 class DetailActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
-        var url = v!!.getTag(R.id.glide_tag)
+        var url = v!!.getTag().toString()
         val playVideoIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url.toString()))
         startActivity(playVideoIntent)
     }
@@ -47,6 +44,7 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener {
     var popularVo: PopularVo? = null
     var topRatedVo: TopRatedVo? = null
     var upComingVo: UpComingVo? = null
+    var favouriteVo: FavouriteVo? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -95,12 +93,21 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             "upcoming" -> {
-                viewModel.getUpComingMOvieDetails().observe(this, Observer { upcomingDetails ->
+                viewModel.getUpComingMovieDetails().observe(this, Observer { upcomingDetails ->
                     if (upcomingDetails != null) {
                         bindUpComingMovie(upcomingDetails)
                         upComingVo = upcomingDetails
                     }
                 })
+            }
+            "favourite" -> {
+                viewModel.getFavouriteMovieDetails().observe(this, Observer { favouriteMovieDetails ->
+                    if (favouriteMovieDetails != null) {
+                        bindFavouriteMovie(favouriteMovieDetails)
+                        favouriteVo = favouriteMovieDetails
+                    }
+                })
+
             }
 
         }
@@ -115,7 +122,7 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener {
         })
 
         add_favourite.setOnCheckedChangeListener { buttonView, isChecked ->
-            Log.i("Hi", "Clicked")
+
 
             when (movieType) {
                 "nowshowing" -> {
@@ -148,6 +155,15 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener {
                             .subscribe({ add_favourite.isChecked = true }, { error ->
                                 Log.i("Hello", "Unable to add movie", error)
                             }))
+
+                }
+                "favourite" -> {
+                    disposable.add(viewModel.removeFavouriteMovie(favouriteVo!!)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe({ Log.i("Hello","Removed")}, { error ->
+                                Log.i("Hello", "Unable to remove movie", error)
+                            }))
                 }
 
 
@@ -158,22 +174,21 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener {
 
     fun bindNowShowingMovie(nowShowingVo: NowShowingVo) {
 
-        Glide.with(this).load("${Constants.BACKDROP_BASE_URL + nowShowingVo.backdrop_path}").into(image)
-        Glide.with(this).load("${Constants.IMAGES_BASE_URL + nowShowingVo.posterPath}")
-                .apply(bitmapTransform(RoundedCornersTransformation(18, 4)))
-                .into(poster_image)
+        Picasso.with(this).load("${Constants.BACKDROP_BASE_URL + nowShowingVo.backdrop_path}").into(image)
+        Picasso.with(this).load("${Constants.IMAGES_BASE_URL + nowShowingVo.posterPath}").transform(RoundedCornersTransformation(18, 4)).into(poster_image);
+
         movie_title.setText(nowShowingVo.title)
         movie_overview.setText(nowShowingVo.overview)
         movie_release.setText(nowShowingVo.releasedDate)
 
     }
 
+
     fun bindPopularMovie(popularVo: PopularVo) {
 
-        Glide.with(this).load("${Constants.BACKDROP_BASE_URL + popularVo.backdrop_path}").into(image)
-        Glide.with(this).load("${Constants.IMAGES_BASE_URL + popularVo.posterPath}")
-                .apply(bitmapTransform(RoundedCornersTransformation(18, 4)))
-                .into(poster_image)
+        Picasso.with(this).load("${Constants.BACKDROP_BASE_URL + popularVo.backdrop_path}").into(image)
+        Picasso.with(this).load("${Constants.IMAGES_BASE_URL + popularVo.posterPath}").transform(RoundedCornersTransformation(18, 4)).into(poster_image);
+
         movie_title.setText(popularVo.title)
         movie_overview.setText(popularVo.overview)
         movie_release.setText(popularVo.releasedDate)
@@ -182,10 +197,9 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener {
 
     fun bindUpComingMovie(upComingVo: UpComingVo) {
 
-        Glide.with(this).load("${Constants.BACKDROP_BASE_URL + upComingVo.backdrop_path}").into(image)
-        Glide.with(this).load("${Constants.IMAGES_BASE_URL + upComingVo.posterPath}")
-                .apply(bitmapTransform(RoundedCornersTransformation(18, 4)))
-                .into(poster_image)
+        Picasso.with(this).load("${Constants.BACKDROP_BASE_URL + upComingVo.backdrop_path}").into(image)
+        Picasso.with(this).load("${Constants.IMAGES_BASE_URL + upComingVo.posterPath}").transform(RoundedCornersTransformation(18, 4)).into(poster_image);
+
         movie_title.setText(upComingVo.title)
         movie_overview.setText(upComingVo.overview)
         movie_release.setText(upComingVo.releasedDate)
@@ -194,13 +208,23 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener {
 
     fun bindTopRatedMovie(topRatedVo: TopRatedVo) {
 
-        Glide.with(this).load("${Constants.BACKDROP_BASE_URL + topRatedVo.backdrop_path}").into(image)
-        Glide.with(this).load("${Constants.IMAGES_BASE_URL + topRatedVo.posterPath}")
-                .apply(bitmapTransform(RoundedCornersTransformation(18, 4)))
-                .into(poster_image)
+        Picasso.with(this).load("${Constants.BACKDROP_BASE_URL + topRatedVo.backdrop_path}").into(image)
+        Picasso.with(this).load("${Constants.IMAGES_BASE_URL + topRatedVo.posterPath}").transform(RoundedCornersTransformation(18, 4)).into(poster_image);
+
         movie_title.setText(topRatedVo.title)
         movie_overview.setText(topRatedVo.overview)
         movie_release.setText(topRatedVo.releasedDate)
+
+    }
+
+    fun bindFavouriteMovie(favouriteVo: FavouriteVo) {
+        Picasso.with(this).load("${Constants.BACKDROP_BASE_URL + favouriteVo.backdrop_path}").into(image)
+        Picasso.with(this).load("${Constants.IMAGES_BASE_URL + favouriteVo.posterPath}").transform(RoundedCornersTransformation(18, 4)).into(poster_image);
+
+        movie_title.setText(favouriteVo.title)
+        movie_overview.setText(favouriteVo.overview)
+        movie_release.setText(favouriteVo.releasedDate)
+        add_favourite.isChecked = true
 
     }
 
@@ -208,31 +232,19 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener {
         this.trailer_container.removeAllViews()
 
         val layoutInflater = this.layoutInflater
-        val options = RequestOptions()
-                .placeholder(R.color.colorPrimary)
-                .centerCrop()
-                .override(150, 150)
 
         for (trailer in trailerList) {
             val thumbContainer = layoutInflater.inflate(R.layout.trailers_content, this.trailer_container, false)
             val thubview = thumbContainer.findViewById(R.id.video_thumb) as ImageView
-            thubview.clipToOutline = true
-
-            thubview.requestLayout();
+//
             thubview.setOnClickListener(this);
+            thubview.setTag(Utility.getUrl(trailer))
+
 
 
 
             if (trailer.type.equals("Trailer", true) || trailer.type.equals("Teaser", true)) {
-//                thubview.setTag(R.id.glide_tag, Utility.getUrl(trailer))
-
-                Glide.with(this)
-                        .load(Utility.getThumbnailUrl(trailer))
-                        .apply(options)
-                        .into(thubview)
-
-
-
+                Picasso.with(this).load(Utility.getThumbnailUrl(trailer)).into(thubview)
                 this.trailer_container.addView(thumbContainer)
             }
 
@@ -245,6 +257,8 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener {
         super.onDestroy()
         disposable.clear()
     }
+
+
 
 
 }

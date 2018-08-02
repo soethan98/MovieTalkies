@@ -16,12 +16,14 @@ class MoviesRepository(val movieDao: MovieDao, val context: Context) {
     var apiService: ApiService
     var trailerData: MutableLiveData<List<TrailerVo>>
     var favouriteData: MutableLiveData<List<FavouriteVo>>
+    var searchData: MutableLiveData<List<SearchVo>>
 
     init {
 
         apiService = ApiService.create()
         trailerData = MutableLiveData()
         favouriteData = MutableLiveData()
+        searchData = MutableLiveData()
     }
 
     companion object {
@@ -91,13 +93,25 @@ class MoviesRepository(val movieDao: MovieDao, val context: Context) {
     fun getTrailers(id: Int): LiveData<List<TrailerVo>>? {
         if (Utility.isNetworkAvailable(context)) {
             apiService.getTrailers(id, Constants.API_KEY)
-                    .subscribeOn(Schedulers.io()).toObservable().map { trailerResponse -> trailerResponse.results }
+                    .subscribeOn(Schedulers.io()).toObservable().map { trailerResponse ->
+                        trailerResponse.results
+                    }
                     .subscribe({ trailerList: List<TrailerVo> -> trailerData.postValue(trailerList) }, { t: Throwable -> Log.i("error: %s", t.message) })
             return trailerData
         } else {
             return null
         }
 
+    }
+
+    fun getSearchList(query: String): LiveData<List<SearchVo>> {
+        apiService.getSearchResult(Constants.API_KEY, query)
+                .subscribeOn(Schedulers.io()).toObservable().map { searchResponse ->
+                    searchResponse.searchResult
+                }.subscribe({ searchList: List<SearchVo> -> searchData.postValue(searchList) }, { t: Throwable ->
+                    Log.i("error: %s", t.message)
+                })
+        return searchData
     }
 
     fun getFavourites(): LiveData<List<FavouriteVo>> {
@@ -109,6 +123,10 @@ class MoviesRepository(val movieDao: MovieDao, val context: Context) {
 
     fun addFavouriteMovie(favouriteVo: FavouriteVo) {
         movieDao.saveFavouriteMovies(favouriteVo)
+    }
+
+    fun removeFavouriteMovie(favouriteVo: FavouriteVo) {
+        movieDao.clearFavoutireMoive(favouriteVo)
     }
 
     fun getPopularMovieDetails(id: Int): LiveData<PopularVo> {
@@ -125,6 +143,10 @@ class MoviesRepository(val movieDao: MovieDao, val context: Context) {
 
     fun getUpComingMovieDetails(id: Int): LiveData<UpComingVo> {
         return movieDao.getUpComingMovieById(id.toString())
+    }
+
+    fun getFavouriteMovieDetails(id: Int): LiveData<FavouriteVo> {
+        return movieDao.getFavouriteMovieById(id.toString())
     }
 
 

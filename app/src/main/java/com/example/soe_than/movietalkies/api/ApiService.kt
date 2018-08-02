@@ -2,6 +2,8 @@ package com.example.soe_than.movietalkies.api
 
 import android.support.annotation.TransitionRes
 import com.example.soe_than.movietalkies.Utils.Constants
+import com.example.soe_than.movietalkies.data.Vo.FavouriteVo
+import com.example.soe_than.movietalkies.data.Vo.SearchVo
 import com.example.soe_than.movietalkies.data.Vo.TrailerVo
 import com.example.soe_than.movietalkies.data.response.*
 import retrofit2.http.GET
@@ -31,6 +33,10 @@ interface ApiService {
 
     @GET("movie/{id}/videos")
     fun getTrailers(@Path("id") id: Int, @Query("api_key") apiKey: String): Single<TrailerResponse>
+
+    @GET("search/movie")
+    fun getSearchResult(@Query("api_key") apiKey: String,
+                        @Query("query") keyword: String): Single<SearchResponse>
 
     companion object Factory {
 

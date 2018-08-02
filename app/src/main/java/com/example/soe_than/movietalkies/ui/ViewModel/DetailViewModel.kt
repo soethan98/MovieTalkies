@@ -25,13 +25,17 @@ class DetailViewModel(val moviesRepository: MoviesRepository, var id: Int) : Vie
 
     }
 
-    fun getUpComingMOvieDetails(): LiveData<UpComingVo> {
+    fun getUpComingMovieDetails(): LiveData<UpComingVo> {
         return moviesRepository.getUpComingMovieDetails(id)
 
     }
 
     fun getTrailers(): LiveData<List<TrailerVo>>? {
         return moviesRepository.getTrailers(id)
+    }
+
+    fun getFavouriteMovieDetails(): LiveData<FavouriteVo> {
+        return moviesRepository.getFavouriteMovieDetails(id)
     }
 
     fun addFavouriteMovie(upComingVo: UpComingVo): Completable {
@@ -41,13 +45,12 @@ class DetailViewModel(val moviesRepository: MoviesRepository, var id: Int) : Vie
         }
     }
 
-    fun addFavouriteMovie(topRatedVo: TopRatedVo):Completable {
-        return Completable.fromAction{
+    fun addFavouriteMovie(topRatedVo: TopRatedVo): Completable {
+        return Completable.fromAction {
             var favourite = FavouriteVo(topRatedVo.id, topRatedVo.posterPath, topRatedVo.overview, topRatedVo.title, topRatedVo.releasedDate, topRatedVo.voteAverage, topRatedVo.backdrop_path)
             moviesRepository.addFavouriteMovie(favourite)
 
         }
-
 
 
     }
@@ -67,7 +70,12 @@ class DetailViewModel(val moviesRepository: MoviesRepository, var id: Int) : Vie
             moviesRepository.addFavouriteMovie(favourite)
 
         }
+    }
 
+    fun removeFavouriteMovie(favouriteVo: FavouriteVo): Completable {
+        return Completable.fromAction {
+            moviesRepository.removeFavouriteMovie(favouriteVo)
+        }
 
     }
 

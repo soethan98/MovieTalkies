@@ -6,6 +6,5 @@ import com.bumptech.glide.request.target.ViewTarget
 class App:Application() {
     override fun onCreate() {
         super.onCreate()
-        ViewTarget.setTagId(R.id.glide_tag);
     }
 }
