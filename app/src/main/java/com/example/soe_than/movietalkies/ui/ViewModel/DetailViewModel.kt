@@ -40,7 +40,7 @@ class DetailViewModel(val moviesRepository: MoviesRepository, var id: Int) : Vie
 
     fun addFavouriteMovie(upComingVo: UpComingVo): Completable {
         return Completable.fromAction {
-            var favourite = FavouriteVo(upComingVo.id, upComingVo.posterPath, upComingVo.overview, upComingVo.title, upComingVo.releasedDate, upComingVo.voteAverage, upComingVo.backdrop_path)
+            var favourite = FavouriteVo(upComingVo.id, upComingVo.poster_path, upComingVo.overview, upComingVo.title, upComingVo.release_date, upComingVo.vote_average, upComingVo.backdrop_path)
             moviesRepository.addFavouriteMovie(favourite)
         }
     }

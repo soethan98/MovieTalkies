@@ -6,7 +6,6 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
 import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -14,13 +13,12 @@ import android.view.ViewGroup
 
 import com.example.soe_than.movietalkies.R
 import com.example.soe_than.movietalkies.Utils.InjectorUtils
-import com.example.soe_than.movietalkies.ui.ViewModel.NowShowingViewModel
-import com.example.soe_than.movietalkies.ui.ViewModelFactory.NowShowingViewFactory
 import com.example.soe_than.movietalkies.adapter.NowShowingRecyclerAdapter
 import com.example.soe_than.movietalkies.data.Vo.NowShowingVo
 import com.example.soe_than.movietalkies.delegate.MovieDelegate
+import com.example.soe_than.movietalkies.ui.ViewModel.MovieViewModel
+import com.example.soe_than.movietalkies.ui.ViewModelFactory.MovieViewModelFactory
 import com.example.soe_than.movietalkies.ui.detail.DetailActivity
-import kotlinx.android.synthetic.main.fragment_detail.*
 import kotlinx.android.synthetic.main.fragment_now_showing.view.*
 
 
@@ -36,8 +34,8 @@ private const val ARG_PARAM2 = "param2"
 class NowShowingFragment : Fragment(), MovieDelegate {
 
 
-    private lateinit var viewModel: NowShowingViewModel
-    private lateinit var viewModelFactory: NowShowingViewFactory
+    private lateinit var viewModel: MovieViewModel
+    private lateinit var viewModelFactory: MovieViewModelFactory
     lateinit var nowShowingAdapter: NowShowingRecyclerAdapter
 
 
@@ -46,8 +44,8 @@ class NowShowingFragment : Fragment(), MovieDelegate {
         // Inflate the layout for this fragment
         var view = inflater.inflate(R.layout.fragment_now_showing, container, false)
 
-        viewModelFactory = InjectorUtils.provideNowShowingViewFactory(activity!!)
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(NowShowingViewModel::class.java)
+        viewModelFactory = InjectorUtils.provideMovieViewModelFactory(activity!!)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(MovieViewModel::class.java)
 
         setUpRecyclerView(view)
 

@@ -1,5 +1,7 @@
 package com.example.soe_than.movietalkies.data.Vo
 
+import android.os.Parcel
+import android.os.Parcelable
 import com.bumptech.glide.load.engine.bitmap_recycle.IntegerArrayAdapter
 import com.google.gson.annotations.SerializedName
 
@@ -21,11 +23,10 @@ data class SearchVo(
         @SerializedName("original_title")
         var original_title: String,
         @SerializedName("genre_ids")
-        var genreids: List<Integer> = ArrayList<Integer>(),
+        var genreids: List<String> = ArrayList<String>(),
         @SerializedName("backdrop_path")
         var backdrop_path: String,
         @SerializedName("overview")
         var overview: String,
         @SerializedName("release_date")
-        var release_date: String) {
-}
+        var release_date: String) {}

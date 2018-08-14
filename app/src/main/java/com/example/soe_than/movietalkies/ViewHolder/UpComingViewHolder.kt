@@ -1,5 +1,6 @@
 package com.example.soe_than.movietalkies.ViewHolder
 
+import android.util.Log
 import android.view.View
 import com.bumptech.glide.Glide
 import com.example.soe_than.movietalkies.Utils.Constants
@@ -17,8 +18,10 @@ class UpComingViewHolder(itemView: View, val mMovieDelegate: MovieDelegate) : Ba
 
 
     override fun bind(data: UpComingVo) {
-        Picasso.with(itemView.context).load("${Constants.IMAGES_BASE_URL + data.posterPath}").into(posterImage)
-        movieRating.setText("${data.voteAverage}")
+        Log.i("Hi",data.title + data.poster_path)
+
+        Picasso.with(itemView.context).load("${Constants.IMAGES_BASE_URL + data.poster_path}").into(posterImage)
+        movieRating.setText("${data.vote_average}")
         movieTitle.setText(data.title)
 
         posterCard.setOnClickListener(View.OnClickListener {

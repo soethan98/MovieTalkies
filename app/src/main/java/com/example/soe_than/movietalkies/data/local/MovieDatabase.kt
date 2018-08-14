@@ -1,24 +1,23 @@
 package com.example.soe_than.movietalkies.data.local
 
-import android.arch.persistence.room.Database
-import android.arch.persistence.room.Room
-import android.arch.persistence.room.RoomDatabase
+import android.arch.persistence.room.*
 import android.content.Context
 import com.example.soe_than.movietalkies.data.Vo.*
 import com.example.soe_than.movietalkies.data.local.Daos.*
 
 
-@Database(entities = arrayOf(NowShowingVo::class,UpComingVo::class,
-        PopularVo::class,TopRatedVo::class,FavouriteVo::class), version = 1)
-abstract class MovieDatabase:RoomDatabase() {
+@Database(entities = arrayOf(NowShowingVo::class, UpComingVo::class,
+        PopularVo::class, TopRatedVo::class, FavouriteVo::class), version = 1)
+@TypeConverters(ListGenresConverter::class)
+abstract class MovieDatabase : RoomDatabase() {
 
-    abstract fun popularDao(): PopularDao
-    abstract fun upcomingDao():UpComingDao
-    abstract fun nowshowingDao():NowShowingDao
-    abstract fun topratedDao():TopRatedDao
+//    abstract fun popularDao(): PopularDao
+//    abstract fun upcomingDao():UpComingDao
+//    abstract fun nowshowingDao():NowShowingDao
+//    abstract fun topratedDao():TopRatedDao
 
 
-    abstract fun movieDao():MovieDao
+    abstract fun movieDao(): MovieDao
 
     companion object {
         @Volatile

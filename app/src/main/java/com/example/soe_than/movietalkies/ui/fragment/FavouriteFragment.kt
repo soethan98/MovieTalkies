@@ -14,17 +14,12 @@ import android.view.ViewGroup
 import com.example.soe_than.movietalkies.R
 import com.example.soe_than.movietalkies.Utils.InjectorUtils
 import com.example.soe_than.movietalkies.adapter.FavouriteRecyclerAdapter
-import com.example.soe_than.movietalkies.adapter.NowShowingRecyclerAdapter
 import com.example.soe_than.movietalkies.data.Vo.FavouriteVo
-import com.example.soe_than.movietalkies.data.Vo.NowShowingVo
 import com.example.soe_than.movietalkies.delegate.MovieDelegate
 import com.example.soe_than.movietalkies.ui.ViewModel.FavouriteViewModel
-import com.example.soe_than.movietalkies.ui.ViewModel.NowShowingViewModel
 import com.example.soe_than.movietalkies.ui.ViewModelFactory.FavouriteViewFactory
-import com.example.soe_than.movietalkies.ui.ViewModelFactory.NowShowingViewFactory
 import com.example.soe_than.movietalkies.ui.detail.DetailActivity
 import kotlinx.android.synthetic.main.fragment_favourite.view.*
-import kotlinx.android.synthetic.main.fragment_now_showing.view.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

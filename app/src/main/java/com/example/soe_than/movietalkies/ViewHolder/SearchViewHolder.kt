@@ -4,14 +4,16 @@ import android.support.v7.widget.AppCompatTextView
 import android.util.Log
 import android.view.View
 import com.example.soe_than.movietalkies.Utils.Constants
+import com.example.soe_than.movietalkies.Utils.Utility
 import com.example.soe_than.movietalkies.data.Vo.SearchVo
 import com.example.soe_than.movietalkies.data.Vo.TopRatedVo
 import com.example.soe_than.movietalkies.delegate.MovieDelegate
+import com.example.soe_than.movietalkies.delegate.SearchDelegate
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.movies_content.view.*
 import kotlinx.android.synthetic.main.search_content.view.*
 
-class SearchViewHolder(itemView: View) : BaseViewHolder<SearchVo>(itemView) {
+class SearchViewHolder( itemView: View,val mSearchDelegate: SearchDelegate):BaseViewHolder<SearchVo>(itemView) {
     override fun onClick(v: View?) {
 
     }
@@ -21,6 +23,7 @@ class SearchViewHolder(itemView: View) : BaseViewHolder<SearchVo>(itemView) {
     private val movieRating = itemView.search_rating
     private val movieTitle = itemView.search_title
     private val movieReleaseDate = itemView.search_releasedate
+    private val movieGenres = itemView.genres_chip
 
     override fun bind(data: SearchVo) {
         movieLanguage.setText(data.original_language.toUpperCase())
@@ -29,7 +32,13 @@ class SearchViewHolder(itemView: View) : BaseViewHolder<SearchVo>(itemView) {
         movieReleaseDate.setText(data.release_date)
         Picasso.with(itemView.context).load("${Constants.IMAGES_BASE_URL + data.poster_path}").into(posterImage)
 
-        Log.i("Search", "${data.genreids.size}")
+        movieGenres.setText(Utility.setGenresTypeForMovie(data.genreids))
+
+        itemView.setOnClickListener({
+            mSearchDelegate.onTapSearchResult(data)
+        })
+
+
     }
 
 

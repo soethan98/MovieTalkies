@@ -4,7 +4,6 @@ import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import com.example.soe_than.movietalkies.data.repository.MoviesRepository
 import com.example.soe_than.movietalkies.ui.ViewModel.FavouriteViewModel
-import com.example.soe_than.movietalkies.ui.ViewModel.NowShowingViewModel
 
 class FavouriteViewFactory(val moviesRepository: MoviesRepository) : ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

@@ -16,8 +16,8 @@ import com.example.soe_than.movietalkies.Utils.InjectorUtils
 import com.example.soe_than.movietalkies.adapter.PopularRecyclerAdapter
 import com.example.soe_than.movietalkies.data.Vo.PopularVo
 import com.example.soe_than.movietalkies.delegate.MovieDelegate
-import com.example.soe_than.movietalkies.ui.ViewModel.PopularViewModel
-import com.example.soe_than.movietalkies.ui.ViewModelFactory.PopularViewFactory
+import com.example.soe_than.movietalkies.ui.ViewModel.MovieViewModel
+import com.example.soe_than.movietalkies.ui.ViewModelFactory.MovieViewModelFactory
 import com.example.soe_than.movietalkies.ui.detail.DetailActivity
 import kotlinx.android.synthetic.main.fragment_popular.view.*
 
@@ -32,8 +32,8 @@ private const val ARG_PARAM2 = "param2"
  */
 class PopularFragment : Fragment(), MovieDelegate {
 
-    private lateinit var viewModel: PopularViewModel
-    private lateinit var viewModelFactory: PopularViewFactory
+    private lateinit var viewModel: MovieViewModel
+    private lateinit var viewModelFactory: MovieViewModelFactory
     lateinit var popularAdapter: PopularRecyclerAdapter
 
 
@@ -41,8 +41,8 @@ class PopularFragment : Fragment(), MovieDelegate {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_popular, container, false)
-        viewModelFactory = InjectorUtils.providePopularViewFactory(activity!!)
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(PopularViewModel::class.java)
+        viewModelFactory = InjectorUtils.provideMovieViewModelFactory(activity!!)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(MovieViewModel::class.java)
 
         setUpRecyclerView(view)
 

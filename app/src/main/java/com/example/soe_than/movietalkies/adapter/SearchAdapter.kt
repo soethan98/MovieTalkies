@@ -9,12 +9,13 @@ import com.example.soe_than.movietalkies.ViewHolder.SearchViewHolder
 import com.example.soe_than.movietalkies.data.Vo.PopularVo
 import com.example.soe_than.movietalkies.data.Vo.SearchVo
 import com.example.soe_than.movietalkies.delegate.MovieDelegate
+import com.example.soe_than.movietalkies.delegate.SearchDelegate
 
-class SearchAdapter(val context: Context?, val movieDelegate: MovieDelegate) : BaseRecyclerAdapter<SearchViewHolder, SearchVo>(context!!) {
+class SearchAdapter(val context: Context?, val searchDelegate: SearchDelegate) : BaseRecyclerAdapter<SearchViewHolder, SearchVo>(context!!) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
         val view = mLayoutInflater.inflate(R.layout.search_content, parent, false)
 
-        return SearchViewHolder(view)
+        return SearchViewHolder(view,searchDelegate)
     }
 
     override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {

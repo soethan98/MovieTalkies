@@ -198,11 +198,11 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener {
     fun bindUpComingMovie(upComingVo: UpComingVo) {
 
         Picasso.with(this).load("${Constants.BACKDROP_BASE_URL + upComingVo.backdrop_path}").into(image)
-        Picasso.with(this).load("${Constants.IMAGES_BASE_URL + upComingVo.posterPath}").transform(RoundedCornersTransformation(18, 4)).into(poster_image);
+        Picasso.with(this).load("${Constants.IMAGES_BASE_URL + upComingVo.poster_path}").transform(RoundedCornersTransformation(18, 4)).into(poster_image);
 
         movie_title.setText(upComingVo.title)
         movie_overview.setText(upComingVo.overview)
-        movie_release.setText(upComingVo.releasedDate)
+        movie_release.setText(upComingVo.release_date)
 
     }
 

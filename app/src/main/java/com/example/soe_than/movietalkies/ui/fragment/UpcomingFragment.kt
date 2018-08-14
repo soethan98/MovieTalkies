@@ -16,8 +16,8 @@ import com.example.soe_than.movietalkies.Utils.InjectorUtils
 import com.example.soe_than.movietalkies.adapter.UpComingRecyclerAdapter
 import com.example.soe_than.movietalkies.data.Vo.UpComingVo
 import com.example.soe_than.movietalkies.delegate.MovieDelegate
-import com.example.soe_than.movietalkies.ui.ViewModel.UpComingViewModel
-import com.example.soe_than.movietalkies.ui.ViewModelFactory.UpComingViewFactory
+import com.example.soe_than.movietalkies.ui.ViewModel.MovieViewModel
+import com.example.soe_than.movietalkies.ui.ViewModelFactory.MovieViewModelFactory
 import com.example.soe_than.movietalkies.ui.detail.DetailActivity
 import kotlinx.android.synthetic.main.fragment_upcoming.*
 import kotlinx.android.synthetic.main.fragment_upcoming.view.*
@@ -40,8 +40,8 @@ class UpcomingFragment : Fragment(), MovieDelegate {
     }
 
 
-    private lateinit var viewModel: UpComingViewModel
-    private lateinit var viewModelFactory: UpComingViewFactory
+    private lateinit var viewModel: MovieViewModel
+    private lateinit var viewModelFactory: MovieViewModelFactory
     lateinit var upComingAdapter: UpComingRecyclerAdapter
 
 
@@ -50,8 +50,8 @@ class UpcomingFragment : Fragment(), MovieDelegate {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_upcoming, container, false)
 
-        viewModelFactory = InjectorUtils.provideUpComingViewFactory(activity!!)
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(UpComingViewModel::class.java)
+        viewModelFactory = InjectorUtils.provideMovieViewModelFactory(activity!!)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(MovieViewModel::class.java)
         setUpRecyclerView(view)
 
         viewModel.getUpComingMovies().observe(activity!!, Observer { upComingList ->
@@ -70,12 +70,9 @@ class UpcomingFragment : Fragment(), MovieDelegate {
         view.upcomingRecyclerView.adapter = upComingAdapter
     }
 
-    private fun getFavouriteMovies()
-    {
+    private fun getFavouriteMovies() {
 
     }
-
-
 
 
 }

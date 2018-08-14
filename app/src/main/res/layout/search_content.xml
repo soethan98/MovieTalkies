@@ -30,6 +30,7 @@
         android:textSize="14sp" />
 
     <LinearLayout
+        android:id="@+id/sperate_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/search_title"
@@ -42,27 +43,42 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/search_title"
+            android:paddingRight="4dp"
             android:text="hi"
-            android:textSize="12sp"
-            android:paddingRight="4dp"/>
+            android:textSize="12sp" />
 
         <View
             android:id="@+id/search_line"
-
             android:layout_width="1dp"
             android:layout_height="10dp"
-            android:paddingTop="@dimen/margin_medium"
             android:layout_gravity="center"
-            android:background="@android:color/darker_gray" />
+            android:background="@android:color/darker_gray"
+            android:paddingTop="@dimen/margin_medium" />
 
         <android.support.v7.widget.AppCompatTextView
-            android:paddingLeft="4dp"
             android:id="@+id/search_releasedate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingLeft="4dp"
             android:text="hello"
             android:textSize="12sp" />
     </LinearLayout>
+
+    <com.hootsuite.nachos.NachoTextView
+        android:enabled="false"
+        android:id="@+id/genres_chip"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sperate_layout"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_toRightOf="@id/search_poster"
+        app:chipBackground="@color/colorAccent"
+        app:chipTextColor="@android:color/white"
+        android:elevation="0dp"
+        android:background="@color/white"/>
 
 
     <ImageView

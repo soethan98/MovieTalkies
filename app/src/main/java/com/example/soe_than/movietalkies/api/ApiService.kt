@@ -3,9 +3,11 @@ package com.example.soe_than.movietalkies.api
 import android.support.annotation.TransitionRes
 import com.example.soe_than.movietalkies.Utils.Constants
 import com.example.soe_than.movietalkies.data.Vo.FavouriteVo
+import com.example.soe_than.movietalkies.data.Vo.MovieDetailVo
 import com.example.soe_than.movietalkies.data.Vo.SearchVo
 import com.example.soe_than.movietalkies.data.Vo.TrailerVo
 import com.example.soe_than.movietalkies.data.response.*
+import io.reactivex.Observable
 import retrofit2.http.GET
 import io.reactivex.Single
 import okhttp3.OkHttpClient
@@ -37,6 +39,11 @@ interface ApiService {
     @GET("search/movie")
     fun getSearchResult(@Query("api_key") apiKey: String,
                         @Query("query") keyword: String): Single<SearchResponse>
+
+
+    @GET("movie/{id}")
+    fun getMovieDetail(@Path("id") movieId: Int,
+                       @Query("api_key") apiKey: String): Single<MovieDetailVo>
 
     companion object Factory {
 
