@@ -47,11 +47,10 @@ class PopularFragment : Fragment(), MovieDelegate {
         setUpRecyclerView(view)
 
         viewModel.getPopularMovies().observe(activity!!, Observer { popularList ->
-            if (popularList!!.size != 0 && popularList != null) {
-                view.popProgress.visibility = View.GONE
 
+            popularList!!.let {
+                view.popProgress.visibility=View.GONE
                 popularAdapter.setNewData(popularList as MutableList<PopularVo>)
-
             }
         })
         return view

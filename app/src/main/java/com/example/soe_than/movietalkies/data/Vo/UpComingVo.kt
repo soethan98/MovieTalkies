@@ -10,28 +10,37 @@ import java.lang.reflect.GenericArrayType
 
 @Entity(tableName = "upcoming")
 data class UpComingVo(
+
+//        @SerializedName("genre_ids")
+//        val genreids: List<String>
+
         @PrimaryKey
-        @SerializedName("vote_count")
-        var vote_count: Int,
         @SerializedName("id")
-        var id: Int,
-        @SerializedName("vote_average")
-        var vote_average: Double,
-        @SerializedName("title")
-        var title: String,
-        @SerializedName("popularity")
-        var popularity: Double,
+        var id: Int = 0,
+
+        @ColumnInfo(name = "poster_path")
         @SerializedName("poster_path")
-        var poster_path: String,
-        @SerializedName("original_language")
-        var original_language: String,
-        @SerializedName("original_title")
-        var original_title: String,
-        @SerializedName("genre_ids")
-        val genreids: List<String>,
-        @SerializedName("backdrop_path")
-        var backdrop_path: String,
+        var posterPath: String? = null,
+
+        @ColumnInfo(name = "overview")
         @SerializedName("overview")
-        var overview: String,
+        var overview: String? = null,
+
+        @ColumnInfo(name = "original_title")
+        @SerializedName("original_title")
+        var title: String? = null,
+
+        @ColumnInfo(name = "release_date")
         @SerializedName("release_date")
-        var release_date: String)
+        var releasedDate: String? = null,
+
+        @ColumnInfo(name = "vote_average")
+        @SerializedName("vote_average")
+        var voteAverage: Double = 0.toDouble(),
+
+
+        @ColumnInfo(name = "backdrop_path")
+        @SerializedName("backdrop_path")
+        var backdrop_path: String? = null
+
+)

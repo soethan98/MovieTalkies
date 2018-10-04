@@ -8,6 +8,7 @@ import com.example.soe_than.movietalkies.Utils.Constants.EMPTY
 import com.example.soe_than.movietalkies.Utils.Constants.SITE_YOUTUBE
 import com.example.soe_than.movietalkies.Utils.Constants.YOUTUBE_THUMBNAIL_URL
 import com.example.soe_than.movietalkies.Utils.Constants.YOUTUBE_VIDEO_URL
+import com.example.soe_than.movietalkies.data.Vo.GenresVo
 import com.example.soe_than.movietalkies.data.Vo.TrailerVo
 
 object Utility {
@@ -73,6 +74,20 @@ object Utility {
         for (id in ids)
         {
           idsList.add(getGeneresnames(id.toInt()))
+
+        }
+        return idsList
+    }
+
+
+
+    fun setGenresTypeForMovie1(ids:List<GenresVo>):ArrayList<String>
+    {
+
+        var idsList: ArrayList<String> = ArrayList<String>()
+        for (id in ids)
+        {
+            idsList.add(id.name)
 
         }
         return idsList

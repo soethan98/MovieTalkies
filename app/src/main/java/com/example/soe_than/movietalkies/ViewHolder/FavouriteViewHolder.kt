@@ -25,7 +25,6 @@ class FavouriteViewHolder(itemView: View, val mMovieDelegate: MovieDelegate) : B
     }
 
     override fun bind(data: FavouriteVo) {
-        Log.i("Hi",data.title + data.posterPath)
         Picasso.with(itemView.context).load("${Constants.IMAGES_BASE_URL + data.posterPath}").into(posterImage)
         movieRating.setText("${data.voteAverage}")
         movieTitle.setText(data.title)

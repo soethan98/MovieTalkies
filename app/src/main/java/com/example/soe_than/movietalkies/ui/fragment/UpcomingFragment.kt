@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,9 +56,9 @@ class UpcomingFragment : Fragment(), MovieDelegate {
         setUpRecyclerView(view)
 
         viewModel.getUpComingMovies().observe(activity!!, Observer { upComingList ->
-            if (upComingList!!.size != 0 && upComingList != null) {
-                upProgress.visibility = View.GONE
 
+            upComingList!!.let {
+              view.upProgress.visibility = View.GONE
                 upComingAdapter.setNewData(upComingList as MutableList<UpComingVo>)
             }
         })
@@ -65,7 +66,7 @@ class UpcomingFragment : Fragment(), MovieDelegate {
     }
 
     private fun setUpRecyclerView(view: View) {
-        view.upcomingRecyclerView.layoutManager = GridLayoutManager(activity, 2)
+        view.upcomingRecyclerView.layoutManager = GridLayoutManager(activity,2)
         upComingAdapter = UpComingRecyclerAdapter(context!!, this)
         view.upcomingRecyclerView.adapter = upComingAdapter
     }

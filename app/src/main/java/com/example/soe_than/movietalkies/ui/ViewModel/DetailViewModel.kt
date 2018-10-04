@@ -7,6 +7,7 @@ import android.view.View
 import com.example.soe_than.movietalkies.data.Vo.*
 import com.example.soe_than.movietalkies.data.repository.MoviesRepository
 import io.reactivex.Completable
+import io.reactivex.Flowable
 
 class DetailViewModel(val moviesRepository: MoviesRepository, var id: Int) : ViewModel() {
 
@@ -40,7 +41,7 @@ class DetailViewModel(val moviesRepository: MoviesRepository, var id: Int) : Vie
 
     fun addFavouriteMovie(upComingVo: UpComingVo): Completable {
         return Completable.fromAction {
-            var favourite = FavouriteVo(upComingVo.id, upComingVo.poster_path, upComingVo.overview, upComingVo.title, upComingVo.release_date, upComingVo.vote_average, upComingVo.backdrop_path)
+            var favourite = FavouriteVo(upComingVo.id, upComingVo.posterPath, upComingVo.overview, upComingVo.title, upComingVo.releasedDate, upComingVo.voteAverage, upComingVo.backdrop_path)
             moviesRepository.addFavouriteMovie(favourite)
         }
     }
@@ -77,6 +78,11 @@ class DetailViewModel(val moviesRepository: MoviesRepository, var id: Int) : Vie
             moviesRepository.removeFavouriteMovie(favouriteVo)
         }
 
+    }
+
+    fun checkedFavourite():Flowable<Int>
+    {
+        return  moviesRepository.checkedFavouriteMovie(id)
     }
 
 

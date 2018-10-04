@@ -33,7 +33,7 @@
                     android:scaleType="centerCrop" />
 
                 <CheckBox
-                    android:id="@+id/add_favourite"
+                    android:id="@+id/add_search_favourite"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_alignParentRight="true"

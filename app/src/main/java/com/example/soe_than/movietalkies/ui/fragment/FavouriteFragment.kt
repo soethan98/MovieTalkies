@@ -70,11 +70,10 @@ class FavouriteFragment : Fragment(), MovieDelegate {
     private fun getFavouriteMovies() {
 
         viewModel.getFavouriteMovies().observe(activity!!, Observer { favouriteList ->
-            if (favouriteList!!.size != 0 && favouriteList != null) {
-//                view.nowProgress.visibility = View.GONE
+
+            favouriteList!!.let {
 
                 favouriteAdapter.setNewData(favouriteList as MutableList<FavouriteVo>)
-
             }
         })
     }

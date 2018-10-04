@@ -9,6 +9,7 @@ import com.example.soe_than.movietalkies.Utils.Utility
 import com.example.soe_than.movietalkies.api.ApiService
 import com.example.soe_than.movietalkies.data.Vo.*
 import com.example.soe_than.movietalkies.data.local.Daos.MovieDao
+import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
@@ -88,8 +89,9 @@ class MoviesRepository(val movieDao: MovieDao, val context: Context) {
                 .toObservable()
                 .map { upComingResponse -> upComingResponse.upComingVo }
                 .subscribe({ upComingList: List<UpComingVo> ->
-                    checkDatatype(upComingList)
-                    movieDao.saveAllUpComingMovies(upComingList)
+//                    checkDatatype(upComingList)
+                    Log.i("Ei","${upComingList.size}")
+                   movieDao.saveAllUpComingMovies(upComingList)
                 },
                         { t: Throwable -> Log.i("error: %s", t.message) })
 
@@ -123,13 +125,17 @@ class MoviesRepository(val movieDao: MovieDao, val context: Context) {
         return searchData
     }
 
-    fun checkDatatype(aa: List<UpComingVo>) {
 
-        for (a in aa) {
-            Log.i("Repos", "${a.genreids.size}")
-        }
 
-    }
+
+
+//    fun checkDatatype(aa: List<UpComingVo>) {
+//
+//        for (a in aa) {
+//            Log.i("Repos", "${a.genreids.size}")
+//        }
+//
+//    }
 
     fun getFavourites(): LiveData<List<FavouriteVo>> {
         movieDao.getAllFavouriteMovies().subscribeOn(Schedulers.io()).toObservable().map { t: List<FavouriteVo> -> t }
@@ -137,6 +143,8 @@ class MoviesRepository(val movieDao: MovieDao, val context: Context) {
 
         return favouriteData
     }
+
+
 
     fun getSearchMovieDetails(id: Int): LiveData<MovieDetailVo> {
         apiService.getMovieDetail(id, Constants.API_KEY)
@@ -177,6 +185,27 @@ class MoviesRepository(val movieDao: MovieDao, val context: Context) {
     fun getFavouriteMovieDetails(id: Int): LiveData<FavouriteVo> {
         return movieDao.getFavouriteMovieById(id.toString())
     }
+
+    fun checkedFavouriteMovie(id:Int): Flowable<Int> {
+
+       return movieDao.isFavouriteMovie(id.toString())
+    }
+
+
+//       if (movieDao.getFavouriteMovieById(id.toString())!=null)
+//       { Log.i("hotpotRepo1","${movieDao.getFavouriteMovieById(id.toString())}")
+//           return true
+//       }else{
+//           Log.i("hotpotRepo2","${movieDao.getFavouriteMovieById(id.toString())}")
+//           return false
+//       }
+
+
+
+
+
+
+
 
 
 }

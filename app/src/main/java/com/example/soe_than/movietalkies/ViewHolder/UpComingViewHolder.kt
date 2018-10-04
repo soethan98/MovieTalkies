@@ -18,10 +18,10 @@ class UpComingViewHolder(itemView: View, val mMovieDelegate: MovieDelegate) : Ba
 
 
     override fun bind(data: UpComingVo) {
-        Log.i("Hi",data.title + data.poster_path)
+        Log.i("Hi",data.title + data.posterPath)
 
-        Picasso.with(itemView.context).load("${Constants.IMAGES_BASE_URL + data.poster_path}").into(posterImage)
-        movieRating.setText("${data.vote_average}")
+        Picasso.with(itemView.context).load("${Constants.IMAGES_BASE_URL + data.posterPath}").into(posterImage)
+        movieRating.setText("${data.voteAverage}")
         movieTitle.setText(data.title)
 
         posterCard.setOnClickListener(View.OnClickListener {

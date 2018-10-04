@@ -52,7 +52,8 @@ class NowShowingFragment : Fragment(), MovieDelegate {
         viewModel.getNowShowingMovies().observe(activity!!,
                 Observer { nowshowingList ->
 
-                    if (nowshowingList!!.size != 0 && nowshowingList != null) {
+
+                    nowshowingList!!.let {
                         view.nowProgress.visibility = View.GONE
 
                         nowShowingAdapter.setNewData(nowshowingList as MutableList<NowShowingVo>)

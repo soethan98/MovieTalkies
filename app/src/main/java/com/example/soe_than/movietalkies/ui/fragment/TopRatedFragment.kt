@@ -58,12 +58,11 @@ class TopRatedFragment : Fragment(), MovieDelegate {
 
         viewModel.getTopRatedMovies().observe(activity!!, Observer { topRatedList ->
 
-            if (topRatedList!!.size != 0 && topRatedList != null) {
+
+            topRatedList!!.let {
                 view.topProgress.visibility = View.GONE
 
                 topRatedAdapter.setNewData(topRatedList as MutableList<TopRatedVo>)
-
-
             }
         });
 

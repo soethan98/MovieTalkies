@@ -2,8 +2,10 @@ package com.example.soe_than.movietalkies.data.local.Daos
 
 import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
+import android.support.annotation.MainThread
 import com.example.soe_than.movietalkies.ViewHolder.PopularViewHolder
 import com.example.soe_than.movietalkies.data.Vo.*
+import io.reactivex.Flowable
 import io.reactivex.Single
 
 
@@ -58,4 +60,8 @@ interface MovieDao {
 
     @Query("SELECT * FROM favourite WHERE id=:id")
     fun getFavouriteMovieById(id: String): LiveData<FavouriteVo>
-}
+
+
+    @Query("SELECT COUNT(*) FROM favourite WHERE id =:id")
+    fun isFavouriteMovie(id:String):Flowable<Int>
+ }

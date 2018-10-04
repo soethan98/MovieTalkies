@@ -27,6 +27,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
+import kotlinx.android.synthetic.main.activity_search_detail.*
 
 
 class DetailActivity : AppCompatActivity(), View.OnClickListener {
@@ -64,14 +65,14 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener {
         when (movieType) {
             "nowshowing" -> {
                 viewModel.getNowShowingMovieDetails().observe(this, Observer { nowShowingDetails ->
-                    if (nowShowingDetails != null) {
-                        nowShowingVo = nowShowingDetails
-                        bindNowShowingMovie(nowShowingDetails)
+                   nowShowingDetails!!.let {  nowShowingVo = nowShowingDetails
+                       bindNowShowingMovie(nowShowingDetails) }
 
-
-                    }
 
                 })
+                checkFavouriteStatus()
+
+
             }
             "popular" -> {
                 viewModel.getPopularMovieDetails().observe(this, Observer { popularDetails ->
@@ -99,8 +100,12 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener {
                         upComingVo = upcomingDetails
                     }
                 })
+
             }
+
+
             "favourite" -> {
+                add_favourite!!.isChecked = true
                 viewModel.getFavouriteMovieDetails().observe(this, Observer { favouriteMovieDetails ->
                     if (favouriteMovieDetails != null) {
                         bindFavouriteMovie(favouriteMovieDetails)
@@ -158,6 +163,7 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener {
 
                 }
                 "favourite" -> {
+
                     disposable.add(viewModel.removeFavouriteMovie(favouriteVo!!)
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
@@ -180,6 +186,7 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener {
         movie_title.setText(nowShowingVo.title)
         movie_overview.setText(nowShowingVo.overview)
         movie_release.setText(nowShowingVo.releasedDate)
+        movie_rat.setText(nowShowingVo.voteAverage.toString())
 
     }
 
@@ -192,17 +199,21 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener {
         movie_title.setText(popularVo.title)
         movie_overview.setText(popularVo.overview)
         movie_release.setText(popularVo.releasedDate)
+        movie_rat.setText(popularVo.voteAverage.toString())
+
 
     }
 
     fun bindUpComingMovie(upComingVo: UpComingVo) {
 
         Picasso.with(this).load("${Constants.BACKDROP_BASE_URL + upComingVo.backdrop_path}").into(image)
-        Picasso.with(this).load("${Constants.IMAGES_BASE_URL + upComingVo.poster_path}").transform(RoundedCornersTransformation(18, 4)).into(poster_image);
+        Picasso.with(this).load("${Constants.IMAGES_BASE_URL + upComingVo.posterPath}").transform(RoundedCornersTransformation(18, 4)).into(poster_image);
 
         movie_title.setText(upComingVo.title)
         movie_overview.setText(upComingVo.overview)
-        movie_release.setText(upComingVo.release_date)
+        movie_release.setText(upComingVo.releasedDate)
+        movie_rat.setText(upComingVo.voteAverage.toString())
+
 
     }
 
@@ -214,17 +225,22 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener {
         movie_title.setText(topRatedVo.title)
         movie_overview.setText(topRatedVo.overview)
         movie_release.setText(topRatedVo.releasedDate)
+        movie_rat.setText(topRatedVo.voteAverage.toString())
+
 
     }
 
     fun bindFavouriteMovie(favouriteVo: FavouriteVo) {
+//        add_favourite!!.isChecked = true
         Picasso.with(this).load("${Constants.BACKDROP_BASE_URL + favouriteVo.backdrop_path}").into(image)
         Picasso.with(this).load("${Constants.IMAGES_BASE_URL + favouriteVo.posterPath}").transform(RoundedCornersTransformation(18, 4)).into(poster_image);
 
         movie_title.setText(favouriteVo.title)
         movie_overview.setText(favouriteVo.overview)
         movie_release.setText(favouriteVo.releasedDate)
-        add_favourite.isChecked = true
+        movie_rat.setText(favouriteVo.voteAverage.toString())
+
+
 
     }
 
@@ -250,6 +266,20 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener {
 
 
         }
+    }
+
+    fun checkFavouriteStatus()
+    {
+        disposable.add(viewModel.checkedFavourite()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ movieCount ->
+                    if(movieCount==0) {
+                   add_favourite!!.isChecked = false }else {
+                    add_favourite!!.isChecked = true
+                }},
+                        { throwable -> Log.e("DetailViewModel", "Unable to count", throwable) }))
+
     }
 
 
