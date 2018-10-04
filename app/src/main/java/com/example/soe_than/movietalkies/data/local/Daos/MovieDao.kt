@@ -63,5 +63,5 @@ interface MovieDao {
 
 
     @Query("SELECT COUNT(*) FROM favourite WHERE id =:id")
-    fun isFavouriteMovie(id:String):Flowable<Int>
+    fun isFavouriteMovie(id:String):Single<Int>
  }

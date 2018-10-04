@@ -10,6 +10,7 @@ import com.example.soe_than.movietalkies.api.ApiService
 import com.example.soe_than.movietalkies.data.Vo.*
 import com.example.soe_than.movietalkies.data.local.Daos.MovieDao
 import io.reactivex.Flowable
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
@@ -186,9 +187,10 @@ class MoviesRepository(val movieDao: MovieDao, val context: Context) {
         return movieDao.getFavouriteMovieById(id.toString())
     }
 
-    fun checkedFavouriteMovie(id:Int): Flowable<Int> {
+    fun checkedFavouriteMovie(id:Int):Single<Int> {
+        Log.i("ViewModel1","$id")
 
-       return movieDao.isFavouriteMovie(id.toString())
+       return movieDao.isFavouriteMovie(id.toString()!!)
     }
 
 

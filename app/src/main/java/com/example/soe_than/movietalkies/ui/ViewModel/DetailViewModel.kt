@@ -8,6 +8,7 @@ import com.example.soe_than.movietalkies.data.Vo.*
 import com.example.soe_than.movietalkies.data.repository.MoviesRepository
 import io.reactivex.Completable
 import io.reactivex.Flowable
+import io.reactivex.Single
 
 class DetailViewModel(val moviesRepository: MoviesRepository, var id: Int) : ViewModel() {
 
@@ -80,9 +81,79 @@ class DetailViewModel(val moviesRepository: MoviesRepository, var id: Int) : Vie
 
     }
 
-    fun checkedFavourite():Flowable<Int>
-    {
-        return  moviesRepository.checkedFavouriteMovie(id)
+    fun checkedFavourite(): Single<Int> {
+
+        return moviesRepository.checkedFavouriteMovie(id!!)
+    }
+
+    fun favouriteStatus(nowShowingVo: NowShowingVo, checked: Boolean): Completable {
+        val favourite = FavouriteVo(nowShowingVo.id, nowShowingVo.posterPath, nowShowingVo.overview, nowShowingVo.title, nowShowingVo.releasedDate, nowShowingVo.voteAverage, nowShowingVo.backdrop_path)
+        if (checked) {
+            return Completable.fromAction {
+                moviesRepository.addFavouriteMovie(favourite)
+            }
+        } else {
+            return Completable.fromAction {
+
+                moviesRepository.removeFavouriteMovie(favourite)
+            }
+        }
+    }
+
+    fun favouriteStatus(upComingVo: UpComingVo, checked: Boolean): Completable {
+        val favourite = FavouriteVo(upComingVo.id, upComingVo.posterPath, upComingVo.overview, upComingVo.title, upComingVo.releasedDate, upComingVo.voteAverage, upComingVo.backdrop_path)
+        if (checked) {
+            return Completable.fromAction {
+                moviesRepository.addFavouriteMovie(favourite)
+            }
+        } else {
+            return Completable.fromAction {
+
+                moviesRepository.removeFavouriteMovie(favourite)
+            }
+        }
+    }
+
+    fun favouriteStatus(topRatedVo: TopRatedVo, checked: Boolean): Completable {
+        val favourite = FavouriteVo(topRatedVo.id, topRatedVo.posterPath, topRatedVo.overview, topRatedVo.title, topRatedVo.releasedDate, topRatedVo.voteAverage, topRatedVo.backdrop_path)
+        if (checked) {
+            return Completable.fromAction {
+                moviesRepository.addFavouriteMovie(favourite)
+            }
+        } else {
+            return Completable.fromAction {
+
+                moviesRepository.removeFavouriteMovie(favourite)
+            }
+        }
+    }
+
+    fun favouriteStatus(popularVo: PopularVo, checked: Boolean): Completable {
+        val favourite = FavouriteVo(popularVo.id, popularVo.posterPath, popularVo.overview, popularVo.title, popularVo.releasedDate, popularVo.voteAverage, popularVo.backdrop_path)
+        if (checked) {
+            return Completable.fromAction {
+                moviesRepository.addFavouriteMovie(favourite)
+            }
+        } else {
+            return Completable.fromAction {
+
+                moviesRepository.removeFavouriteMovie(favourite)
+            }
+        }
+    }
+
+    fun favouriteStatus(favouriteVo: FavouriteVo, checked: Boolean): Completable {
+
+        if (checked) {
+            return Completable.fromAction {
+                moviesRepository.addFavouriteMovie(favouriteVo)
+            }
+        } else {
+            return Completable.fromAction {
+
+                moviesRepository.removeFavouriteMovie(favouriteVo)
+            }
+        }
     }
 
 

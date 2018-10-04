@@ -20,6 +20,8 @@ import android.content.Intent
 import android.net.Uri
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.CheckBox
+import android.widget.CompoundButton
 import android.widget.ImageView
 import com.example.soe_than.movietalkies.ui.search.SearchActivity
 import com.squareup.picasso.Picasso
@@ -30,7 +32,9 @@ import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
 import kotlinx.android.synthetic.main.activity_search_detail.*
 
 
-class DetailActivity : AppCompatActivity(), View.OnClickListener {
+class DetailActivity : AppCompatActivity(), View.OnClickListener,CompoundButton.OnCheckedChangeListener {
+
+
     override fun onClick(v: View?) {
         var url = v!!.getTag().toString()
         val playVideoIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url.toString()))
@@ -46,31 +50,38 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener {
     var topRatedVo: TopRatedVo? = null
     var upComingVo: UpComingVo? = null
     var favouriteVo: FavouriteVo? = null
+    var movieId:Int? =null
+    var movieType:String? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
 
-        var movieId = intent.getIntExtra("ID", 0)
-        var movieType = intent.getStringExtra("TYPE")
+         movieId = intent.getIntExtra("ID", 0)
+         movieType = intent.getStringExtra("TYPE")
+        add_favourite.setOnCheckedChangeListener(this)
+        Log.i("Detail",movieType)
 
 
 
 
-        viewModelFactory = InjectorUtils.provideDetailViewFactory(this, movieId)
+        viewModelFactory = InjectorUtils.provideDetailViewFactory(this, movieId!!)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(DetailViewModel::class.java)
 
 
         when (movieType) {
             "nowshowing" -> {
                 viewModel.getNowShowingMovieDetails().observe(this, Observer { nowShowingDetails ->
-                   nowShowingDetails!!.let {  nowShowingVo = nowShowingDetails
-                       bindNowShowingMovie(nowShowingDetails) }
+                    nowShowingDetails!!.let {
+                        nowShowingVo = nowShowingDetails
+                        bindNowShowingMovie(nowShowingDetails)
+                        checkFavouriteStatus()
+                    }
 
 
                 })
-                checkFavouriteStatus()
+
 
 
             }
@@ -79,6 +90,8 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener {
                     if (popularDetails != null) {
                         bindPopularMovie(popularDetails)
                         popularVo = popularDetails
+                        checkFavouriteStatus()
+
                     }
                 })
             }
@@ -87,6 +100,7 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener {
                     if (topRatedDetails != null) {
                         bindTopRatedMovie(topRatedDetails)
                         topRatedVo = topRatedDetails
+                        checkFavouriteStatus()
 
 
                     }
@@ -98,6 +112,8 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener {
                     if (upcomingDetails != null) {
                         bindUpComingMovie(upcomingDetails)
                         upComingVo = upcomingDetails
+                        checkFavouriteStatus()
+
                     }
                 })
 
@@ -105,17 +121,74 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener {
 
 
             "favourite" -> {
-                add_favourite!!.isChecked = true
                 viewModel.getFavouriteMovieDetails().observe(this, Observer { favouriteMovieDetails ->
                     if (favouriteMovieDetails != null) {
                         bindFavouriteMovie(favouriteMovieDetails)
                         favouriteVo = favouriteMovieDetails
+                        add_favourite!!.isChecked=true
                     }
                 })
+
 
             }
 
         }
+
+
+//        add_favourite.setOnCheckedChangeListener { buttonView, isChecked ->
+//
+//            Log.i("isCheck", "Hello")
+
+
+//            when (movieType) {
+//                "nowshowing" -> {
+//                    disposable.add(viewModel.favouriteStatus(nowShowingVo!!, isChecked)
+//                            .subscribeOn(Schedulers.io())
+//                            .observeOn(AndroidSchedulers.mainThread())
+//                            .subscribe({ add_favourite.isChecked = isChecked },
+//                                    { error -> Log.e("Hello", "Unable to add movie", error) }))
+//
+//                }
+//                "popular" -> {
+//                    disposable.add(viewModel.favouriteStatus(popularVo!!, isChecked)
+//                            .subscribeOn(Schedulers.io())
+//                            .observeOn(AndroidSchedulers.mainThread())
+//                            .subscribe({ add_favourite.isChecked = isChecked },
+//                                    { error -> Log.e("Hello", "Unable to add movie", error) }))
+//                }
+//                "toprated" -> {
+//                    disposable.add(viewModel.favouriteStatus(topRatedVo!!, isChecked)
+//                            .subscribeOn(Schedulers.io())
+//                            .observeOn(AndroidSchedulers.mainThread())
+//                            .subscribe({ add_favourite.isChecked = isChecked }, { error ->
+//                                Log.i("Hello", "Unable to add movie", error)
+//                            }))
+//                }
+//                "upcoming" -> {
+//                    disposable.add(viewModel.favouriteStatus(upComingVo!!, isChecked)
+//                            .subscribeOn(Schedulers.io())
+//                            .observeOn(AndroidSchedulers.mainThread())
+//                            .subscribe({ add_favourite.isChecked = isChecked }, { error ->
+//                                Log.i("Hello", "Unable to add movie", error)
+//                            }))
+//
+//                }
+//                "favourite" -> {
+//
+//                    disposable.add(viewModel.favouriteStatus(favouriteVo!!, isChecked)
+//                            .subscribeOn(Schedulers.io())
+//                            .observeOn(AndroidSchedulers.mainThread())
+//                            .subscribe({
+//                                add_favourite.isChecked = isChecked
+//                                Log.i("Hello", "Removed")
+//                            }, { error ->
+//                                Log.i("Hello", "Unable to remove movie", error)
+//                            }))
+//                }
+
+
+//            }
+//        }
         viewModel.getTrailers()?.observe(this, Observer { trailerList ->
             if (trailerList!!.isEmpty()) {
                 trailer_label.visibility = View.GONE
@@ -126,55 +199,8 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener {
             }
         })
 
-        add_favourite.setOnCheckedChangeListener { buttonView, isChecked ->
 
 
-            when (movieType) {
-                "nowshowing" -> {
-                    disposable.add(viewModel.addFavouriteMovie(nowShowingVo!!)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe({ add_favourite.isChecked = true },
-                                    { error -> Log.e("Hello", "Unable to add movie", error) }))
-
-                }
-                "popular" -> {
-                    disposable.add(viewModel.addFavouriteMovie(popularVo!!)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe({ add_favourite.isChecked = true },
-                                    { error -> Log.e("Hello", "Unable to add movie", error) }))
-                }
-                "toprated" -> {
-                    disposable.add(viewModel.addFavouriteMovie(topRatedVo!!)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe({ add_favourite.isChecked = true }, { error ->
-                                Log.i("Hello", "Unable to add movie", error)
-                            }))
-                }
-                "upcoming" -> {
-                    disposable.add(viewModel.addFavouriteMovie(upComingVo!!)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe({ add_favourite.isChecked = true }, { error ->
-                                Log.i("Hello", "Unable to add movie", error)
-                            }))
-
-                }
-                "favourite" -> {
-
-                    disposable.add(viewModel.removeFavouriteMovie(favouriteVo!!)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe({ Log.i("Hello","Removed")}, { error ->
-                                Log.i("Hello", "Unable to remove movie", error)
-                            }))
-                }
-
-
-            }
-        }
     }
 
 
@@ -241,7 +267,6 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener {
         movie_rat.setText(favouriteVo.voteAverage.toString())
 
 
-
     }
 
     fun bindTrailers(trailerList: List<TrailerVo>) {
@@ -268,19 +293,72 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    fun checkFavouriteStatus()
-    {
+    fun checkFavouriteStatus() {
+        Log.i("checkFavoutite","$movieId + $movieType")
         disposable.add(viewModel.checkedFavourite()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ movieCount ->
-                    if(movieCount==0) {
-                   add_favourite!!.isChecked = false }else {
-                    add_favourite!!.isChecked = true
-                }},
+                    Log.i("checkFavoutite","$movieCount")
+                    if (movieCount==0)
+                    {
+                        add_favourite.isChecked = false
+                    }else{add_favourite.isChecked = true }
+
+                },
                         { throwable -> Log.e("DetailViewModel", "Unable to count", throwable) }))
 
     }
+    override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
+        Log.i("Heeeee", "$isChecked")
+        when (movieType) {
+            "nowshowing" -> {
+                disposable.add(viewModel.favouriteStatus(nowShowingVo!!, isChecked)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({ add_favourite.isChecked = isChecked },
+                                { error -> Log.e("Hello", "Unable to Perform", error) }))
+            }
+            "upcoming" -> {
+                    disposable.add(viewModel.favouriteStatus(upComingVo!!, isChecked)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe({ add_favourite.isChecked = isChecked }, { error ->
+                                Log.i("Hello", "Unable to Perform", error)
+                            }))
+
+                }
+            "popular" -> {
+                disposable.add(viewModel.favouriteStatus(popularVo!!, isChecked)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({ add_favourite.isChecked = isChecked },
+                                { error -> Log.e("Hello", "Unable to Perform", error) }))
+                }
+            "toprated" -> {
+                    disposable.add(viewModel.favouriteStatus(topRatedVo!!, isChecked)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe({ add_favourite.isChecked = isChecked }, { error ->
+                                Log.i("Hello", "Unable to Perform", error)
+                            }))
+                }
+            "favourite" -> {
+                    disposable.add(viewModel.favouriteStatus(favouriteVo!!, isChecked)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe({
+                                add_favourite.isChecked = isChecked
+                                Log.i("Hello", "Removed")
+                            }, { error ->
+                                Log.i("Hello", "Unable to remove movie", error)
+                            }))
+                }
+
+
+            }
+        }
+
 
 
     override fun onDestroy() {
@@ -288,7 +366,10 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener {
         disposable.clear()
     }
 
-
+    override fun onStart() {
+        super.onStart()
+        Log.i("He","onStart")
+    }
 
 
 }
