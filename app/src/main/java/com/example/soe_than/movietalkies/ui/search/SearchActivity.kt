@@ -16,6 +16,7 @@ import com.example.soe_than.movietalkies.ui.ViewModel.MovieViewModel
 import com.example.soe_than.movietalkies.ui.ViewModelFactory.MovieViewModelFactory
 import kotlinx.android.synthetic.main.activity_search.*
 import android.text.Editable
+import android.view.View
 import com.example.soe_than.movietalkies.delegate.SearchDelegate
 import com.example.soe_than.movietalkies.ui.detail.SearchDetailActivity
 
@@ -42,7 +43,6 @@ class SearchActivity : AppCompatActivity(), SearchDelegate {
 
         setUpRecyclerView()
 
-//        getSearchQuery()
 
         input_search.addTextChangedListener(object : TextWatcher {
 
@@ -55,6 +55,8 @@ class SearchActivity : AppCompatActivity(), SearchDelegate {
             }
 
             override fun afterTextChanged(s: Editable) {
+                search_progress.visibility = View.VISIBLE
+
                 getViewModelData(s.toString()!!)
             }
         })
@@ -75,6 +77,7 @@ class SearchActivity : AppCompatActivity(), SearchDelegate {
                 Observer { searchList ->
                     if (searchList!!.size != 0 && searchList != null) {
                         searchAdapter.setNewData(searchList as MutableList<SearchVo>)
+                        search_progress.visibility = View.GONE
                     }
                 })
 

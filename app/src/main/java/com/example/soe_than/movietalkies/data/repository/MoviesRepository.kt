@@ -90,8 +90,6 @@ class MoviesRepository(val movieDao: MovieDao, val context: Context) {
                 .toObservable()
                 .map { upComingResponse -> upComingResponse.upComingVo }
                 .subscribe({ upComingList: List<UpComingVo> ->
-//                    checkDatatype(upComingList)
-                    Log.i("Ei","${upComingList.size}")
                    movieDao.saveAllUpComingMovies(upComingList)
                 },
                         { t: Throwable -> Log.i("error: %s", t.message) })
@@ -126,17 +124,6 @@ class MoviesRepository(val movieDao: MovieDao, val context: Context) {
         return searchData
     }
 
-
-
-
-
-//    fun checkDatatype(aa: List<UpComingVo>) {
-//
-//        for (a in aa) {
-//            Log.i("Repos", "${a.genreids.size}")
-//        }
-//
-//    }
 
     fun getFavourites(): LiveData<List<FavouriteVo>> {
         movieDao.getAllFavouriteMovies().subscribeOn(Schedulers.io()).toObservable().map { t: List<FavouriteVo> -> t }
@@ -194,13 +181,6 @@ class MoviesRepository(val movieDao: MovieDao, val context: Context) {
     }
 
 
-//       if (movieDao.getFavouriteMovieById(id.toString())!=null)
-//       { Log.i("hotpotRepo1","${movieDao.getFavouriteMovieById(id.toString())}")
-//           return true
-//       }else{
-//           Log.i("hotpotRepo2","${movieDao.getFavouriteMovieById(id.toString())}")
-//           return false
-//       }
 
 
 

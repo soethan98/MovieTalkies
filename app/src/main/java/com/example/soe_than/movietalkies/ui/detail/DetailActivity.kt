@@ -134,61 +134,6 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener,CompoundButton.
 
         }
 
-
-//        add_favourite.setOnCheckedChangeListener { buttonView, isChecked ->
-//
-//            Log.i("isCheck", "Hello")
-
-
-//            when (movieType) {
-//                "nowshowing" -> {
-//                    disposable.add(viewModel.favouriteStatus(nowShowingVo!!, isChecked)
-//                            .subscribeOn(Schedulers.io())
-//                            .observeOn(AndroidSchedulers.mainThread())
-//                            .subscribe({ add_favourite.isChecked = isChecked },
-//                                    { error -> Log.e("Hello", "Unable to add movie", error) }))
-//
-//                }
-//                "popular" -> {
-//                    disposable.add(viewModel.favouriteStatus(popularVo!!, isChecked)
-//                            .subscribeOn(Schedulers.io())
-//                            .observeOn(AndroidSchedulers.mainThread())
-//                            .subscribe({ add_favourite.isChecked = isChecked },
-//                                    { error -> Log.e("Hello", "Unable to add movie", error) }))
-//                }
-//                "toprated" -> {
-//                    disposable.add(viewModel.favouriteStatus(topRatedVo!!, isChecked)
-//                            .subscribeOn(Schedulers.io())
-//                            .observeOn(AndroidSchedulers.mainThread())
-//                            .subscribe({ add_favourite.isChecked = isChecked }, { error ->
-//                                Log.i("Hello", "Unable to add movie", error)
-//                            }))
-//                }
-//                "upcoming" -> {
-//                    disposable.add(viewModel.favouriteStatus(upComingVo!!, isChecked)
-//                            .subscribeOn(Schedulers.io())
-//                            .observeOn(AndroidSchedulers.mainThread())
-//                            .subscribe({ add_favourite.isChecked = isChecked }, { error ->
-//                                Log.i("Hello", "Unable to add movie", error)
-//                            }))
-//
-//                }
-//                "favourite" -> {
-//
-//                    disposable.add(viewModel.favouriteStatus(favouriteVo!!, isChecked)
-//                            .subscribeOn(Schedulers.io())
-//                            .observeOn(AndroidSchedulers.mainThread())
-//                            .subscribe({
-//                                add_favourite.isChecked = isChecked
-//                                Log.i("Hello", "Removed")
-//                            }, { error ->
-//                                Log.i("Hello", "Unable to remove movie", error)
-//                            }))
-//                }
-
-
-//            }
-//        }
         viewModel.getTrailers()?.observe(this, Observer { trailerList ->
             if (trailerList!!.isEmpty()) {
                 trailer_label.visibility = View.GONE
@@ -310,7 +255,6 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener,CompoundButton.
 
     }
     override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
-        Log.i("Heeeee", "$isChecked")
         when (movieType) {
             "nowshowing" -> {
                 disposable.add(viewModel.favouriteStatus(nowShowingVo!!, isChecked)
