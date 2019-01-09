@@ -23,7 +23,7 @@ data class SearchVo(
         @SerializedName("original_title")
         var original_title: String,
         @SerializedName("genre_ids")
-        var genreids: List<String> = ArrayList<String>(),
+        var genreids: List<Int> ,
         @SerializedName("backdrop_path")
         var backdrop_path: String,
         @SerializedName("overview")

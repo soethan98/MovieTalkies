@@ -20,8 +20,6 @@ class FavouriteViewHolder(itemView: View, val mMovieDelegate: MovieDelegate) : B
     private val movieTitle = itemView.movie_title
 
     override fun onClick(v: View?) {
-
-
     }
 
     override fun bind(data: FavouriteVo) {

@@ -27,7 +27,7 @@ class SearchDetailViewModel(val moviesRepository: MoviesRepository, var id: Int)
     }
 
     fun favouriteStatus(movieDetailVo: MovieDetailVo, checked: Boolean): Completable {
-        val favourite = FavouriteVo(movieDetailVo.id, movieDetailVo.poster_path, movieDetailVo.overview, movieDetailVo.title, movieDetailVo.release_date, movieDetailVo.vote_average, movieDetailVo.backdrop_path)
+        val favourite = FavouriteVo(movieDetailVo.id, movieDetailVo.poster_path, movieDetailVo.overview, movieDetailVo.title, movieDetailVo.release_date, movieDetailVo.vote_average, movieDetailVo.backdrop_path,movieDetailVo.genreids.map { it.id }.toList())
         if (checked) {
             return Completable.fromAction {
                 moviesRepository.addFavouriteMovie(favourite)

@@ -8,7 +8,7 @@ import com.example.soe_than.movietalkies.data.local.Daos.*
 
 @Database(entities = arrayOf(NowShowingVo::class, UpComingVo::class,
         PopularVo::class, TopRatedVo::class, FavouriteVo::class), version = 1)
-@TypeConverters(ListGenresConverter::class)
+@TypeConverters(Converters::class)
 abstract class MovieDatabase : RoomDatabase() {
 
 //    abstract fun popularDao(): PopularDao

@@ -35,4 +35,8 @@ data class PopularVo ( @PrimaryKey
 
                        @ColumnInfo(name = "backdrop_path")
                        @SerializedName("backdrop_path")
-                       var backdrop_path: String? = null)
+                       var backdrop_path: String? = null,
+
+                       @ColumnInfo(name = "genres_ids")
+                       @SerializedName("genre_ids")
+                       val genreids: List<Int>)

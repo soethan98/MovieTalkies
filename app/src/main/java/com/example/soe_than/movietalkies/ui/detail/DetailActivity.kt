@@ -32,11 +32,11 @@ import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
 import kotlinx.android.synthetic.main.activity_search_detail.*
 
 
-class DetailActivity : AppCompatActivity(), View.OnClickListener,CompoundButton.OnCheckedChangeListener {
+class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
 
     override fun onClick(v: View?) {
-        var url = v!!.getTag().toString()
+        var url = v!!.tag.toString()
         val playVideoIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url.toString()))
         startActivity(playVideoIntent)
     }
@@ -45,23 +45,23 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener,CompoundButton.
     private lateinit var viewModelFactory: DetailViewModelFactory
     private val disposable = CompositeDisposable()
 
-    var nowShowingVo: NowShowingVo? = null
-    var popularVo: PopularVo? = null
-    var topRatedVo: TopRatedVo? = null
-    var upComingVo: UpComingVo? = null
-    var favouriteVo: FavouriteVo? = null
-    var movieId:Int? =null
-    var movieType:String? = null
+    private var nowShowingVo: NowShowingVo? = null
+    private var popularVo: PopularVo? = null
+    private var topRatedVo: TopRatedVo? = null
+    private var upComingVo: UpComingVo? = null
+    private var favouriteVo: FavouriteVo? = null
+    var movieId: Int? = null
+    var movieType: String? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
 
-         movieId = intent.getIntExtra("ID", 0)
-         movieType = intent.getStringExtra("TYPE")
+        movieId = intent.getIntExtra("ID", 0)
+        movieType = intent.getStringExtra("TYPE")
         add_favourite.setOnCheckedChangeListener(this)
-        Log.i("Detail",movieType)
+        Log.i("Detail", movieType)
 
 
 
@@ -74,8 +74,8 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener,CompoundButton.
             "nowshowing" -> {
                 viewModel.getNowShowingMovieDetails().observe(this, Observer { nowShowingDetails ->
                     nowShowingDetails!!.let {
-                        nowShowingVo = nowShowingDetails
-                        bindNowShowingMovie(nowShowingDetails)
+                                                nowShowingVo = nowShowingDetails
+                        bindNowShowingMovie(nowShowingVo = nowShowingDetails)
                         checkFavouriteStatus()
                     }
 
@@ -83,12 +83,11 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener,CompoundButton.
                 })
 
 
-
             }
             "popular" -> {
                 viewModel.getPopularMovieDetails().observe(this, Observer { popularDetails ->
                     if (popularDetails != null) {
-                        bindPopularMovie(popularDetails)
+                        bindPopularMovie(popularVo = popularDetails)
                         popularVo = popularDetails
                         checkFavouriteStatus()
 
@@ -98,7 +97,7 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener,CompoundButton.
             "toprated" -> {
                 viewModel.getTopRatedMovieDetails().observe(this, Observer { topRatedDetails ->
                     if (topRatedDetails != null) {
-                        bindTopRatedMovie(topRatedDetails)
+                        bindTopRatedMovie(topRatedVo = topRatedDetails)
                         topRatedVo = topRatedDetails
                         checkFavouriteStatus()
 
@@ -110,7 +109,7 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener,CompoundButton.
             "upcoming" -> {
                 viewModel.getUpComingMovieDetails().observe(this, Observer { upcomingDetails ->
                     if (upcomingDetails != null) {
-                        bindUpComingMovie(upcomingDetails)
+                        bindUpComingMovie(upComingVo = upcomingDetails)
                         upComingVo = upcomingDetails
                         checkFavouriteStatus()
 
@@ -123,9 +122,9 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener,CompoundButton.
             "favourite" -> {
                 viewModel.getFavouriteMovieDetails().observe(this, Observer { favouriteMovieDetails ->
                     if (favouriteMovieDetails != null) {
-                        bindFavouriteMovie(favouriteMovieDetails)
+                        bindFavouriteMovie(favouriteVo = favouriteMovieDetails)
                         favouriteVo = favouriteMovieDetails
-                        add_favourite!!.isChecked=true
+                        add_favourite!!.isChecked = true
                     }
                 })
 
@@ -140,10 +139,9 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener,CompoundButton.
                 trailer_scroll.visibility = View.GONE
                 trailer_container.visibility = View.GONE
             } else {
-                bindTrailers(trailerList!!)
+                bindTrailers(trailerList)
             }
         })
-
 
 
     }
@@ -151,65 +149,87 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener,CompoundButton.
 
     fun bindNowShowingMovie(nowShowingVo: NowShowingVo) {
 
-        Picasso.with(this).load("${Constants.BACKDROP_BASE_URL + nowShowingVo.backdrop_path}").into(image)
-        Picasso.with(this).load("${Constants.IMAGES_BASE_URL + nowShowingVo.posterPath}").transform(RoundedCornersTransformation(18, 4)).into(poster_image);
+        with(nowShowingVo) {
+            Picasso.with(this@DetailActivity).load("${Constants.BACKDROP_BASE_URL + this.backdrop_path}").into(image)
+            Picasso.with(this@DetailActivity).load("${Constants.IMAGES_BASE_URL + this.posterPath}").transform(RoundedCornersTransformation(18, 4)).into(poster_image)
 
-        movie_title.setText(nowShowingVo.title)
-        movie_overview.setText(nowShowingVo.overview)
-        movie_release.setText(nowShowingVo.releasedDate)
-        movie_rat.setText(nowShowingVo.voteAverage.toString())
+            movie_title.text = this.title
+            movie_overview.text = this.overview
+            movie_release.text = this.releasedDate
+            movie_rat.text = this.voteAverage.toString()
 
+             genresChip.setText(Utility.setGenresTypeForMovie(this.genreids))
+
+
+        }
     }
 
 
     fun bindPopularMovie(popularVo: PopularVo) {
 
-        Picasso.with(this).load("${Constants.BACKDROP_BASE_URL + popularVo.backdrop_path}").into(image)
-        Picasso.with(this).load("${Constants.IMAGES_BASE_URL + popularVo.posterPath}").transform(RoundedCornersTransformation(18, 4)).into(poster_image);
+        with(popularVo) {
+            Picasso.with(this@DetailActivity).load("${Constants.BACKDROP_BASE_URL + this.backdrop_path}").into(image)
+            Picasso.with(this@DetailActivity).load("${Constants.IMAGES_BASE_URL + this.posterPath}").transform(RoundedCornersTransformation(18, 4)).into(poster_image)
 
-        movie_title.setText(popularVo.title)
-        movie_overview.setText(popularVo.overview)
-        movie_release.setText(popularVo.releasedDate)
-        movie_rat.setText(popularVo.voteAverage.toString())
+            movie_title.text = this.title
+            movie_overview.text = this.overview
+            movie_release.text = this.releasedDate
+            movie_rat.text = this.voteAverage.toString()
+            genresChip.setText(Utility.setGenresTypeForMovie(this.genreids))
 
+
+        }
 
     }
 
     fun bindUpComingMovie(upComingVo: UpComingVo) {
 
-        Picasso.with(this).load("${Constants.BACKDROP_BASE_URL + upComingVo.backdrop_path}").into(image)
-        Picasso.with(this).load("${Constants.IMAGES_BASE_URL + upComingVo.posterPath}").transform(RoundedCornersTransformation(18, 4)).into(poster_image);
+        with(upComingVo) {
+            Picasso.with(this@DetailActivity).load("${Constants.BACKDROP_BASE_URL + this.backdrop_path}").into(image)
+            Picasso.with(this@DetailActivity).load("${Constants.IMAGES_BASE_URL + this.posterPath}").transform(RoundedCornersTransformation(18, 4)).into(poster_image)
 
-        movie_title.setText(upComingVo.title)
-        movie_overview.setText(upComingVo.overview)
-        movie_release.setText(upComingVo.releasedDate)
-        movie_rat.setText(upComingVo.voteAverage.toString())
+            movie_title.text = this.title
+            movie_overview.text = this.overview
+            movie_release.text = this.releasedDate
+            movie_rat.text = this.voteAverage.toString()
 
+            genresChip.setText(Utility.setGenresTypeForMovie(this.genreids))
+
+        }
 
     }
 
     fun bindTopRatedMovie(topRatedVo: TopRatedVo) {
+        with(topRatedVo) {
+            Picasso.with(this@DetailActivity).load("${Constants.BACKDROP_BASE_URL + this.backdrop_path}").into(image)
+            Picasso.with(this@DetailActivity).load("${Constants.IMAGES_BASE_URL + this.posterPath}").transform(RoundedCornersTransformation(18, 4)).into(poster_image)
 
-        Picasso.with(this).load("${Constants.BACKDROP_BASE_URL + topRatedVo.backdrop_path}").into(image)
-        Picasso.with(this).load("${Constants.IMAGES_BASE_URL + topRatedVo.posterPath}").transform(RoundedCornersTransformation(18, 4)).into(poster_image);
+            movie_title.text = this.title
+            movie_overview.text = this.overview
+            movie_release.text = this.releasedDate
+            movie_rat.text = this.voteAverage.toString()
+            genresChip.setText(Utility.setGenresTypeForMovie(this.genreids))
 
-        movie_title.setText(topRatedVo.title)
-        movie_overview.setText(topRatedVo.overview)
-        movie_release.setText(topRatedVo.releasedDate)
-        movie_rat.setText(topRatedVo.voteAverage.toString())
 
+        }
 
     }
 
     fun bindFavouriteMovie(favouriteVo: FavouriteVo) {
-//        add_favourite!!.isChecked = true
-        Picasso.with(this).load("${Constants.BACKDROP_BASE_URL + favouriteVo.backdrop_path}").into(image)
-        Picasso.with(this).load("${Constants.IMAGES_BASE_URL + favouriteVo.posterPath}").transform(RoundedCornersTransformation(18, 4)).into(poster_image);
 
-        movie_title.setText(favouriteVo.title)
-        movie_overview.setText(favouriteVo.overview)
-        movie_release.setText(favouriteVo.releasedDate)
-        movie_rat.setText(favouriteVo.voteAverage.toString())
+
+        with(favouriteVo) {
+            Picasso.with(this@DetailActivity).load("${Constants.BACKDROP_BASE_URL + this.backdrop_path}").into(image)
+            Picasso.with(this@DetailActivity).load("${Constants.IMAGES_BASE_URL + this.posterPath}").transform(RoundedCornersTransformation(18, 4)).into(poster_image)
+
+            movie_title.text = this.title
+            movie_overview.text = this.overview
+            movie_release.text = this.releasedDate
+            movie_rat.text = this.voteAverage.toString()
+            genresChip.setText(Utility.setGenresTypeForMovie(this.genreids))
+
+
+        }
 
 
     }
@@ -223,8 +243,8 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener,CompoundButton.
             val thumbContainer = layoutInflater.inflate(R.layout.trailers_content, this.trailer_container, false)
             val thubview = thumbContainer.findViewById(R.id.video_thumb) as ImageView
 //
-            thubview.setOnClickListener(this);
-            thubview.setTag(Utility.getUrl(trailer))
+            thubview.setOnClickListener(this)
+            thubview.tag = Utility.getUrl(trailer)
 
 
 
@@ -239,21 +259,19 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener,CompoundButton.
     }
 
     fun checkFavouriteStatus() {
-        Log.i("checkFavoutite","$movieId + $movieType")
+
         disposable.add(viewModel.checkedFavourite()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ movieCount ->
-                    Log.i("checkFavoutite","$movieCount")
-                    if (movieCount==0)
-                    {
-                        add_favourite.isChecked = false
-                    }else{add_favourite.isChecked = true }
+                    Log.i("checkFavoutite", "$movieCount")
+                    add_favourite.isChecked = movieCount != 0
 
                 },
                         { throwable -> Log.e("DetailViewModel", "Unable to count", throwable) }))
 
     }
+
     override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
         when (movieType) {
             "nowshowing" -> {
@@ -264,45 +282,44 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener,CompoundButton.
                                 { error -> Log.e("Hello", "Unable to Perform", error) }))
             }
             "upcoming" -> {
-                    disposable.add(viewModel.favouriteStatus(upComingVo!!, isChecked)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe({ add_favourite.isChecked = isChecked }, { error ->
-                                Log.i("Hello", "Unable to Perform", error)
-                            }))
+                disposable.add(viewModel.favouriteStatus(upComingVo!!, isChecked)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({ add_favourite.isChecked = isChecked }, { error ->
+                            Log.i("Hello", "Unable to Perform", error)
+                        }))
 
-                }
+            }
             "popular" -> {
                 disposable.add(viewModel.favouriteStatus(popularVo!!, isChecked)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({ add_favourite.isChecked = isChecked },
                                 { error -> Log.e("Hello", "Unable to Perform", error) }))
-                }
-            "toprated" -> {
-                    disposable.add(viewModel.favouriteStatus(topRatedVo!!, isChecked)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe({ add_favourite.isChecked = isChecked }, { error ->
-                                Log.i("Hello", "Unable to Perform", error)
-                            }))
-                }
-            "favourite" -> {
-                    disposable.add(viewModel.favouriteStatus(favouriteVo!!, isChecked)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe({
-                                add_favourite.isChecked = isChecked
-                                Log.i("Hello", "Removed")
-                            }, { error ->
-                                Log.i("Hello", "Unable to remove movie", error)
-                            }))
-                }
-
-
             }
-        }
+            "toprated" -> {
+                disposable.add(viewModel.favouriteStatus(topRatedVo!!, isChecked)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({ add_favourite.isChecked = isChecked }, { error ->
+                            Log.i("Hello", "Unable to Perform", error)
+                        }))
+            }
+            "favourite" -> {
+                disposable.add(viewModel.favouriteStatus(favouriteVo!!, isChecked)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({
+                            add_favourite.isChecked = isChecked
+                            Log.i("Hello", "Removed")
+                        }, { error ->
+                            Log.i("Hello", "Unable to remove movie", error)
+                        }))
+            }
 
+
+        }
+    }
 
 
     override fun onDestroy() {
@@ -312,7 +329,6 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener,CompoundButton.
 
     override fun onStart() {
         super.onStart()
-        Log.i("He","onStart")
     }
 
 

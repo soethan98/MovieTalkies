@@ -3,7 +3,6 @@ package com.example.soe_than.movietalkies.data.Vo
 import android.arch.persistence.room.*
 import android.os.Parcel
 import android.os.Parcelable
-import com.example.soe_than.movietalkies.data.local.ListGenresConverter
 import com.google.gson.annotations.SerializedName
 import java.lang.reflect.GenericArrayType
 
@@ -11,8 +10,7 @@ import java.lang.reflect.GenericArrayType
 @Entity(tableName = "upcoming")
 data class UpComingVo(
 
-//        @SerializedName("genre_ids")
-//        val genreids: List<String>
+
 
         @PrimaryKey
         @SerializedName("id")
@@ -41,6 +39,10 @@ data class UpComingVo(
 
         @ColumnInfo(name = "backdrop_path")
         @SerializedName("backdrop_path")
-        var backdrop_path: String? = null
+        var backdrop_path: String? = null,
+
+        @ColumnInfo(name = "genres_ids")
+        @SerializedName("genre_ids")
+        val genreids: List<Int>
 
 )

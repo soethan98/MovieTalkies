@@ -67,13 +67,13 @@ object Utility {
         return type
     }
 
-    fun setGenresTypeForMovie(ids:List<String>):ArrayList<String>
+    fun setGenresTypeForMovie(ids:List<Int>):ArrayList<String>
     {
 
          var idsList: ArrayList<String> = ArrayList<String>()
         for (id in ids)
         {
-          idsList.add(getGeneresnames(id.toInt()))
+          idsList.add(getGeneresnames(id))
 
         }
         return idsList
@@ -87,7 +87,7 @@ object Utility {
         var idsList: ArrayList<String> = ArrayList<String>()
         for (id in ids)
         {
-            idsList.add(id.name)
+            idsList.add(getGeneresnames(id.id))
 
         }
         return idsList

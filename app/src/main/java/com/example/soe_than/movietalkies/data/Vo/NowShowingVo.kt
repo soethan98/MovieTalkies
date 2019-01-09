@@ -9,7 +9,6 @@ import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "nowshowing")
 data class NowShowingVo(
-
         @PrimaryKey
         @SerializedName("id")
         var id: Int = 0,
@@ -34,7 +33,10 @@ data class NowShowingVo(
         @SerializedName("vote_average")
         var voteAverage: Double = 0.toDouble(),
 
-
         @ColumnInfo(name = "backdrop_path")
         @SerializedName("backdrop_path")
-        var backdrop_path: String? = null)
+        var backdrop_path: String? = null,
+
+        @ColumnInfo(name = "genres_ids")
+        @SerializedName("genre_ids")
+        val genreids: List<Int>)

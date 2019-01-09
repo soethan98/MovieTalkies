@@ -40,7 +40,7 @@ class FavouriteFragment : Fragment(), MovieDelegate {
 
     private lateinit var viewModel: FavouriteViewModel
     private lateinit var viewModelFactory: FavouriteViewFactory
-    lateinit var favouriteAdapter: FavouriteRecyclerAdapter
+    private lateinit var favouriteAdapter: FavouriteRecyclerAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -61,6 +61,7 @@ class FavouriteFragment : Fragment(), MovieDelegate {
     }
 
     private fun setUpRecyclerView(view: View) {
+
 
         view.favouriteRecyclerView.layoutManager = GridLayoutManager(activity, 2)
         favouriteAdapter = FavouriteRecyclerAdapter(context!!, this)

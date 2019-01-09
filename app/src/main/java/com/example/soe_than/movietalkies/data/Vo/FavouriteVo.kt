@@ -20,4 +20,6 @@ data class FavouriteVo(@PrimaryKey
                        @ColumnInfo(name = "vote_average")
                        var voteAverage: Double = 0.toDouble(),
                        @ColumnInfo(name = "backdrop_path")
-                       var backdrop_path: String? = null)
+                       var backdrop_path: String? = null,
+                       @ColumnInfo(name = "genres_ids")
+                       val genreids: List<Int>)

@@ -32,7 +32,7 @@ class SearchDetailActivity : AppCompatActivity(), View.OnClickListener, Compound
 
 
     override fun onClick(v: View?) {
-        var url = v!!.getTag().toString()
+        var url = v!!.tag.toString()
         val playVideoIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url.toString()))
         startActivity(playVideoIntent)
     }
@@ -43,16 +43,15 @@ class SearchDetailActivity : AppCompatActivity(), View.OnClickListener, Compound
 
 
     private val disposable = CompositeDisposable()
-    var movieId:Int? =null
-
+    var movieId: Int? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search_detail)
-         movieId = intent.getIntExtra("Search", 0)
+        movieId = intent.getIntExtra("Search", 0)
 
-        Log.i("SearchDetailViewModel","$movieId MovieId")
+        Log.i("SearchDetailViewModel", "$movieId MovieId")
 
         add_search_favourite.setOnCheckedChangeListener(this)
 
@@ -76,7 +75,7 @@ class SearchDetailActivity : AppCompatActivity(), View.OnClickListener, Compound
                 trailer_scroll.visibility = View.GONE
                 trailer_container.visibility = View.GONE
             } else {
-                bindTrailers(trailerList!!)
+                bindTrailers(trailerList)
             }
         })
 
@@ -86,15 +85,15 @@ class SearchDetailActivity : AppCompatActivity(), View.OnClickListener, Compound
 
 
         Picasso.with(this).load("${Constants.BACKDROP_BASE_URL + searchDetailVo.backdrop_path}").into(search_image)
-        Picasso.with(this).load("${Constants.IMAGES_BASE_URL + searchDetailVo.poster_path}").transform(RoundedCornersTransformation(18, 4)).into(poster_image);
+        Picasso.with(this).load("${Constants.IMAGES_BASE_URL + searchDetailVo.poster_path}").transform(RoundedCornersTransformation(18, 4)).into(poster_image)
         genresChip.setText(Utility//        Log.i("checkFavoutite","$movieId + $movieType")
-.setGenresTypeForMovie1(searchDetailVo.genreids))
+                .setGenresTypeForMovie1(searchDetailVo.genreids))
 
-        movie_title.setText(searchDetailVo.title)
-        movie_overview.setText(searchDetailVo.overview)
-        movie_release.setText(searchDetailVo.release_date)
-        movie_rat.setText("${searchDetailVo.vote_average}")
-        movie_lang.setText(searchDetailVo.original_language.toUpperCase())
+        movie_title.text = searchDetailVo.title
+        movie_overview.text = searchDetailVo.overview
+        movie_release.text = searchDetailVo.release_date
+        movie_rat.text = "${searchDetailVo.vote_average}"
+        movie_lang.text = searchDetailVo.original_language.toUpperCase()
 
     }
 
@@ -106,8 +105,8 @@ class SearchDetailActivity : AppCompatActivity(), View.OnClickListener, Compound
         for (trailer in trailerList) {
             val thumbContainer = layoutInflater.inflate(R.layout.trailers_content, this.trailer_container, false)
             val thubview = thumbContainer.findViewById(R.id.video_thumb) as ImageView
-            thubview.setOnClickListener(this);
-            thubview.setTag(Utility.getUrl(trailer))
+            thubview.setOnClickListener(this)
+            thubview.tag = Utility.getUrl(trailer)
 
             if (trailer.type.equals("Trailer", true) || trailer.type.equals("Teaser", true)) {
                 Picasso.with(this).load(Utility.getThumbnailUrl(trailer)).into(thubview)
@@ -123,11 +122,8 @@ class SearchDetailActivity : AppCompatActivity(), View.OnClickListener, Compound
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ movieCount ->
-                    Log.i("SearchDetail","$movieCount checkFavourite")
-                    if (movieCount==0)
-                    {
-                        add_search_favourite.isChecked = false
-                    }else{add_search_favourite.isChecked = true }
+                    Log.i("SearchDetail", "$movieCount checkFavourite")
+                    add_search_favourite.isChecked = movieCount != 0
 
                 },
                         { throwable -> Log.e("SearchDetailViewModel", "Unable to count", throwable) }))
@@ -135,7 +131,7 @@ class SearchDetailActivity : AppCompatActivity(), View.OnClickListener, Compound
     }
 
     override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
-        Log.i("SearchDetail","$isChecked")
+
 
         disposable.add(viewModel.favouriteStatus(movieDetailVo!!, isChecked)
                 .subscribeOn(Schedulers.io())

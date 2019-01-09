@@ -13,32 +13,25 @@ import io.reactivex.Single
 class DetailViewModel(val moviesRepository: MoviesRepository, var id: Int) : ViewModel() {
 
 
-    fun getPopularMovieDetails(): LiveData<PopularVo> {
-        return moviesRepository.getPopularMovieDetails(id)
-    }
 
-    fun getNowShowingMovieDetails(): LiveData<NowShowingVo> {
-        return moviesRepository.getNowShowingMovieDetail(id)
+    fun getPopularMovieDetails() = moviesRepository.getPopularMovieDetails(id)
 
-    }
+    fun getNowShowingMovieDetails() = moviesRepository.getNowShowingMovieDetail(id)
 
-    fun getTopRatedMovieDetails(): LiveData<TopRatedVo> {
-        return moviesRepository.getTopRatedMovieDetails(id)
 
-    }
 
-    fun getUpComingMovieDetails(): LiveData<UpComingVo> {
-        return moviesRepository.getUpComingMovieDetails(id)
+    fun getTopRatedMovieDetails()= moviesRepository.getTopRatedMovieDetails(id)
 
-    }
+    fun getUpComingMovieDetails()
+        = moviesRepository.getUpComingMovieDetails(id)
 
-    fun getTrailers(): LiveData<List<TrailerVo>>? {
-        return moviesRepository.getTrailers(id)
-    }
 
-    fun getFavouriteMovieDetails(): LiveData<FavouriteVo> {
-        return moviesRepository.getFavouriteMovieDetails(id)
-    }
+
+    fun getTrailers() = moviesRepository.getTrailers(id) as LiveData<List<TrailerVo>>
+
+
+    fun getFavouriteMovieDetails()= moviesRepository.getFavouriteMovieDetails(id)
+
 
 //    fun addFavouriteMovie(upComingVo: UpComingVo): Completable {
 //        return Completable.fromAction {
@@ -81,13 +74,15 @@ class DetailViewModel(val moviesRepository: MoviesRepository, var id: Int) : Vie
 //
 //    }
 
-    fun checkedFavourite(): Single<Int> {
+    fun checkedFavourite(): Single<Int> = moviesRepository.checkedFavouriteMovie(id!!)
 
-        return moviesRepository.checkedFavouriteMovie(id!!)
-    }
 
     fun favouriteStatus(nowShowingVo: NowShowingVo, checked: Boolean): Completable {
-        val favourite = FavouriteVo(nowShowingVo.id, nowShowingVo.posterPath, nowShowingVo.overview, nowShowingVo.title, nowShowingVo.releasedDate, nowShowingVo.voteAverage, nowShowingVo.backdrop_path)
+
+        Log.i("DetailViewModel","${nowShowingVo.genreids.get(1)}")
+        val favourite = FavouriteVo(nowShowingVo.id, nowShowingVo.posterPath, nowShowingVo.overview, nowShowingVo.title, nowShowingVo.releasedDate, nowShowingVo.voteAverage, nowShowingVo.backdrop_path,nowShowingVo.genreids)
+
+        
         if (checked) {
             return Completable.fromAction {
                 moviesRepository.addFavouriteMovie(favourite)
@@ -98,10 +93,12 @@ class DetailViewModel(val moviesRepository: MoviesRepository, var id: Int) : Vie
                 moviesRepository.removeFavouriteMovie(favourite)
             }
         }
+
+
     }
 
     fun favouriteStatus(upComingVo: UpComingVo, checked: Boolean): Completable {
-        val favourite = FavouriteVo(upComingVo.id, upComingVo.posterPath, upComingVo.overview, upComingVo.title, upComingVo.releasedDate, upComingVo.voteAverage, upComingVo.backdrop_path)
+        val favourite = FavouriteVo(upComingVo.id, upComingVo.posterPath, upComingVo.overview, upComingVo.title, upComingVo.releasedDate, upComingVo.voteAverage, upComingVo.backdrop_path,upComingVo.genreids)
         if (checked) {
             return Completable.fromAction {
                 moviesRepository.addFavouriteMovie(favourite)
@@ -115,7 +112,7 @@ class DetailViewModel(val moviesRepository: MoviesRepository, var id: Int) : Vie
     }
 
     fun favouriteStatus(topRatedVo: TopRatedVo, checked: Boolean): Completable {
-        val favourite = FavouriteVo(topRatedVo.id, topRatedVo.posterPath, topRatedVo.overview, topRatedVo.title, topRatedVo.releasedDate, topRatedVo.voteAverage, topRatedVo.backdrop_path)
+        val favourite = FavouriteVo(topRatedVo.id, topRatedVo.posterPath, topRatedVo.overview, topRatedVo.title, topRatedVo.releasedDate, topRatedVo.voteAverage, topRatedVo.backdrop_path,topRatedVo.genreids)
         if (checked) {
             return Completable.fromAction {
                 moviesRepository.addFavouriteMovie(favourite)
@@ -129,7 +126,7 @@ class DetailViewModel(val moviesRepository: MoviesRepository, var id: Int) : Vie
     }
 
     fun favouriteStatus(popularVo: PopularVo, checked: Boolean): Completable {
-        val favourite = FavouriteVo(popularVo.id, popularVo.posterPath, popularVo.overview, popularVo.title, popularVo.releasedDate, popularVo.voteAverage, popularVo.backdrop_path)
+        val favourite = FavouriteVo(popularVo.id, popularVo.posterPath, popularVo.overview, popularVo.title, popularVo.releasedDate, popularVo.voteAverage, popularVo.backdrop_path,popularVo.genreids)
         if (checked) {
             return Completable.fromAction {
                 moviesRepository.addFavouriteMovie(favourite)

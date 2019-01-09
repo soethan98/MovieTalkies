@@ -8,9 +8,8 @@ import com.example.soe_than.movietalkies.data.repository.MoviesRepository
 
 class FavouriteViewModel(val moviesRepository: MoviesRepository) : ViewModel() {
 
-    fun getFavouriteMovies(): LiveData<List<FavouriteVo>> {
-        return moviesRepository.getFavourites()
+    fun getFavouriteMovies()= moviesRepository.getFavourites()
 
-    }
+
 
 }

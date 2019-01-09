@@ -26,17 +26,17 @@ class SearchViewHolder( itemView: View,val mSearchDelegate: SearchDelegate):Base
     private val movieGenres = itemView.genres_chip
 
     override fun bind(data: SearchVo) {
-        movieLanguage.setText(data.original_language.toUpperCase())
-        movieRating.setText("${data.vote_average}")
-        movieTitle.setText(data.title)
-        movieReleaseDate.setText(data.release_date)
+        movieLanguage.text = data.original_language.toUpperCase()
+        movieRating.text = "${data.vote_average}"
+        movieTitle.text = data.title
+        movieReleaseDate.text = data.release_date
         Picasso.with(itemView.context).load("${Constants.IMAGES_BASE_URL + data.poster_path}").into(posterImage)
 
         movieGenres.setText(Utility.setGenresTypeForMovie(data.genreids))
 
-        itemView.setOnClickListener({
+        itemView.setOnClickListener {
             mSearchDelegate.onTapSearchResult(data)
-        })
+        }
 
 
     }
