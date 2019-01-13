@@ -39,4 +39,7 @@ data class TopRatedVo( @PrimaryKey
 
                        @ColumnInfo(name = "genres_ids")
                        @SerializedName("genre_ids")
-                       val genreids: List<Int>)
+                       val genreids: List<Int>,
+                       @ColumnInfo(name = "original_language")
+                       @SerializedName("original_language")
+                       val originalLang:String)

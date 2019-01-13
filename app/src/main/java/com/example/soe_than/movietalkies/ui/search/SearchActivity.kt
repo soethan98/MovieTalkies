@@ -2,6 +2,7 @@ package com.example.soe_than.movietalkies.ui.search
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -19,6 +20,9 @@ import android.text.Editable
 import android.view.View
 import com.example.soe_than.movietalkies.delegate.SearchDelegate
 import com.example.soe_than.movietalkies.ui.detail.SearchDetailActivity
+import android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT
+import android.content.Context.INPUT_METHOD_SERVICE
+import android.view.inputmethod.InputMethodManager
 
 
 class SearchActivity : AppCompatActivity(), SearchDelegate {
@@ -27,6 +31,8 @@ class SearchActivity : AppCompatActivity(), SearchDelegate {
         intent.putExtra("Search", searchVo.id)
         startActivity(intent)
     }
+
+
 
     private lateinit var viewModel: MovieViewModel
     private lateinit var viewModelFactory: MovieViewModelFactory

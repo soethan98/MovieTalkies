@@ -22,4 +22,7 @@ data class FavouriteVo(@PrimaryKey
                        @ColumnInfo(name = "backdrop_path")
                        var backdrop_path: String? = null,
                        @ColumnInfo(name = "genres_ids")
-                       val genreids: List<Int>)
+                       val genreids: List<Int>,
+                       @ColumnInfo(name = "original_language")
+                       @SerializedName("original_language")
+                       val originalLang:String)

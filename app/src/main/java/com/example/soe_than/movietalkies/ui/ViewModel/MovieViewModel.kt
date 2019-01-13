@@ -8,30 +8,19 @@ import com.example.soe_than.movietalkies.data.repository.MoviesRepository
 
 class MovieViewModel(val moviesRepository: MoviesRepository) : ViewModel() {
 
-    fun getSearchMovie(query: String): LiveData<List<SearchVo>> {
-        return moviesRepository.getSearchList(query)
-    }
+    fun getSearchMovie(query: String): LiveData<List<SearchVo>> = moviesRepository.getSearchList(query)
 
 
-    fun getNowShowingMovies(): LiveData<List<NowShowingVo>> {
-        return moviesRepository.getNowShowingMovies()
-
-    }
+    fun getNowShowingMovies(): LiveData<List<NowShowingVo>> = moviesRepository.getNowShowingMovies()
 
 
-    fun getPopularMovies(): LiveData<List<PopularVo>> {
-        return moviesRepository.getPopularMovies()
+    fun getPopularMovies(): LiveData<List<PopularVo>> = moviesRepository.getPopularMovies()
 
-    }
 
-    fun getTopRatedMovies(): LiveData<List<TopRatedVo>> {
-        return moviesRepository.getTopRatedMovies()
+    fun getTopRatedMovies(): LiveData<List<TopRatedVo>> = moviesRepository.getTopRatedMovies()
 
-    }
 
-    fun getUpComingMovies(): LiveData<List<UpComingVo>> {
-        return moviesRepository.getUpComingMovies()
+    fun getUpComingMovies(): LiveData<List<UpComingVo>> = moviesRepository.getUpComingMovies()
 
-    }
 
 }

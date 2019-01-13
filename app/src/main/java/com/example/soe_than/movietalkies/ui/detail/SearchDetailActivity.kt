@@ -7,6 +7,7 @@ import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.view.View
 import android.widget.CompoundButton
 import android.widget.ImageView
@@ -51,8 +52,9 @@ class SearchDetailActivity : AppCompatActivity(), View.OnClickListener, Compound
         setContentView(R.layout.activity_search_detail)
         movieId = intent.getIntExtra("Search", 0)
 
-        Log.i("SearchDetailViewModel", "$movieId MovieId")
+        setSupportActionBar(search_tool_bar)
 
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         add_search_favourite.setOnCheckedChangeListener(this)
 
 
@@ -139,5 +141,14 @@ class SearchDetailActivity : AppCompatActivity(), View.OnClickListener, Compound
                 .subscribe({ add_search_favourite.isChecked = isChecked },
                         { error -> Log.e("SearchDetailViewModel", "Unable to Perform", error) }))
     }
+
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item?.itemId == android.R.id.home){
+            finish()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
 
 }

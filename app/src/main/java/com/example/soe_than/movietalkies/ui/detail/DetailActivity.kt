@@ -58,6 +58,10 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
 
+        setSupportActionBar(tool_bar)
+
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
         movieId = intent.getIntExtra("ID", 0)
         movieType = intent.getStringExtra("TYPE")
         add_favourite.setOnCheckedChangeListener(this)
@@ -157,6 +161,7 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
             movie_overview.text = this.overview
             movie_release.text = this.releasedDate
             movie_rat.text = this.voteAverage.toString()
+            movie_lang.text = this.originalLang
 
              genresChip.setText(Utility.setGenresTypeForMovie(this.genreids))
 
@@ -175,6 +180,8 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
             movie_overview.text = this.overview
             movie_release.text = this.releasedDate
             movie_rat.text = this.voteAverage.toString()
+            movie_lang.text = this.originalLang
+
             genresChip.setText(Utility.setGenresTypeForMovie(this.genreids))
 
 
@@ -192,6 +199,7 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
             movie_overview.text = this.overview
             movie_release.text = this.releasedDate
             movie_rat.text = this.voteAverage.toString()
+            movie_lang.text = this.originalLang
 
             genresChip.setText(Utility.setGenresTypeForMovie(this.genreids))
 
@@ -208,6 +216,8 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
             movie_overview.text = this.overview
             movie_release.text = this.releasedDate
             movie_rat.text = this.voteAverage.toString()
+            movie_lang.text = this.originalLang
+
             genresChip.setText(Utility.setGenresTypeForMovie(this.genreids))
 
 
@@ -226,6 +236,8 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
             movie_overview.text = this.overview
             movie_release.text = this.releasedDate
             movie_rat.text = this.voteAverage.toString()
+            movie_lang.text = this.originalLang
+
             genresChip.setText(Utility.setGenresTypeForMovie(this.genreids))
 
 
@@ -329,6 +341,14 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
 
     override fun onStart() {
         super.onStart()
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item?.itemId == android.R.id.home){
+            finish()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 
