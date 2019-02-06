@@ -26,52 +26,14 @@ class DetailViewModel(val moviesRepository: MoviesRepository, var id: Int) : Vie
 
 
 
-    fun getTrailers() = moviesRepository.getTrailers(id) as LiveData<List<TrailerVo>>
-
+fun getTrailers(): LiveData<List<TrailerVo>>? {
+    return moviesRepository.getTrailers(id)
+}
 
     fun getFavouriteMovieDetails()= moviesRepository.getFavouriteMovieDetails(id)
 
 
-//    fun addFavouriteMovie(upComingVo: UpComingVo): Completable {
-//        return Completable.fromAction {
-//            var favourite = FavouriteVo(upComingVo.id, upComingVo.posterPath, upComingVo.overview, upComingVo.title, upComingVo.releasedDate, upComingVo.voteAverage, upComingVo.backdrop_path)
-//            moviesRepository.addFavouriteMovie(favourite)
-//        }
-//    }
-//
-//    fun addFavouriteMovie(topRatedVo: TopRatedVo): Completable {
-//        return Completable.fromAction {
-//            var favourite = FavouriteVo(topRatedVo.id, topRatedVo.posterPath, topRatedVo.overview, topRatedVo.title, topRatedVo.releasedDate, topRatedVo.voteAverage, topRatedVo.backdrop_path)
-//            moviesRepository.addFavouriteMovie(favourite)
-//
-//        }
-//
-//
-//    }
-//
-//    fun addFavouriteMovie(popularVo: PopularVo): Completable {
-//        return Completable.fromAction {
-//            var favourite = FavouriteVo(popularVo.id, popularVo.posterPath, popularVo.overview, popularVo.title, popularVo.releasedDate, popularVo.voteAverage, popularVo.backdrop_path)
-//            moviesRepository.addFavouriteMovie(favourite)
-//
-//        }
-//
-//    }
-//
-//    fun addFavouriteMovie(nowShowingVo: NowShowingVo): Completable {
-//        return Completable.fromAction {
-//            val favourite = FavouriteVo(nowShowingVo.id, nowShowingVo.posterPath, nowShowingVo.overview, nowShowingVo.title, nowShowingVo.releasedDate, nowShowingVo.voteAverage, nowShowingVo.backdrop_path)
-//            moviesRepository.addFavouriteMovie(favourite)
-//
-//        }
-//    }
-//
-//    fun removeFavouriteMovie(favouriteVo: FavouriteVo): Completable {
-//        return Completable.fromAction {
-//            moviesRepository.removeFavouriteMovie(favouriteVo)
-//        }
-//
-//    }
+
 
     fun checkedFavourite(): Single<Int> = moviesRepository.checkedFavouriteMovie(id!!)
 
@@ -82,12 +44,12 @@ class DetailViewModel(val moviesRepository: MoviesRepository, var id: Int) : Vie
         val favourite = FavouriteVo(nowShowingVo.id, nowShowingVo.posterPath, nowShowingVo.overview, nowShowingVo.title, nowShowingVo.releasedDate, nowShowingVo.voteAverage, nowShowingVo.backdrop_path,nowShowingVo.genreids,nowShowingVo.originalLang)
 
         
-        if (checked) {
-            return Completable.fromAction {
+       return  if (checked) {
+             Completable.fromAction {
                 moviesRepository.addFavouriteMovie(favourite)
             }
         } else {
-            return Completable.fromAction {
+             Completable.fromAction {
 
                 moviesRepository.removeFavouriteMovie(favourite)
             }
@@ -98,12 +60,12 @@ class DetailViewModel(val moviesRepository: MoviesRepository, var id: Int) : Vie
 
     fun favouriteStatus(upComingVo: UpComingVo, checked: Boolean): Completable {
         val favourite = FavouriteVo(upComingVo.id, upComingVo.posterPath, upComingVo.overview, upComingVo.title, upComingVo.releasedDate, upComingVo.voteAverage, upComingVo.backdrop_path,upComingVo.genreids,upComingVo.originalLang)
-        if (checked) {
-            return Completable.fromAction {
+       return  if (checked) {
+             Completable.fromAction {
                 moviesRepository.addFavouriteMovie(favourite)
             }
         } else {
-            return Completable.fromAction {
+             Completable.fromAction {
 
                 moviesRepository.removeFavouriteMovie(favourite)
             }
@@ -112,12 +74,12 @@ class DetailViewModel(val moviesRepository: MoviesRepository, var id: Int) : Vie
 
     fun favouriteStatus(topRatedVo: TopRatedVo, checked: Boolean): Completable {
         val favourite = FavouriteVo(topRatedVo.id, topRatedVo.posterPath, topRatedVo.overview, topRatedVo.title, topRatedVo.releasedDate, topRatedVo.voteAverage, topRatedVo.backdrop_path,topRatedVo.genreids,topRatedVo.originalLang)
-        if (checked) {
-            return Completable.fromAction {
+       return  if (checked) {
+             Completable.fromAction {
                 moviesRepository.addFavouriteMovie(favourite)
             }
         } else {
-            return Completable.fromAction {
+             Completable.fromAction {
 
                 moviesRepository.removeFavouriteMovie(favourite)
             }
@@ -126,12 +88,12 @@ class DetailViewModel(val moviesRepository: MoviesRepository, var id: Int) : Vie
 
     fun favouriteStatus(popularVo: PopularVo, checked: Boolean): Completable {
         val favourite = FavouriteVo(popularVo.id, popularVo.posterPath, popularVo.overview, popularVo.title, popularVo.releasedDate, popularVo.voteAverage, popularVo.backdrop_path,popularVo.genreids,popularVo.originalLang)
-        if (checked) {
-            return Completable.fromAction {
+        return if (checked) {
+             Completable.fromAction {
                 moviesRepository.addFavouriteMovie(favourite)
             }
         } else {
-            return Completable.fromAction {
+             Completable.fromAction {
 
                 moviesRepository.removeFavouriteMovie(favourite)
             }
@@ -140,12 +102,12 @@ class DetailViewModel(val moviesRepository: MoviesRepository, var id: Int) : Vie
 
     fun favouriteStatus(favouriteVo: FavouriteVo, checked: Boolean): Completable {
 
-        if (checked) {
-            return Completable.fromAction {
+        return if (checked) {
+             Completable.fromAction {
                 moviesRepository.addFavouriteMovie(favouriteVo)
             }
         } else {
-            return Completable.fromAction {
+             Completable.fromAction {
 
                 moviesRepository.removeFavouriteMovie(favouriteVo)
             }

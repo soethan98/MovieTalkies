@@ -98,15 +98,15 @@ class MoviesRepository(val movieDao: MovieDao, val context: Context) {
     }
 
     fun getTrailers(id: Int): LiveData<List<TrailerVo>>? {
-        if (Utility.isNetworkAvailable(context)) {
+        return if (Utility.isNetworkAvailable(context)) {
             apiService.getTrailers(id, Constants.API_KEY)
                     .subscribeOn(Schedulers.io()).toObservable().map { trailerResponse ->
                         trailerResponse.results
                     }
                     .subscribe({ trailerList: List<TrailerVo> -> trailerData.postValue(trailerList) }, { t: Throwable -> Log.i("error: %s", t.message) })
-            return trailerData
+             trailerData
         } else {
-            return null
+            null
         }
 
     }

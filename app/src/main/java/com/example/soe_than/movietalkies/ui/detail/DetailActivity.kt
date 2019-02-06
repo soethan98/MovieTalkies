@@ -58,14 +58,11 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
 
-        setSupportActionBar(tool_bar)
 
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         movieId = intent.getIntExtra("ID", 0)
         movieType = intent.getStringExtra("TYPE")
         add_favourite.setOnCheckedChangeListener(this)
-        Log.i("Detail", movieType)
 
 
 
@@ -138,6 +135,7 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
         }
 
         viewModel.getTrailers()?.observe(this, Observer { trailerList ->
+            Log.i("DetailActivity","Hii")
             if (trailerList!!.isEmpty()) {
                 trailer_label.visibility = View.GONE
                 trailer_scroll.visibility = View.GONE
@@ -147,11 +145,14 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
             }
         })
 
+        btn_exit_preview.setOnClickListener {
+            finish()
+        }
 
     }
 
 
-    fun bindNowShowingMovie(nowShowingVo: NowShowingVo) {
+    private fun bindNowShowingMovie(nowShowingVo: NowShowingVo) {
 
         with(nowShowingVo) {
             Picasso.with(this@DetailActivity).load("${Constants.BACKDROP_BASE_URL + this.backdrop_path}").into(image)
@@ -254,7 +255,7 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
         for (trailer in trailerList) {
             val thumbContainer = layoutInflater.inflate(R.layout.trailers_content, this.trailer_container, false)
             val thubview = thumbContainer.findViewById(R.id.video_thumb) as ImageView
-//
+
             thubview.setOnClickListener(this)
             thubview.tag = Utility.getUrl(trailer)
 
@@ -271,7 +272,6 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
     }
 
     fun checkFavouriteStatus() {
-
         disposable.add(viewModel.checkedFavourite()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -331,6 +331,8 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
 
 
         }
+
+
     }
 
 
@@ -344,12 +346,6 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
     }
 
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (item?.itemId == android.R.id.home){
-            finish()
-        }
-        return super.onOptionsItemSelected(item)
-    }
 
 
 }

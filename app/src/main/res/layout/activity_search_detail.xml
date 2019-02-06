@@ -32,6 +32,15 @@
                     android:fitsSystemWindows="true"
                     android:scaleType="centerCrop" />
 
+                <ImageView
+                    android:layout_alignParentStart="true"
+                    android:layout_margin="@dimen/margin_medium"
+                    android:id="@+id/btn_exit_search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_backarrow"
+                    android:clickable="true"/>
+
                 <CheckBox
                     android:id="@+id/add_search_favourite"
                     android:layout_width="30dp"
@@ -47,11 +56,11 @@
             </RelativeLayout>
 
 
-            <android.support.v7.widget.Toolbar
-            android:id="@+id/search_tool_bar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:layout_collapseMode="pin"/>
+            <!--<android.support.v7.widget.Toolbar-->
+            <!--android:id="@+id/search_tool_bar"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="?attr/actionBarSize"-->
+            <!--app:layout_collapseMode="pin"/>-->
 
 
 

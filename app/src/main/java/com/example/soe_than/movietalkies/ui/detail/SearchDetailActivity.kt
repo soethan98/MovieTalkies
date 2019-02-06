@@ -52,9 +52,7 @@ class SearchDetailActivity : AppCompatActivity(), View.OnClickListener, Compound
         setContentView(R.layout.activity_search_detail)
         movieId = intent.getIntExtra("Search", 0)
 
-        setSupportActionBar(search_tool_bar)
 
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         add_search_favourite.setOnCheckedChangeListener(this)
 
 
@@ -80,6 +78,10 @@ class SearchDetailActivity : AppCompatActivity(), View.OnClickListener, Compound
                 bindTrailers(trailerList)
             }
         })
+
+        btn_exit_search.setOnClickListener {
+            finish()
+        }
 
     }
 
@@ -143,12 +145,6 @@ class SearchDetailActivity : AppCompatActivity(), View.OnClickListener, Compound
     }
 
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (item?.itemId == android.R.id.home){
-            finish()
-        }
-        return super.onOptionsItemSelected(item)
-    }
 
 
 }
