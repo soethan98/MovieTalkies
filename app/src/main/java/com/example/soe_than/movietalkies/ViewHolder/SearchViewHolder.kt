@@ -3,7 +3,7 @@ package com.example.soe_than.movietalkies.ViewHolder
 import android.support.v7.widget.AppCompatTextView
 import android.util.Log
 import android.view.View
-import com.example.soe_than.movietalkies.Utils.Constants
+import com.example.soe_than.movietalkies.Utils.IMAGES_BASE_URL
 import com.example.soe_than.movietalkies.Utils.Utility
 import com.example.soe_than.movietalkies.data.Vo.SearchVo
 import com.example.soe_than.movietalkies.data.Vo.TopRatedVo
@@ -30,7 +30,7 @@ class SearchViewHolder( itemView: View,val mSearchDelegate: SearchDelegate):Base
         movieRating.text = "${data.vote_average}"
         movieTitle.text = data.title
         movieReleaseDate.text = data.release_date
-        Picasso.with(itemView.context).load("${Constants.IMAGES_BASE_URL + data.poster_path}").into(posterImage)
+        Picasso.with(itemView.context).load("${IMAGES_BASE_URL + data.poster_path}").into(posterImage)
 
         movieGenres.setText(Utility.setGenresTypeForMovie(data.genreids))
 

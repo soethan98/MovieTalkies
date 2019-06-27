@@ -7,9 +7,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import com.example.soe_than.movietalkies.R
-import com.example.soe_than.movietalkies.Utils.Constants
-import com.example.soe_than.movietalkies.Utils.InjectorUtils
-import com.example.soe_than.movietalkies.Utils.Utility
 import com.example.soe_than.movietalkies.data.Vo.*
 import com.example.soe_than.movietalkies.ui.ViewModel.DetailViewModel
 import com.example.soe_than.movietalkies.ui.ViewModelFactory.DetailViewModelFactory
@@ -23,6 +20,7 @@ import android.view.MenuItem
 import android.widget.CheckBox
 import android.widget.CompoundButton
 import android.widget.ImageView
+import com.example.soe_than.movietalkies.Utils.*
 import com.example.soe_than.movietalkies.ui.search.SearchActivity
 import com.squareup.picasso.Picasso
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -155,8 +153,8 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
     private fun bindNowShowingMovie(nowShowingVo: NowShowingVo) {
 
         with(nowShowingVo) {
-            Picasso.with(this@DetailActivity).load("${Constants.BACKDROP_BASE_URL + this.backdrop_path}").into(image)
-            Picasso.with(this@DetailActivity).load("${Constants.IMAGES_BASE_URL + this.posterPath}").transform(RoundedCornersTransformation(18, 4)).into(poster_image)
+            Picasso.with(this@DetailActivity).load(BACKDROP_BASE_URL + this.backdrop_path).into(image)
+            Picasso.with(this@DetailActivity).load(IMAGES_BASE_URL + this.posterPath).transform(RoundedCornersTransformation(18, 4)).into(poster_image)
 
             movie_title.text = this.title
             movie_overview.text = this.overview
@@ -171,11 +169,11 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
     }
 
 
-    fun bindPopularMovie(popularVo: PopularVo) {
+   private fun bindPopularMovie(popularVo: PopularVo) {
 
         with(popularVo) {
-            Picasso.with(this@DetailActivity).load("${Constants.BACKDROP_BASE_URL + this.backdrop_path}").into(image)
-            Picasso.with(this@DetailActivity).load("${Constants.IMAGES_BASE_URL + this.posterPath}").transform(RoundedCornersTransformation(18, 4)).into(poster_image)
+            Picasso.with(this@DetailActivity).load(BACKDROP_BASE_URL + this.backdrop_path).into(image)
+            Picasso.with(this@DetailActivity).load(IMAGES_BASE_URL + this.posterPath).transform(RoundedCornersTransformation(18, 4)).into(poster_image)
 
             movie_title.text = this.title
             movie_overview.text = this.overview
@@ -190,11 +188,11 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
 
     }
 
-    fun bindUpComingMovie(upComingVo: UpComingVo) {
+    private fun bindUpComingMovie(upComingVo: UpComingVo) {
 
         with(upComingVo) {
-            Picasso.with(this@DetailActivity).load("${Constants.BACKDROP_BASE_URL + this.backdrop_path}").into(image)
-            Picasso.with(this@DetailActivity).load("${Constants.IMAGES_BASE_URL + this.posterPath}").transform(RoundedCornersTransformation(18, 4)).into(poster_image)
+            Picasso.with(this@DetailActivity).load(BACKDROP_BASE_URL + this.backdrop_path).into(image)
+            Picasso.with(this@DetailActivity).load(IMAGES_BASE_URL + this.posterPath).transform(RoundedCornersTransformation(18, 4)).into(poster_image)
 
             movie_title.text = this.title
             movie_overview.text = this.overview
@@ -208,10 +206,10 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
 
     }
 
-    fun bindTopRatedMovie(topRatedVo: TopRatedVo) {
+    private fun bindTopRatedMovie(topRatedVo: TopRatedVo) {
         with(topRatedVo) {
-            Picasso.with(this@DetailActivity).load("${Constants.BACKDROP_BASE_URL + this.backdrop_path}").into(image)
-            Picasso.with(this@DetailActivity).load("${Constants.IMAGES_BASE_URL + this.posterPath}").transform(RoundedCornersTransformation(18, 4)).into(poster_image)
+            Picasso.with(this@DetailActivity).load(BACKDROP_BASE_URL + this.backdrop_path).into(image)
+            Picasso.with(this@DetailActivity).load(IMAGES_BASE_URL + this.posterPath).transform(RoundedCornersTransformation(18, 4)).into(poster_image)
 
             movie_title.text = this.title
             movie_overview.text = this.overview
@@ -226,12 +224,12 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
 
     }
 
-    fun bindFavouriteMovie(favouriteVo: FavouriteVo) {
+   private fun bindFavouriteMovie(favouriteVo: FavouriteVo) {
 
 
         with(favouriteVo) {
-            Picasso.with(this@DetailActivity).load("${Constants.BACKDROP_BASE_URL + this.backdrop_path}").into(image)
-            Picasso.with(this@DetailActivity).load("${Constants.IMAGES_BASE_URL + this.posterPath}").transform(RoundedCornersTransformation(18, 4)).into(poster_image)
+            Picasso.with(this@DetailActivity).load(BACKDROP_BASE_URL + this.backdrop_path).into(image)
+            Picasso.with(this@DetailActivity).load(IMAGES_BASE_URL + this.posterPath).transform(RoundedCornersTransformation(18, 4)).into(poster_image)
 
             movie_title.text = this.title
             movie_overview.text = this.overview
@@ -247,7 +245,7 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
 
     }
 
-    fun bindTrailers(trailerList: List<TrailerVo>) {
+    private fun bindTrailers(trailerList: List<TrailerVo>) {
         this.trailer_container.removeAllViews()
 
         val layoutInflater = this.layoutInflater
@@ -271,7 +269,7 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
         }
     }
 
-    fun checkFavouriteStatus() {
+    private fun checkFavouriteStatus() {
         disposable.add(viewModel.checkedFavourite()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -280,7 +278,7 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
                     add_favourite.isChecked = movieCount != 0
 
                 },
-                        { throwable -> Log.e("DetailViewModel", "Unable to count", throwable) }))
+                        { throwable -> Log.e(LOG_TAG, "Unable to count", throwable) }))
 
     }
 
@@ -291,14 +289,14 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({ add_favourite.isChecked = isChecked },
-                                { error -> Log.e("Hello", "Unable to Perform", error) }))
+                                { error -> Log.e(LOG_TAG, "Unable to Perform", error) }))
             }
             "upcoming" -> {
                 disposable.add(viewModel.favouriteStatus(upComingVo!!, isChecked)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({ add_favourite.isChecked = isChecked }, { error ->
-                            Log.i("Hello", "Unable to Perform", error)
+                            Log.i(LOG_TAG, "Unable to Perform", error)
                         }))
 
             }
@@ -307,14 +305,14 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({ add_favourite.isChecked = isChecked },
-                                { error -> Log.e("Hello", "Unable to Perform", error) }))
+                                { error -> Log.e(LOG_TAG, "Unable to Perform", error) }))
             }
             "toprated" -> {
                 disposable.add(viewModel.favouriteStatus(topRatedVo!!, isChecked)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({ add_favourite.isChecked = isChecked }, { error ->
-                            Log.i("Hello", "Unable to Perform", error)
+                            Log.i(LOG_TAG, "Unable to Perform", error)
                         }))
             }
             "favourite" -> {
@@ -323,9 +321,9 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
                             add_favourite.isChecked = isChecked
-                            Log.i("Hello", "Removed")
+                            Log.i(LOG_TAG, "Removed")
                         }, { error ->
-                            Log.i("Hello", "Unable to remove movie", error)
+                            Log.i(LOG_TAG, "Unable to remove movie", error)
                         }))
             }
 

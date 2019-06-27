@@ -4,7 +4,9 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import android.util.Log
-import com.example.soe_than.movietalkies.Utils.Constants
+import com.example.soe_than.movietalkies.Utils.APIKEY
+import com.example.soe_than.movietalkies.Utils.APIKEY.API_KEY
+import com.example.soe_than.movietalkies.Utils.LOG_TAG
 import com.example.soe_than.movietalkies.Utils.Utility
 import com.example.soe_than.movietalkies.api.ApiService
 import com.example.soe_than.movietalkies.data.Vo.*
@@ -36,12 +38,12 @@ class MoviesRepository(val movieDao: MovieDao, val context: Context) {
         val LOCK = Object()
 
         fun getInstance(movieDao: MovieDao, context: Context): MoviesRepository? {
-            Log.d(Constants.LOG_TAG, "Getting the repository")
+            Log.d(LOG_TAG, "Getting the repository")
             if (sInstance == null) {
                 synchronized(LOCK) {
 
                     sInstance = MoviesRepository(movieDao, context)
-                    Log.d(Constants.LOG_TAG, "Made new repository")
+                    Log.d(LOG_TAG, "Made new repository")
 
                 }
             }
@@ -52,7 +54,7 @@ class MoviesRepository(val movieDao: MovieDao, val context: Context) {
     }
 
     fun getNowShowingMovies(): LiveData<List<NowShowingVo>> {
-        apiService.getNowShowingMovies(Constants.API_KEY)
+        apiService.getNowShowingMovies(API_KEY)
                 .subscribeOn(Schedulers.io())
                 .toObservable()
                 .map { nowShowingResponse -> nowShowingResponse.nowShowingVo }
@@ -63,7 +65,7 @@ class MoviesRepository(val movieDao: MovieDao, val context: Context) {
     }
 
     fun getPopularMovies(): LiveData<List<PopularVo>> {
-        apiService.getPopularMovies(Constants.API_KEY)
+        apiService.getPopularMovies(API_KEY)
                 .subscribeOn(Schedulers.io())
                 .toObservable()
                 .map { popularResponse -> popularResponse.popularVo }
@@ -74,7 +76,7 @@ class MoviesRepository(val movieDao: MovieDao, val context: Context) {
     }
 
     fun getTopRatedMovies(): LiveData<List<TopRatedVo>> {
-        apiService.getTopRatedMovies(Constants.API_KEY)
+        apiService.getTopRatedMovies(API_KEY)
                 .subscribeOn(Schedulers.io())
                 .toObservable()
                 .map { topRatedResponse -> topRatedResponse.topRatedVo }
@@ -85,7 +87,7 @@ class MoviesRepository(val movieDao: MovieDao, val context: Context) {
     }
 
     fun getUpComingMovies(): LiveData<List<UpComingVo>> {
-        apiService.getUpComingMovies(Constants.API_KEY)
+        apiService.getUpComingMovies(API_KEY)
                 .subscribeOn(Schedulers.io())
                 .toObservable()
                 .map { upComingResponse -> upComingResponse.upComingVo }
@@ -99,7 +101,7 @@ class MoviesRepository(val movieDao: MovieDao, val context: Context) {
 
     fun getTrailers(id: Int): LiveData<List<TrailerVo>>? {
         return if (Utility.isNetworkAvailable(context)) {
-            apiService.getTrailers(id, Constants.API_KEY)
+            apiService.getTrailers(id, API_KEY)
                     .subscribeOn(Schedulers.io()).toObservable().map { trailerResponse ->
                         trailerResponse.results
                     }
@@ -112,7 +114,7 @@ class MoviesRepository(val movieDao: MovieDao, val context: Context) {
     }
 
     fun getSearchList(query: String): LiveData<List<SearchVo>> {
-        apiService.getSearchResult(Constants.API_KEY, query)
+        apiService.getSearchResult(API_KEY, query)
                 .subscribeOn(Schedulers.io()).toObservable().map { searchResponse ->
                     searchResponse.searchResult
                 }.subscribe({ searchList: List<SearchVo> ->
@@ -135,7 +137,7 @@ class MoviesRepository(val movieDao: MovieDao, val context: Context) {
 
 
     fun getSearchMovieDetails(id: Int): LiveData<MovieDetailVo> {
-        apiService.getMovieDetail(id, Constants.API_KEY)
+        apiService.getMovieDetail(id,API_KEY)
                 .subscribeOn(Schedulers.io())
                 .toObservable()
                 .subscribe({ movieDetail: MovieDetailVo ->
@@ -175,7 +177,6 @@ class MoviesRepository(val movieDao: MovieDao, val context: Context) {
     }
 
     fun checkedFavouriteMovie(id:Int):Single<Int> {
-        Log.i("ViewModel1","$id")
 
        return movieDao.isFavouriteMovie(id.toString()!!)
     }

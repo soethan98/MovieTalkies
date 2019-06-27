@@ -81,7 +81,7 @@ class SearchActivity : AppCompatActivity(), SearchDelegate {
     private fun getViewModelData(query: String) {
         viewModel.getSearchMovie(query).observe(this,
                 Observer { searchList ->
-                    if (searchList!!.size != 0 && searchList != null) {
+                    if (searchList!!.isNotEmpty() && searchList != null) {
                         searchAdapter.setNewData(searchList as MutableList<SearchVo>)
                         search_progress.visibility = View.GONE
                     }

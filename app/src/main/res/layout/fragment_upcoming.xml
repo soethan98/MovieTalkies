@@ -5,8 +5,8 @@
     android:layout_height="match_parent"
     tools:context=".ui.fragment.UpcomingFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <android.support.v7.widget.RecyclerView
+        android:layout_marginTop="@dimen/margin_10"
         android:id="@+id/upcomingRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

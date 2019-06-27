@@ -12,9 +12,7 @@ import android.view.View
 import android.widget.CompoundButton
 import android.widget.ImageView
 import com.example.soe_than.movietalkies.R
-import com.example.soe_than.movietalkies.Utils.Constants
-import com.example.soe_than.movietalkies.Utils.InjectorUtils
-import com.example.soe_than.movietalkies.Utils.Utility
+import com.example.soe_than.movietalkies.Utils.*
 import com.example.soe_than.movietalkies.data.Vo.MovieDetailVo
 import com.example.soe_than.movietalkies.data.Vo.TrailerVo
 import com.example.soe_than.movietalkies.ui.ViewModel.SearchDetailViewModel
@@ -88,9 +86,9 @@ class SearchDetailActivity : AppCompatActivity(), View.OnClickListener, Compound
     fun bindMovieDetailsMovie(searchDetailVo: MovieDetailVo) {
 
 
-        Picasso.with(this).load("${Constants.BACKDROP_BASE_URL + searchDetailVo.backdrop_path}").into(search_image)
-        Picasso.with(this).load("${Constants.IMAGES_BASE_URL + searchDetailVo.poster_path}").transform(RoundedCornersTransformation(18, 4)).into(poster_image)
-        genresChip.setText(Utility//        Log.i("checkFavoutite","$movieId + $movieType")
+        Picasso.with(this).load(BACKDROP_BASE_URL + searchDetailVo.backdrop_path).into(search_image)
+        Picasso.with(this).load(IMAGES_BASE_URL + searchDetailVo.poster_path).transform(RoundedCornersTransformation(18, 4)).into(poster_image)
+        genresChip.setText(Utility
                 .setGenresTypeForMovie1(searchDetailVo.genreids))
 
         movie_title.text = searchDetailVo.title
@@ -101,7 +99,7 @@ class SearchDetailActivity : AppCompatActivity(), View.OnClickListener, Compound
 
     }
 
-    fun bindTrailers(trailerList: List<TrailerVo>) {
+    private fun bindTrailers(trailerList: List<TrailerVo>) {
         this.trailer_container.removeAllViews()
 
         val layoutInflater = this.layoutInflater
@@ -121,7 +119,7 @@ class SearchDetailActivity : AppCompatActivity(), View.OnClickListener, Compound
         }
     }
 
-    fun checkFavouriteStatus() {
+    private fun checkFavouriteStatus() {
         disposable.add(viewModel.checkedFavourite()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

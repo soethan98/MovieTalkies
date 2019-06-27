@@ -23,15 +23,7 @@ import com.example.soe_than.movietalkies.ui.detail.DetailActivity
 import kotlinx.android.synthetic.main.fragment_upcoming.*
 import kotlinx.android.synthetic.main.fragment_upcoming.view.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- *
- */
 class UpcomingFragment : Fragment(), MovieDelegate {
     override fun onTapMovie(id: Int) {
         val intent = Intent(activity, DetailActivity::class.java)

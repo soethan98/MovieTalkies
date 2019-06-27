@@ -21,15 +21,7 @@ import com.example.soe_than.movietalkies.ui.ViewModelFactory.FavouriteViewFactor
 import com.example.soe_than.movietalkies.ui.detail.DetailActivity
 import kotlinx.android.synthetic.main.fragment_favourite.view.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- *
- */
 class FavouriteFragment : Fragment(), MovieDelegate {
     override fun onTapMovie(id: Int) {
         var intent = Intent(activity, DetailActivity::class.java)

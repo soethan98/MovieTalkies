@@ -11,10 +11,6 @@ import com.example.soe_than.movietalkies.data.local.Daos.*
 @TypeConverters(Converters::class)
 abstract class MovieDatabase : RoomDatabase() {
 
-//    abstract fun popularDao(): PopularDao
-//    abstract fun upcomingDao():UpComingDao
-//    abstract fun nowshowingDao():NowShowingDao
-//    abstract fun topratedDao():TopRatedDao
 
 
     abstract fun movieDao(): MovieDao

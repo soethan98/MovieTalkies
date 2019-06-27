@@ -9,7 +9,7 @@ import com.example.soe_than.movietalkies.ui.ViewModelFactory.*
 object InjectorUtils {
 
 
-    fun provideMoviesRepository(context: Context): MoviesRepository? {
+    private fun provideMoviesRepository(context: Context): MoviesRepository? {
         val database = MovieDatabase.getInstance(context)
         return MoviesRepository.getInstance(database.movieDao(), context)
     }

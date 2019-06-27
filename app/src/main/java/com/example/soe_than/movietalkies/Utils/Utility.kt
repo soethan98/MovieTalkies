@@ -4,10 +4,10 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import com.bumptech.glide.load.engine.bitmap_recycle.IntegerArrayAdapter
-import com.example.soe_than.movietalkies.Utils.Constants.EMPTY
-import com.example.soe_than.movietalkies.Utils.Constants.SITE_YOUTUBE
-import com.example.soe_than.movietalkies.Utils.Constants.YOUTUBE_THUMBNAIL_URL
-import com.example.soe_than.movietalkies.Utils.Constants.YOUTUBE_VIDEO_URL
+import com.example.soe_than.movietalkies.Utils.EMPTY
+import com.example.soe_than.movietalkies.Utils.SITE_YOUTUBE
+import com.example.soe_than.movietalkies.Utils.YOUTUBE_THUMBNAIL_URL
+import com.example.soe_than.movietalkies.Utils.YOUTUBE_VIDEO_URL
 import com.example.soe_than.movietalkies.data.Vo.GenresVo
 import com.example.soe_than.movietalkies.data.Vo.TrailerVo
 
@@ -21,19 +21,19 @@ object Utility {
     }
 
     fun getUrl(video: TrailerVo): String {
-        if (SITE_YOUTUBE.equals(video.site, true)) {
-            return String.format(YOUTUBE_VIDEO_URL, video.key)
+        return if (SITE_YOUTUBE.equals(video.site, true)) {
+             String.format(YOUTUBE_VIDEO_URL, video.key)
         } else {
-            return EMPTY
+             EMPTY
         }
 
     }
 
     fun getThumbnailUrl(video: TrailerVo): String {
-        if (Constants.SITE_YOUTUBE.equals(video.site, true)) {
-            return String.format(YOUTUBE_THUMBNAIL_URL, video.key);
+        return if (SITE_YOUTUBE.equals(video.site, true)) {
+            String.format(YOUTUBE_THUMBNAIL_URL, video.key);
         } else {
-            return EMPTY;
+            EMPTY
         }
     }
 
@@ -60,35 +60,30 @@ object Utility {
             53 -> type = "Thriller"
             10752 -> type = "War"
             37 -> type = "Western"
-            else -> type=""
+            else -> type = ""
 
 
         }
         return type
     }
 
-    fun setGenresTypeForMovie(ids:List<Int>):ArrayList<String>
-    {
+    fun setGenresTypeForMovie(ids: List<Int>): ArrayList<String> {
 
-         var idsList: ArrayList<String> = ArrayList<String>()
-        for (id in ids)
-        {
-          idsList.add(getGeneresnames(id))
+        var idsList: ArrayList<String> = ArrayList<String>()
 
+
+        ids.map {
+            idsList.add(getGeneresnames(it))
         }
         return idsList
     }
 
 
-
-    fun setGenresTypeForMovie1(ids:List<GenresVo>):ArrayList<String>
-    {
+    fun setGenresTypeForMovie1(ids: List<GenresVo>): ArrayList<String> {
 
         var idsList: ArrayList<String> = ArrayList<String>()
-        for (id in ids)
-        {
-            idsList.add(getGeneresnames(id.id))
-
+        ids.map {
+            idsList.add(getGeneresnames(it.id))
         }
         return idsList
     }
