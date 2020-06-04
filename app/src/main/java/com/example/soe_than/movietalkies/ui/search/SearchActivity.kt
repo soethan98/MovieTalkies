@@ -2,27 +2,25 @@ package com.example.soe_than.movietalkies.ui.search
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.text.TextWatcher
 import com.example.soe_than.movietalkies.R
 import com.example.soe_than.movietalkies.Utils.InjectorUtils
 import com.example.soe_than.movietalkies.adapter.SearchAdapter
 import com.example.soe_than.movietalkies.data.Vo.SearchVo
-import com.example.soe_than.movietalkies.delegate.MovieDelegate
 import com.example.soe_than.movietalkies.ui.ViewModel.MovieViewModel
 import com.example.soe_than.movietalkies.ui.ViewModelFactory.MovieViewModelFactory
 import kotlinx.android.synthetic.main.activity_search.*
-import android.text.Editable
 import android.view.View
 import com.example.soe_than.movietalkies.delegate.SearchDelegate
 import com.example.soe_than.movietalkies.ui.detail.SearchDetailActivity
-import android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT
-import android.content.Context.INPUT_METHOD_SERVICE
-import android.view.inputmethod.InputMethodManager
+import com.jakewharton.rxbinding2.widget.RxTextView
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import java.util.concurrent.TimeUnit
 
 
 class SearchActivity : AppCompatActivity(), SearchDelegate {
@@ -33,10 +31,18 @@ class SearchActivity : AppCompatActivity(), SearchDelegate {
     }
 
 
-
     private lateinit var viewModel: MovieViewModel
     private lateinit var viewModelFactory: MovieViewModelFactory
     lateinit var searchAdapter: SearchAdapter
+
+    lateinit var disposable: CompositeDisposable
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        disposable.clear()
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,28 +50,24 @@ class SearchActivity : AppCompatActivity(), SearchDelegate {
 
         setUpRecyclerView()
 
+        disposable = CompositeDisposable()
+
         viewModelFactory = InjectorUtils.provideMovieViewModelFactory(this)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(MovieViewModel::class.java)
 
         setUpRecyclerView()
+        observeSearchView()
+
+        viewModel.searchResultLiveData.observe(this,
+                Observer { searchList ->
+                    if (searchList!!.isNotEmpty()) {
+                        searchAdapter.setNewData(searchList as MutableList<SearchVo>)
+                        search_progress.visibility = View.GONE
+                    }
+                })
 
 
-        input_search.addTextChangedListener(object : TextWatcher {
 
-            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
-
-            }
-
-            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
-
-            }
-
-            override fun afterTextChanged(s: Editable) {
-                search_progress.visibility = View.VISIBLE
-
-                getViewModelData(s.toString()!!)
-            }
-        })
 
 
     }
@@ -78,16 +80,23 @@ class SearchActivity : AppCompatActivity(), SearchDelegate {
     }
 
 
-    private fun getViewModelData(query: String) {
-        viewModel.getSearchMovie(query).observe(this,
-                Observer { searchList ->
-                    if (searchList!!.isNotEmpty() && searchList != null) {
-                        searchAdapter.setNewData(searchList as MutableList<SearchVo>)
-                        search_progress.visibility = View.GONE
-                    }
-                })
 
+
+
+    private fun observeSearchView() {
+        disposable.add(RxTextView.textChangeEvents(input_search)
+                .debounce(300, TimeUnit.MILLISECONDS)
+                .filter {
+                    it.text().isNotEmpty()
+                }
+
+                .distinctUntilChanged().switchMap { searchKey ->
+                    Observable.just(searchKey)
+                }.observeOn(AndroidSchedulers.mainThread())
+                .subscribe { searchString ->
+                    viewModel.getSearchList(searchString.text().toString())
+                }
+        )
     }
-
 
 }

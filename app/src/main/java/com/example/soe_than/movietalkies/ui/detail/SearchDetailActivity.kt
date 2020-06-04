@@ -143,6 +143,10 @@ class SearchDetailActivity : AppCompatActivity(), View.OnClickListener, Compound
     }
 
 
+    override fun onDestroy() {
+        super.onDestroy()
+        disposable.clear()
+    }
 
 
 }

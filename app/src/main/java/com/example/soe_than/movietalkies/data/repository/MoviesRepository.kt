@@ -11,6 +11,7 @@ import com.example.soe_than.movietalkies.Utils.Utility
 import com.example.soe_than.movietalkies.api.ApiService
 import com.example.soe_than.movietalkies.data.Vo.*
 import com.example.soe_than.movietalkies.data.local.Daos.MovieDao
+import com.example.soe_than.movietalkies.data.response.SearchResponse
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -92,7 +93,7 @@ class MoviesRepository(val movieDao: MovieDao, val context: Context) {
                 .toObservable()
                 .map { upComingResponse -> upComingResponse.upComingVo }
                 .subscribe({ upComingList: List<UpComingVo> ->
-                   movieDao.saveAllUpComingMovies(upComingList)
+                    movieDao.saveAllUpComingMovies(upComingList)
                 },
                         { t: Throwable -> Log.i("error: %s", t.message) })
 
@@ -106,24 +107,17 @@ class MoviesRepository(val movieDao: MovieDao, val context: Context) {
                         trailerResponse.results
                     }
                     .subscribe({ trailerList: List<TrailerVo> -> trailerData.postValue(trailerList) }, { t: Throwable -> Log.i("error: %s", t.message) })
-             trailerData
+            trailerData
         } else {
             null
         }
 
     }
 
-    fun getSearchList(query: String): LiveData<List<SearchVo>> {
-        apiService.getSearchResult(API_KEY, query)
-                .subscribeOn(Schedulers.io()).toObservable().map { searchResponse ->
-                    searchResponse.searchResult
-                }.subscribe({ searchList: List<SearchVo> ->
 
-                    searchData.postValue(searchList)
-                }, { t: Throwable ->
-                    Log.i("error: %s", t.message)
-                })
-        return searchData
+
+    fun getSearchMovie(query: String): Single<SearchResponse> {
+        return apiService.getSearchResult(API_KEY,query)
     }
 
 
@@ -135,9 +129,8 @@ class MoviesRepository(val movieDao: MovieDao, val context: Context) {
     }
 
 
-
     fun getSearchMovieDetails(id: Int): LiveData<MovieDetailVo> {
-        apiService.getMovieDetail(id,API_KEY)
+        apiService.getMovieDetail(id, API_KEY)
                 .subscribeOn(Schedulers.io())
                 .toObservable()
                 .subscribe({ movieDetail: MovieDetailVo ->
@@ -176,19 +169,10 @@ class MoviesRepository(val movieDao: MovieDao, val context: Context) {
         return movieDao.getFavouriteMovieById(id.toString())
     }
 
-    fun checkedFavouriteMovie(id:Int):Single<Int> {
+    fun checkedFavouriteMovie(id: Int): Single<Int> {
 
-       return movieDao.isFavouriteMovie(id.toString()!!)
+        return movieDao.isFavouriteMovie(id.toString()!!)
     }
-
-
-
-
-
-
-
-
-
 
 
 }
