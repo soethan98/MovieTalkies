@@ -1,14 +1,14 @@
 package com.example.soe_than.movietalkies.adapter
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import com.example.soe_than.movietalkies.ViewHolder.BaseViewHolder
 
 
 import java.util.ArrayList
 
-abstract class BaseRecyclerAdapter<T : BaseViewHolder<*>, W>(context: Context) : RecyclerView.Adapter<T>() {
+abstract class BaseRecyclerAdapter<T : BaseViewHolder<*>, W>(context: Context) : androidx.recyclerview.widget.RecyclerView.Adapter<T>() {
 
     protected var mLayoutInflater: LayoutInflater
 

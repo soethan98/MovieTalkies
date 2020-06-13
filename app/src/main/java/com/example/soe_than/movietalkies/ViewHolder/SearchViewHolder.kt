@@ -1,6 +1,6 @@
 package com.example.soe_than.movietalkies.ViewHolder
 
-import android.support.v7.widget.AppCompatTextView
+import androidx.appcompat.widget.AppCompatTextView
 import android.util.Log
 import android.view.View
 import com.example.soe_than.movietalkies.Utils.IMAGES_BASE_URL

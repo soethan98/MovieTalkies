@@ -1,11 +1,12 @@
 package com.example.soe_than.movietalkies.ui.detail
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.net.Uri
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
@@ -16,8 +17,12 @@ import com.example.soe_than.movietalkies.Utils.*
 import com.example.soe_than.movietalkies.data.Vo.MovieDetailVo
 import com.example.soe_than.movietalkies.data.Vo.TrailerVo
 import com.example.soe_than.movietalkies.ui.ViewModel.SearchDetailViewModel
-import com.example.soe_than.movietalkies.ui.ViewModelFactory.SearchDetailViewModelFactory
+import com.example.soe_than.movietalkies.ui.ViewModelFactory.MainViewModelFactory
 import com.squareup.picasso.Picasso
+import dagger.android.AndroidInjection
+import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.support.HasSupportFragmentInjector
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -26,8 +31,12 @@ import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.activity_search_detail.*
 import kotlinx.android.synthetic.main.detail_movies_content.*
 import kotlinx.android.synthetic.main.trailers.*
+import javax.inject.Inject
 
 class SearchDetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+
+//    @Inject
+//    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
 
 
     override fun onClick(v: View?) {
@@ -37,7 +46,9 @@ class SearchDetailActivity : AppCompatActivity(), View.OnClickListener, Compound
     }
 
     private lateinit var viewModel: SearchDetailViewModel
-    private lateinit var viewModelFactory: SearchDetailViewModelFactory
+
+    @Inject
+     lateinit var viewModelFactory: MainViewModelFactory
     var movieDetailVo: MovieDetailVo? = null
 
 
@@ -48,26 +59,27 @@ class SearchDetailActivity : AppCompatActivity(), View.OnClickListener, Compound
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search_detail)
+        AndroidInjection.inject(this)
         movieId = intent.getIntExtra("Search", 0)
 
 
         add_search_favourite.setOnCheckedChangeListener(this)
 
 
-        viewModelFactory = InjectorUtils.provideSearchDetailViewFactory(this, movieId!!)
+//        viewModelFactory = InjectorUtils.provideSearchDetailViewFactory(this, movieId!!)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(SearchDetailViewModel::class.java)
 
-        viewModel.getMovieDetails().observe(this, Observer { movieDetails ->
+        viewModel.getMovieDetails(movieId!!).observe(this, Observer { movieDetails ->
             movieDetails!!.let {
                 bindMovieDetailsMovie(movieDetails)
                 movieDetailVo = movieDetails
-                checkFavouriteStatus()
+                checkFavouriteStatus(movieId ?: 0)
 
             }
 
         })
 
-        viewModel.getTrailers()?.observe(this, Observer { trailerList ->
+        viewModel.getTrailers(movieId!!)?.observe(this, Observer { trailerList ->
             if (trailerList!!.isEmpty()) {
                 trailer_label.visibility = View.GONE
                 trailer_scroll.visibility = View.GONE
@@ -119,8 +131,8 @@ class SearchDetailActivity : AppCompatActivity(), View.OnClickListener, Compound
         }
     }
 
-    private fun checkFavouriteStatus() {
-        disposable.add(viewModel.checkedFavourite()
+    private fun checkFavouriteStatus(movieId:Int) {
+        disposable.add(viewModel.checkedFavourite(movieId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ movieCount ->
@@ -147,6 +159,7 @@ class SearchDetailActivity : AppCompatActivity(), View.OnClickListener, Compound
         super.onDestroy()
         disposable.clear()
     }
+
 
 
 }

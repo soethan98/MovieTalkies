@@ -1,17 +1,15 @@
 package com.example.soe_than.movietalkies.adapter
 
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
-import java.nio.file.Files.size
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
 
 
-class ViewPagerAdapter(fm: FragmentManager?) : FragmentPagerAdapter(fm) {
-    val mFragmentList = arrayListOf<Fragment>()
+class ViewPagerAdapter(fm:FragmentManager) : FragmentPagerAdapter(fm){
+    val mFragmentList = arrayListOf<androidx.fragment.app.Fragment>()
     val mFragmentTitleList = arrayListOf<String>()
 
 
-    override fun getItem(position: Int): Fragment {
+    override fun getItem(position: Int): androidx.fragment.app.Fragment {
         return mFragmentList.get(position)
     }
 
@@ -19,7 +17,7 @@ class ViewPagerAdapter(fm: FragmentManager?) : FragmentPagerAdapter(fm) {
         return mFragmentList.size
     }
 
-    fun addFrag(fragment: Fragment, title: String) {
+    fun addFrag(fragment: androidx.fragment.app.Fragment, title: String) {
         mFragmentList.add(fragment)
         mFragmentTitleList.add(title)
     }

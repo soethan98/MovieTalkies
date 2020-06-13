@@ -1,6 +1,6 @@
 package com.example.soe_than.movietalkies.data.Vo
 
-import android.arch.persistence.room.*
+import androidx.room.*
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName

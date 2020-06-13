@@ -1,7 +1,7 @@
 package com.example.soe_than.movietalkies.ui.ViewModel
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
 import com.example.soe_than.movietalkies.data.Vo.FavouriteVo
 import com.example.soe_than.movietalkies.data.Vo.MovieDetailVo
 import com.example.soe_than.movietalkies.data.Vo.NowShowingVo
@@ -9,16 +9,17 @@ import com.example.soe_than.movietalkies.data.Vo.TrailerVo
 import com.example.soe_than.movietalkies.data.repository.MoviesRepository
 import io.reactivex.Completable
 import io.reactivex.Single
+import javax.inject.Inject
 
-class SearchDetailViewModel(val moviesRepository: MoviesRepository, var id: Int) : ViewModel() {
+class SearchDetailViewModel @Inject constructor( val moviesRepository: MoviesRepository) : ViewModel() {
 
-    fun getMovieDetails(): LiveData<MovieDetailVo> = moviesRepository.getSearchMovieDetails(id)
-
-
-    fun getTrailers(): LiveData<List<TrailerVo>>? = moviesRepository.getTrailers(id)
+    fun getMovieDetails(id:Int): LiveData<MovieDetailVo> = moviesRepository.getSearchMovieDetails(id)
 
 
-    fun checkedFavourite(): Single<Int> = moviesRepository.checkedFavouriteMovie(id!!)
+    fun getTrailers(id:Int): LiveData<List<TrailerVo>>? = moviesRepository.getTrailers(id)
+
+
+    fun checkedFavourite(id:Int): Single<Int> = moviesRepository.checkedFavouriteMovie(id!!)
 
 
     fun favouriteStatus(movieDetailVo: MovieDetailVo, checked: Boolean): Completable {

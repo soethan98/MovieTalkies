@@ -1,24 +1,30 @@
 package com.example.soe_than.movietalkies.ui.ViewModel
 
 import android.app.DownloadManager
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import android.util.Log
 import com.example.soe_than.movietalkies.Utils.APIKEY
 import com.example.soe_than.movietalkies.data.Vo.*
 import com.example.soe_than.movietalkies.data.repository.MoviesRepository
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
-class MovieViewModel(private val moviesRepository: MoviesRepository) : ViewModel() {
+
+class MovieViewModel @Inject constructor(var moviesRepository: MoviesRepository) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
 
 
 
 
-    fun getNowShowingMovies(): LiveData<List<NowShowingVo>> = moviesRepository.getNowShowingMovies()
+    fun getNowShowingMovies(): LiveData<List<NowShowingVo>> {
+        Log.i("ViewModel",moviesRepository.getNowShowingMovies().value?.size.toString()+"---")
+
+        return moviesRepository.getNowShowingMovies()
+    }
 
 
     fun getPopularMovies(): LiveData<List<PopularVo>> = moviesRepository.getPopularMovies()

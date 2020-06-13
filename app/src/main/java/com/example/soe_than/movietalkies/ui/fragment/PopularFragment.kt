@@ -1,12 +1,12 @@
 package com.example.soe_than.movietalkies.ui.fragment
 
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.GridLayoutManager
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,23 +17,32 @@ import com.example.soe_than.movietalkies.adapter.PopularRecyclerAdapter
 import com.example.soe_than.movietalkies.data.Vo.PopularVo
 import com.example.soe_than.movietalkies.delegate.MovieDelegate
 import com.example.soe_than.movietalkies.ui.ViewModel.MovieViewModel
-import com.example.soe_than.movietalkies.ui.ViewModelFactory.MovieViewModelFactory
+import com.example.soe_than.movietalkies.ui.ViewModelFactory.MainViewModelFactory
 import com.example.soe_than.movietalkies.ui.detail.DetailActivity
+import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_popular.view.*
+import javax.inject.Inject
 
 
 class PopularFragment : Fragment(), MovieDelegate {
 
     private lateinit var viewModel: MovieViewModel
-    private lateinit var viewModelFactory: MovieViewModelFactory
+
+    @Inject
+     lateinit var viewModelFactory: MainViewModelFactory
     lateinit var popularAdapter: PopularRecyclerAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        AndroidSupportInjection.inject(this)
+    }
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_popular, container, false)
-        viewModelFactory = InjectorUtils.provideMovieViewModelFactory(activity!!)
+//        viewModelFactory = InjectorUtils.provideMovieViewModelFactory(activity!!)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(MovieViewModel::class.java)
 
         setUpRecyclerView(view)
@@ -49,7 +58,7 @@ class PopularFragment : Fragment(), MovieDelegate {
     }
 
     private fun setUpRecyclerView(view: View) {
-        view.popularRecyclerView.layoutManager = GridLayoutManager(activity, 2)
+        view.popularRecyclerView.layoutManager = androidx.recyclerview.widget.GridLayoutManager(activity, 2)
         popularAdapter = PopularRecyclerAdapter(context!!, this)
         view.popularRecyclerView.adapter = popularAdapter
     }

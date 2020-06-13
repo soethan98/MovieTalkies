@@ -1,6 +1,6 @@
 package com.example.soe_than.movietalkies.api
 
-import android.support.annotation.TransitionRes
+import androidx.annotation.TransitionRes
 import com.example.soe_than.movietalkies.Utils.BASE_URL
 import com.example.soe_than.movietalkies.data.Vo.FavouriteVo
 import com.example.soe_than.movietalkies.data.Vo.MovieDetailVo
@@ -45,26 +45,6 @@ interface ApiService {
     fun getMovieDetail(@Path("id") movieId: Int,
                        @Query("api_key") apiKey: String): Single<MovieDetailVo>
 
-    companion object Factory {
-
-        fun create(): ApiService {
-            var okHttpClient = OkHttpClient.Builder()
-                    .connectTimeout(15, TimeUnit.SECONDS)
-                    .writeTimeout(15, TimeUnit.SECONDS)
-                    .readTimeout(60, TimeUnit.SECONDS)
-                    .build()
-
-            val retrofit = Retrofit.Builder()
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .baseUrl(BASE_URL)
-                    .client(okHttpClient)
-                    .build()
-
-            return retrofit.create(ApiService::class.java)
-        }
-
-    }
 
 
 }

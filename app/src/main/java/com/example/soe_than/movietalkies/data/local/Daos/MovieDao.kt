@@ -1,8 +1,8 @@
 package com.example.soe_than.movietalkies.data.local.Daos
 
-import android.arch.lifecycle.LiveData
-import android.arch.persistence.room.*
-import android.support.annotation.MainThread
+import androidx.lifecycle.LiveData
+import androidx.room.*
+import androidx.annotation.MainThread
 import com.example.soe_than.movietalkies.ViewHolder.PopularViewHolder
 import com.example.soe_than.movietalkies.data.Vo.*
 import io.reactivex.Flowable

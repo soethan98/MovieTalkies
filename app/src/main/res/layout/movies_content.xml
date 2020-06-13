@@ -18,14 +18,14 @@
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground">
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/movieImage"
             android:layout_width="match_parent"
             android:layout_height="240dp"
             android:scaleType="fitXY"
             tools:ignore="ContentDescription" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/ratingCircle"
             android:layout_width="30dp"
             android:layout_height="30dp"
@@ -38,7 +38,7 @@
             android:textStyle="bold" />
     </FrameLayout>
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/movie_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -52,7 +52,7 @@
         android:textSize="16sp"
         android:textStyle="bold" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/movie_genres"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -1,36 +1,47 @@
 package com.example.soe_than.movietalkies.ui.detail
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
-import android.support.v7.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import com.example.soe_than.movietalkies.R
 import com.example.soe_than.movietalkies.data.Vo.*
 import com.example.soe_than.movietalkies.ui.ViewModel.DetailViewModel
-import com.example.soe_than.movietalkies.ui.ViewModelFactory.DetailViewModelFactory
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.detail_movies_content.*
 import kotlinx.android.synthetic.main.trailers.*
 import android.content.Intent
 import android.net.Uri
+import androidx.fragment.app.Fragment
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.CheckBox
 import android.widget.CompoundButton
 import android.widget.ImageView
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.example.soe_than.movietalkies.Utils.*
+import com.example.soe_than.movietalkies.ui.ViewModelFactory.MainViewModelFactory
 import com.example.soe_than.movietalkies.ui.search.SearchActivity
 import com.squareup.picasso.Picasso
+import dagger.android.AndroidInjection
+import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.support.HasSupportFragmentInjector
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
 import kotlinx.android.synthetic.main.activity_search_detail.*
+import javax.inject.Inject
 
 
-class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton.OnCheckedChangeListener{
+
+//    @Inject
+//    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
 
 
     override fun onClick(v: View?) {
@@ -40,7 +51,10 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
     }
 
     private lateinit var viewModel: DetailViewModel
-    private lateinit var viewModelFactory: DetailViewModelFactory
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
     private val disposable = CompositeDisposable()
 
     private var nowShowingVo: NowShowingVo? = null
@@ -56,6 +70,8 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
 
+        AndroidInjection.inject(this)
+
 
 
         movieId = intent.getIntExtra("ID", 0)
@@ -65,15 +81,15 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
 
 
 
-        viewModelFactory = InjectorUtils.provideDetailViewFactory(this, movieId!!)
+//        viewModelFactory = InjectorUtils.provideDetailViewFactory(this, movieId!!)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(DetailViewModel::class.java)
 
 
         when (movieType) {
             "nowshowing" -> {
-                viewModel.getNowShowingMovieDetails().observe(this, Observer { nowShowingDetails ->
+                viewModel.getNowShowingMovieDetails(movieId!!).observe(this, Observer { nowShowingDetails ->
                     nowShowingDetails!!.let {
-                                                nowShowingVo = nowShowingDetails
+                        nowShowingVo = nowShowingDetails
                         bindNowShowingMovie(nowShowingVo = nowShowingDetails)
                         checkFavouriteStatus()
                     }
@@ -84,7 +100,7 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
 
             }
             "popular" -> {
-                viewModel.getPopularMovieDetails().observe(this, Observer { popularDetails ->
+                viewModel.getPopularMovieDetails(movieId!!).observe(this, Observer { popularDetails ->
                     if (popularDetails != null) {
                         bindPopularMovie(popularVo = popularDetails)
                         popularVo = popularDetails
@@ -94,7 +110,7 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
                 })
             }
             "toprated" -> {
-                viewModel.getTopRatedMovieDetails().observe(this, Observer { topRatedDetails ->
+                viewModel.getTopRatedMovieDetails(movieId!!).observe(this, Observer { topRatedDetails ->
                     if (topRatedDetails != null) {
                         bindTopRatedMovie(topRatedVo = topRatedDetails)
                         topRatedVo = topRatedDetails
@@ -106,7 +122,7 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
             }
 
             "upcoming" -> {
-                viewModel.getUpComingMovieDetails().observe(this, Observer { upcomingDetails ->
+                viewModel.getUpComingMovieDetails(movieId!!).observe(this, Observer { upcomingDetails ->
                     if (upcomingDetails != null) {
                         bindUpComingMovie(upComingVo = upcomingDetails)
                         upComingVo = upcomingDetails
@@ -119,7 +135,7 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
 
 
             "favourite" -> {
-                viewModel.getFavouriteMovieDetails().observe(this, Observer { favouriteMovieDetails ->
+                viewModel.getFavouriteMovieDetails(movieId!!).observe(this, Observer { favouriteMovieDetails ->
                     if (favouriteMovieDetails != null) {
                         bindFavouriteMovie(favouriteVo = favouriteMovieDetails)
                         favouriteVo = favouriteMovieDetails
@@ -132,8 +148,8 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
 
         }
 
-        viewModel.getTrailers()?.observe(this, Observer { trailerList ->
-            Log.i("DetailActivity","Hii")
+        viewModel.getTrailers(movieId!!)?.observe(this, Observer { trailerList ->
+            Log.i("DetailActivity", "Hii")
             if (trailerList!!.isEmpty()) {
                 trailer_label.visibility = View.GONE
                 trailer_scroll.visibility = View.GONE
@@ -162,14 +178,14 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
             movie_rat.text = this.voteAverage.toString()
             movie_lang.text = this.originalLang
 
-             genresChip.setText(Utility.setGenresTypeForMovie(this.genreids))
+            genresChip.setText(Utility.setGenresTypeForMovie(this.genreids))
 
 
         }
     }
 
 
-   private fun bindPopularMovie(popularVo: PopularVo) {
+    private fun bindPopularMovie(popularVo: PopularVo) {
 
         with(popularVo) {
             Picasso.with(this@DetailActivity).load(BACKDROP_BASE_URL + this.backdrop_path).into(image)
@@ -224,7 +240,7 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
 
     }
 
-   private fun bindFavouriteMovie(favouriteVo: FavouriteVo) {
+    private fun bindFavouriteMovie(favouriteVo: FavouriteVo) {
 
 
         with(favouriteVo) {
@@ -270,7 +286,7 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
     }
 
     private fun checkFavouriteStatus() {
-        disposable.add(viewModel.checkedFavourite()
+        disposable.add(viewModel.checkedFavourite(movieId!!)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ movieCount ->
@@ -343,7 +359,9 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
         super.onStart()
     }
 
-
+//    override fun supportFragmentInjector(): AndroidInjector<Fragment> {
+//        return dispatchingAndroidInjector
+//    }
 
 
 }

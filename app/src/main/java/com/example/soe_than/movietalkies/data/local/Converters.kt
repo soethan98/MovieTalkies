@@ -1,6 +1,6 @@
 package com.example.soe_than.movietalkies.data.local
 
-import android.arch.persistence.room.TypeConverter
+import androidx.room.TypeConverter
 import android.util.Log
 import com.google.gson.reflect.TypeToken
 import com.google.gson.Gson

@@ -1,29 +1,40 @@
 package com.example.soe_than.movietalkies.ui.search
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.soe_than.movietalkies.R
 import com.example.soe_than.movietalkies.Utils.InjectorUtils
 import com.example.soe_than.movietalkies.adapter.SearchAdapter
 import com.example.soe_than.movietalkies.data.Vo.SearchVo
 import com.example.soe_than.movietalkies.ui.ViewModel.MovieViewModel
-import com.example.soe_than.movietalkies.ui.ViewModelFactory.MovieViewModelFactory
 import kotlinx.android.synthetic.main.activity_search.*
 import android.view.View
+import androidx.lifecycle.ViewModelProvider
 import com.example.soe_than.movietalkies.delegate.SearchDelegate
+import com.example.soe_than.movietalkies.ui.ViewModelFactory.MainViewModelFactory
 import com.example.soe_than.movietalkies.ui.detail.SearchDetailActivity
 import com.jakewharton.rxbinding2.widget.RxTextView
+import dagger.android.AndroidInjection
+import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasFragmentInjector
+import dagger.android.support.HasSupportFragmentInjector
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 
 class SearchActivity : AppCompatActivity(), SearchDelegate {
+
+
+
     override fun onTapSearchResult(searchVo: SearchVo) {
         val intent = Intent(this, SearchDetailActivity::class.java)
         intent.putExtra("Search", searchVo.id)
@@ -32,7 +43,10 @@ class SearchActivity : AppCompatActivity(), SearchDelegate {
 
 
     private lateinit var viewModel: MovieViewModel
-    private lateinit var viewModelFactory: MovieViewModelFactory
+
+    @Inject
+     lateinit var viewModelFactory: ViewModelProvider.Factory
+
     lateinit var searchAdapter: SearchAdapter
 
     lateinit var disposable: CompositeDisposable
@@ -48,11 +62,13 @@ class SearchActivity : AppCompatActivity(), SearchDelegate {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
+        AndroidInjection.inject(this)
+
         setUpRecyclerView()
 
         disposable = CompositeDisposable()
 
-        viewModelFactory = InjectorUtils.provideMovieViewModelFactory(this)
+//        viewModelFactory = InjectorUtils.provideMovieViewModelFactory(this)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(MovieViewModel::class.java)
 
         setUpRecyclerView()
@@ -67,20 +83,14 @@ class SearchActivity : AppCompatActivity(), SearchDelegate {
                 })
 
 
-
-
-
     }
 
     private fun setUpRecyclerView() {
 
-        searchRecyclerview.layoutManager = LinearLayoutManager(this)
+        searchRecyclerview.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
         searchAdapter = SearchAdapter(this, this)
         searchRecyclerview.adapter = searchAdapter
     }
-
-
-
 
 
     private fun observeSearchView() {
@@ -98,5 +108,6 @@ class SearchActivity : AppCompatActivity(), SearchDelegate {
                 }
         )
     }
+
 
 }

@@ -1,7 +1,7 @@
 package com.example.soe_than.movietalkies.data.repository
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import android.content.Context
 import android.util.Log
 import com.example.soe_than.movietalkies.Utils.APIKEY
@@ -16,49 +16,26 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class MoviesRepository(val movieDao: MovieDao, val context: Context) {
+@Singleton
+class MoviesRepository @Inject constructor(private val movieDao: MovieDao, private val apiService: ApiService) {
 
-    var apiService: ApiService
-    var trailerData: MutableLiveData<List<TrailerVo>>
-    var favouriteData: MutableLiveData<List<FavouriteVo>>
-    var searchData: MutableLiveData<List<SearchVo>>
-    var movieDetailData: MutableLiveData<MovieDetailVo>
+    var trailerData: MutableLiveData<List<TrailerVo>> = MutableLiveData()
+    var favouriteData: MutableLiveData<List<FavouriteVo>> = MutableLiveData()
+    var movieDetailData: MutableLiveData<MovieDetailVo> = MutableLiveData()
 
-    init {
-
-        apiService = ApiService.create()
-        trailerData = MutableLiveData()
-        favouriteData = MutableLiveData()
-        searchData = MutableLiveData()
-        movieDetailData = MutableLiveData()
-    }
-
-    companion object {
-        var sInstance: MoviesRepository? = null
-        val LOCK = Object()
-
-        fun getInstance(movieDao: MovieDao, context: Context): MoviesRepository? {
-            Log.d(LOG_TAG, "Getting the repository")
-            if (sInstance == null) {
-                synchronized(LOCK) {
-
-                    sInstance = MoviesRepository(movieDao, context)
-                    Log.d(LOG_TAG, "Made new repository")
-
-                }
-            }
-            return sInstance
-        }
-
-
-    }
 
     fun getNowShowingMovies(): LiveData<List<NowShowingVo>> {
+
+
+
         apiService.getNowShowingMovies(API_KEY)
                 .subscribeOn(Schedulers.io())
                 .toObservable()
-                .map { nowShowingResponse -> nowShowingResponse.nowShowingVo }
+                .map { nowShowingResponse ->
+                    nowShowingResponse.nowShowingVo }
                 .subscribe({ nowShowingList: List<NowShowingVo> -> movieDao.saveAllNowShowingMovies(nowShowingList) },
                         { t: Throwable -> Log.i("error: %s", t.message) })
 
@@ -101,23 +78,29 @@ class MoviesRepository(val movieDao: MovieDao, val context: Context) {
     }
 
     fun getTrailers(id: Int): LiveData<List<TrailerVo>>? {
-        return if (Utility.isNetworkAvailable(context)) {
-            apiService.getTrailers(id, API_KEY)
-                    .subscribeOn(Schedulers.io()).toObservable().map { trailerResponse ->
-                        trailerResponse.results
-                    }
-                    .subscribe({ trailerList: List<TrailerVo> -> trailerData.postValue(trailerList) }, { t: Throwable -> Log.i("error: %s", t.message) })
-            trailerData
-        } else {
-            null
-        }
+
+        apiService.getTrailers(id, API_KEY)
+                .subscribeOn(Schedulers.io()).toObservable().map { trailerResponse ->
+                    trailerResponse.results
+                }.subscribe({ trailerList: List<TrailerVo> -> trailerData.postValue(trailerList) }, { t: Throwable -> Log.i("error: %s", t.message) })
+
+        return trailerData
+//        return if (Utility.isNetworkAvailable()) {
+//            apiService.getTrailers(id, API_KEY)
+//                    .subscribeOn(Schedulers.io()).toObservable().map { trailerResponse ->
+//                        trailerResponse.results
+//                    }
+//                    .subscribe({ trailerList: List<TrailerVo> -> trailerData.postValue(trailerList) }, { t: Throwable -> Log.i("error: %s", t.message) })
+//            trailerData
+//        } else {
+//            null
+//        }
 
     }
 
 
-
     fun getSearchMovie(query: String): Single<SearchResponse> {
-        return apiService.getSearchResult(API_KEY,query)
+        return apiService.getSearchResult(API_KEY, query)
     }
 
 
