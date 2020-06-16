@@ -1,12 +1,10 @@
 package com.example.soe_than.movietalkies.di.component
 
 import android.app.Application
-import com.example.soe_than.movietalkies.App
-import com.example.soe_than.movietalkies.data.repository.MoviesRepository
+import com.example.soe_than.movietalkies.MovieApp
 import com.example.soe_than.movietalkies.di.module.*
 import dagger.BindsInstance
 import dagger.Component
-import dagger.Module
 import dagger.android.AndroidInjectionModule
 import javax.inject.Singleton
 
@@ -31,5 +29,5 @@ interface AppComponent {
 
 
 
-    fun inject(app: App)
+    fun inject(app: MovieApp)
 }

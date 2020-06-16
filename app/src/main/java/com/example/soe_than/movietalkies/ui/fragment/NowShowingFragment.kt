@@ -18,6 +18,7 @@ import com.example.soe_than.movietalkies.Utils.InjectorUtils
 import com.example.soe_than.movietalkies.adapter.NowShowingRecyclerAdapter
 import com.example.soe_than.movietalkies.data.Vo.NowShowingVo
 import com.example.soe_than.movietalkies.delegate.MovieDelegate
+import com.example.soe_than.movietalkies.di.Injectable
 import com.example.soe_than.movietalkies.ui.ViewModel.MovieViewModel
 import com.example.soe_than.movietalkies.ui.ViewModelFactory.MainViewModelFactory
 import com.example.soe_than.movietalkies.ui.detail.DetailActivity
@@ -26,7 +27,7 @@ import kotlinx.android.synthetic.main.fragment_now_showing.view.*
 import javax.inject.Inject
 
 
-class NowShowingFragment : Fragment(), MovieDelegate {
+class NowShowingFragment : Fragment(), MovieDelegate,Injectable{
 
 
     private lateinit var viewModel: MovieViewModel
@@ -35,10 +36,6 @@ class NowShowingFragment : Fragment(), MovieDelegate {
     lateinit var viewModelFactory: ViewModelProvider.Factory
     lateinit var nowShowingAdapter: NowShowingRecyclerAdapter
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        AndroidSupportInjection.inject(this)
-    }
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -46,7 +43,6 @@ class NowShowingFragment : Fragment(), MovieDelegate {
         // Inflate the layout for this fragment
         var view = inflater.inflate(R.layout.fragment_now_showing, container, false)
 
-//        viewModelFactory = InjectorUtils.provideMovieViewModelFactory(activity!!)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(MovieViewModel::class.java)
 
         setUpRecyclerView(view)

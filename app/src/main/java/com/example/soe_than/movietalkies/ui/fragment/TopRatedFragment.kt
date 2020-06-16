@@ -15,6 +15,7 @@ import com.example.soe_than.movietalkies.R
 import com.example.soe_than.movietalkies.adapter.TopRatedRecyclerAdapter
 import com.example.soe_than.movietalkies.data.Vo.TopRatedVo
 import com.example.soe_than.movietalkies.delegate.MovieDelegate
+import com.example.soe_than.movietalkies.di.Injectable
 import com.example.soe_than.movietalkies.ui.ViewModel.MovieViewModel
 import com.example.soe_than.movietalkies.ui.ViewModelFactory.MainViewModelFactory
 import com.example.soe_than.movietalkies.ui.detail.DetailActivity
@@ -23,7 +24,7 @@ import kotlinx.android.synthetic.main.fragment_top_rated.view.*
 import javax.inject.Inject
 
 
-class TopRatedFragment : Fragment(), MovieDelegate {
+class TopRatedFragment : Fragment(), MovieDelegate,Injectable{
     override fun onTapMovie(id: Int) {
 
         var intent = Intent(activity, DetailActivity::class.java)
@@ -39,10 +40,7 @@ class TopRatedFragment : Fragment(), MovieDelegate {
      lateinit var viewModelFactory: MainViewModelFactory
     lateinit var topRatedAdapter: TopRatedRecyclerAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        AndroidSupportInjection.inject(this)
-    }
+
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,

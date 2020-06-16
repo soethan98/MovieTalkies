@@ -12,20 +12,18 @@ import com.example.soe_than.movietalkies.adapter.ViewPagerAdapter
 import com.example.soe_than.movietalkies.ui.fragment.*
 import com.example.soe_than.movietalkies.ui.search.SearchActivity
 import dagger.android.*
-import dagger.android.support.HasSupportFragmentInjector
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(),HasSupportFragmentInjector{
+class MainActivity : AppCompatActivity(),HasAndroidInjector{
 
     @Inject
-    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
+    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Any>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        AndroidInjection.inject(this)
 
 
 
@@ -64,8 +62,7 @@ class MainActivity : AppCompatActivity(),HasSupportFragmentInjector{
     }
 
 
-
-    override fun supportFragmentInjector(): AndroidInjector<Fragment> {
+    override fun androidInjector(): AndroidInjector<Any> {
         return dispatchingAndroidInjector
     }
 

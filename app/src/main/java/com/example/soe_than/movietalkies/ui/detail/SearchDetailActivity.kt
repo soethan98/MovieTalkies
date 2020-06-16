@@ -22,7 +22,7 @@ import com.squareup.picasso.Picasso
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
-import dagger.android.support.HasSupportFragmentInjector
+import dagger.android.HasAndroidInjector
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -33,10 +33,10 @@ import kotlinx.android.synthetic.main.detail_movies_content.*
 import kotlinx.android.synthetic.main.trailers.*
 import javax.inject.Inject
 
-class SearchDetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+class SearchDetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton.OnCheckedChangeListener, HasAndroidInjector {
 
-//    @Inject
-//    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
+    @Inject
+    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Any>
 
 
     override fun onClick(v: View?) {
@@ -48,7 +48,7 @@ class SearchDetailActivity : AppCompatActivity(), View.OnClickListener, Compound
     private lateinit var viewModel: SearchDetailViewModel
 
     @Inject
-     lateinit var viewModelFactory: MainViewModelFactory
+    lateinit var viewModelFactory: MainViewModelFactory
     var movieDetailVo: MovieDetailVo? = null
 
 
@@ -59,14 +59,12 @@ class SearchDetailActivity : AppCompatActivity(), View.OnClickListener, Compound
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search_detail)
-        AndroidInjection.inject(this)
         movieId = intent.getIntExtra("Search", 0)
 
 
         add_search_favourite.setOnCheckedChangeListener(this)
 
 
-//        viewModelFactory = InjectorUtils.provideSearchDetailViewFactory(this, movieId!!)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(SearchDetailViewModel::class.java)
 
         viewModel.getMovieDetails(movieId!!).observe(this, Observer { movieDetails ->
@@ -131,7 +129,7 @@ class SearchDetailActivity : AppCompatActivity(), View.OnClickListener, Compound
         }
     }
 
-    private fun checkFavouriteStatus(movieId:Int) {
+    private fun checkFavouriteStatus(movieId: Int) {
         disposable.add(viewModel.checkedFavourite(movieId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -160,6 +158,9 @@ class SearchDetailActivity : AppCompatActivity(), View.OnClickListener, Compound
         disposable.clear()
     }
 
+    override fun androidInjector(): AndroidInjector<Any> {
+        return dispatchingAndroidInjector
+    }
 
 
 }

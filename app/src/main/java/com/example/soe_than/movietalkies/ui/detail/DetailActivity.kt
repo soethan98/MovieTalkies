@@ -29,7 +29,7 @@ import com.squareup.picasso.Picasso
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
-import dagger.android.support.HasSupportFragmentInjector
+import dagger.android.HasAndroidInjector
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -38,10 +38,10 @@ import kotlinx.android.synthetic.main.activity_search_detail.*
 import javax.inject.Inject
 
 
-class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton.OnCheckedChangeListener{
+class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton.OnCheckedChangeListener, HasAndroidInjector {
 
-//    @Inject
-//    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
+    @Inject
+    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Any>
 
 
     override fun onClick(v: View?) {
@@ -70,7 +70,6 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
 
-        AndroidInjection.inject(this)
 
 
 
@@ -81,7 +80,6 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
 
 
 
-//        viewModelFactory = InjectorUtils.provideDetailViewFactory(this, movieId!!)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(DetailViewModel::class.java)
 
 
@@ -355,13 +353,9 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
         disposable.clear()
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun androidInjector(): AndroidInjector<Any> {
+        return dispatchingAndroidInjector
     }
-
-//    override fun supportFragmentInjector(): AndroidInjector<Fragment> {
-//        return dispatchingAndroidInjector
-//    }
 
 
 }

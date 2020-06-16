@@ -19,11 +19,7 @@ import com.example.soe_than.movietalkies.delegate.SearchDelegate
 import com.example.soe_than.movietalkies.ui.ViewModelFactory.MainViewModelFactory
 import com.example.soe_than.movietalkies.ui.detail.SearchDetailActivity
 import com.jakewharton.rxbinding2.widget.RxTextView
-import dagger.android.AndroidInjection
-import dagger.android.AndroidInjector
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasFragmentInjector
-import dagger.android.support.HasSupportFragmentInjector
+import dagger.android.*
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -31,7 +27,12 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
-class SearchActivity : AppCompatActivity(), SearchDelegate {
+class SearchActivity : AppCompatActivity(), SearchDelegate,HasAndroidInjector {
+
+
+    @Inject
+    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Any>
+
 
 
 
@@ -62,13 +63,10 @@ class SearchActivity : AppCompatActivity(), SearchDelegate {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        AndroidInjection.inject(this)
 
         setUpRecyclerView()
 
         disposable = CompositeDisposable()
-
-//        viewModelFactory = InjectorUtils.provideMovieViewModelFactory(this)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(MovieViewModel::class.java)
 
         setUpRecyclerView()
@@ -107,6 +105,10 @@ class SearchActivity : AppCompatActivity(), SearchDelegate {
                     viewModel.getSearchList(searchString.text().toString())
                 }
         )
+    }
+
+    override fun androidInjector(): AndroidInjector<Any> {
+        return dispatchingAndroidInjector
     }
 
 

@@ -16,6 +16,7 @@ import com.example.soe_than.movietalkies.Utils.InjectorUtils
 import com.example.soe_than.movietalkies.adapter.PopularRecyclerAdapter
 import com.example.soe_than.movietalkies.data.Vo.PopularVo
 import com.example.soe_than.movietalkies.delegate.MovieDelegate
+import com.example.soe_than.movietalkies.di.Injectable
 import com.example.soe_than.movietalkies.ui.ViewModel.MovieViewModel
 import com.example.soe_than.movietalkies.ui.ViewModelFactory.MainViewModelFactory
 import com.example.soe_than.movietalkies.ui.detail.DetailActivity
@@ -24,7 +25,7 @@ import kotlinx.android.synthetic.main.fragment_popular.view.*
 import javax.inject.Inject
 
 
-class PopularFragment : Fragment(), MovieDelegate {
+class PopularFragment : Fragment(), MovieDelegate,Injectable{
 
     private lateinit var viewModel: MovieViewModel
 
@@ -32,10 +33,7 @@ class PopularFragment : Fragment(), MovieDelegate {
      lateinit var viewModelFactory: MainViewModelFactory
     lateinit var popularAdapter: PopularRecyclerAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        AndroidSupportInjection.inject(this)
-    }
+
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,

@@ -2,22 +2,24 @@ package com.example.soe_than.movietalkies
 
 import android.app.Activity
 import android.app.Application
+import com.example.soe_than.movietalkies.di.AppInjector
 import com.example.soe_than.movietalkies.di.component.DaggerAppComponent
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasActivityInjector
+import dagger.android.HasAndroidInjector
 import javax.inject.Inject
 
-class App : Application(), HasActivityInjector {
+class MovieApp : Application(), HasAndroidInjector {
 
     @Inject
-    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
+    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Any>
     override fun onCreate() {
         super.onCreate()
 
-        DaggerAppComponent.builder().application(this).build().inject(this)
+        AppInjector.init(this)
+
     }
 
 
-    override fun activityInjector() = dispatchingAndroidInjector
+    override fun androidInjector() = dispatchingAndroidInjector
 }

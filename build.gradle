@@ -5,7 +5,7 @@ buildscript {
     ext.lifecycle = '2.2.0-alpha03'
     ext.fragment = "1.2.5"
     ext.retrofit_version = '2.4.0'
-    ext.dagger2_version = '2.23.2'
+    ext.dagger2_version = '2.27'
     ext.room_version  = '1.1.1'
     ext.glide_version = '4.7.1'
     repositories {

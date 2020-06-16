@@ -2,7 +2,6 @@ package com.example.soe_than.movietalkies.ui.fragment
 
 
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -11,12 +10,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 
 import com.example.soe_than.movietalkies.R
 import com.example.soe_than.movietalkies.Utils.InjectorUtils
 import com.example.soe_than.movietalkies.adapter.FavouriteRecyclerAdapter
 import com.example.soe_than.movietalkies.data.Vo.FavouriteVo
 import com.example.soe_than.movietalkies.delegate.MovieDelegate
+import com.example.soe_than.movietalkies.di.Injectable
 import com.example.soe_than.movietalkies.ui.ViewModel.FavouriteViewModel
 import com.example.soe_than.movietalkies.ui.ViewModelFactory.MainViewModelFactory
 import com.example.soe_than.movietalkies.ui.detail.DetailActivity
@@ -25,7 +26,7 @@ import kotlinx.android.synthetic.main.fragment_favourite.view.*
 import javax.inject.Inject
 
 
-class FavouriteFragment : Fragment(), MovieDelegate {
+class FavouriteFragment : Fragment(), MovieDelegate,Injectable {
     override fun onTapMovie(id: Int) {
         var intent = Intent(activity, DetailActivity::class.java)
         intent.putExtra("ID", id)
@@ -40,17 +41,12 @@ class FavouriteFragment : Fragment(), MovieDelegate {
 
     private lateinit var favouriteAdapter: FavouriteRecyclerAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        AndroidSupportInjection.inject(this)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_favourite, container, false)
 
-//        viewModelFactory = InjectorUtils.provideFavouriteViewFactory(activity!!)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(FavouriteViewModel::class.java)
 
         setUpRecyclerView(view)
@@ -67,13 +63,13 @@ class FavouriteFragment : Fragment(), MovieDelegate {
 
 
         view.favouriteRecyclerView.layoutManager = androidx.recyclerview.widget.GridLayoutManager(activity, 2)
-        favouriteAdapter = FavouriteRecyclerAdapter(context!!, this)
+        favouriteAdapter = FavouriteRecyclerAdapter(requireContext(), this)
         view.favouriteRecyclerView.adapter = favouriteAdapter
     }
 
     private fun getFavouriteMovies() {
 
-        viewModel.getFavouriteMovies().observe(activity!!, Observer { favouriteList ->
+        viewModel.getFavouriteMovies().observe(requireActivity(), Observer { favouriteList ->
 
             favouriteList!!.let {
 
