@@ -26,7 +26,7 @@ import kotlinx.android.synthetic.main.fragment_favourite.view.*
 import javax.inject.Inject
 
 
-class FavouriteFragment : Fragment(), MovieDelegate,Injectable {
+class FavouriteFragment : Fragment(), MovieDelegate, Injectable {
     override fun onTapMovie(id: Int) {
         var intent = Intent(activity, DetailActivity::class.java)
         intent.putExtra("ID", id)
@@ -51,6 +51,8 @@ class FavouriteFragment : Fragment(), MovieDelegate,Injectable {
 
         setUpRecyclerView(view)
 
+        viewModel.getFavouriteMovies()
+
         getFavouriteMovies()
 
 
@@ -69,9 +71,9 @@ class FavouriteFragment : Fragment(), MovieDelegate,Injectable {
 
     private fun getFavouriteMovies() {
 
-        viewModel.getFavouriteMovies().observe(requireActivity(), Observer { favouriteList ->
+        viewModel.favouriteResultLiveData.observe(requireActivity(), Observer { favouriteList ->
 
-            favouriteList!!.let {
+            favouriteList?.let {
 
                 favouriteAdapter.setNewData(favouriteList as MutableList<FavouriteVo>)
             }

@@ -2,6 +2,7 @@ package com.example.soe_than.movietalkies.di.component
 
 import android.app.Application
 import com.example.soe_than.movietalkies.MovieApp
+import com.example.soe_than.movietalkies.data.repository.MoviesRepository
 import com.example.soe_than.movietalkies.di.module.*
 import dagger.BindsInstance
 import dagger.Component

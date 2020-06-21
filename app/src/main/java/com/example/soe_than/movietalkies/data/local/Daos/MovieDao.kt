@@ -6,6 +6,7 @@ import androidx.annotation.MainThread
 import com.example.soe_than.movietalkies.ViewHolder.PopularViewHolder
 import com.example.soe_than.movietalkies.data.Vo.*
 import io.reactivex.Flowable
+import io.reactivex.Observable
 import io.reactivex.Single
 
 
@@ -13,19 +14,19 @@ import io.reactivex.Single
 interface MovieDao {
 
     @Query("SELECT * FROM nowshowing")
-    fun getAllNowShowingMovies(): LiveData<List<NowShowingVo>>
+    fun getAllNowShowingMovies(): Observable<List<NowShowingVo>>
 
     @Query("SELECT * FROM popular")
-    fun getAllPopularMovies(): LiveData<List<PopularVo>>
+    fun getAllPopularMovies(): Observable<List<PopularVo>>
 
     @Query("SELECT * FROM toprated")
-    fun getAllTopRatedMovies(): LiveData<List<TopRatedVo>>
+    fun getAllTopRatedMovies(): Observable<List<TopRatedVo>>
 
     @Query("SELECT * FROM upcoming")
-    fun getAllUpComingMovies(): LiveData<List<UpComingVo>>
+    fun getAllUpComingMovies(): Observable<List<UpComingVo>>
 
     @Query("SELECT * FROM favourite")
-    fun getAllFavouriteMovies(): Single<List<FavouriteVo>>
+    fun getAllFavouriteMovies(): Observable<List<FavouriteVo>>
 
     @Delete
     fun clearFavoutireMoive(movies: FavouriteVo)
@@ -47,21 +48,21 @@ interface MovieDao {
     fun saveFavouriteMovies(favouriteVo: FavouriteVo)
 
     @Query("SELECT * FROM nowshowing WHERE id=:id")
-    fun getNowShowingMovieById(id: String): LiveData<NowShowingVo>
+    fun getNowShowingMovieById(id: String): Single<NowShowingVo>
 
     @Query("SELECT * FROM popular WHERE id=:id")
-    fun getPopularMovieById(id: String): LiveData<PopularVo>
+    fun getPopularMovieById(id: String): Single<PopularVo>
 
     @Query("SELECT * FROM toprated WHERE id=:id")
-    fun getTopRatedMovieByID(id: String): LiveData<TopRatedVo>
+    fun getTopRatedMovieByID(id: String): Single<TopRatedVo>
 
     @Query("SELECT * FROM upcoming WHERE id=:id")
-    fun getUpComingMovieById(id: String): LiveData<UpComingVo>
+    fun getUpComingMovieById(id: String): Single<UpComingVo>
 
     @Query("SELECT * FROM favourite WHERE id=:id")
-    fun getFavouriteMovieById(id: String): LiveData<FavouriteVo>
+    fun getFavouriteMovieById(id: String): Single<FavouriteVo>
 
 
     @Query("SELECT COUNT(*) FROM favourite WHERE id =:id")
-    fun isFavouriteMovie(id:String):Single<Int>
- }
+    fun isFavouriteMovie(id: String): Single<Int>
+}

@@ -85,8 +85,10 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
 
         when (movieType) {
             "nowshowing" -> {
-                viewModel.getNowShowingMovieDetails(movieId!!).observe(this, Observer { nowShowingDetails ->
-                    nowShowingDetails!!.let {
+
+                viewModel.getNowShowingMovieDetails(movieId!!)
+                viewModel.nowShowingMovieDetailResultLiveData.observe(this, Observer { nowShowingDetails ->
+                    nowShowingDetails?.let {
                         nowShowingVo = nowShowingDetails
                         bindNowShowingMovie(nowShowingVo = nowShowingDetails)
                         checkFavouriteStatus()
@@ -98,7 +100,8 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
 
             }
             "popular" -> {
-                viewModel.getPopularMovieDetails(movieId!!).observe(this, Observer { popularDetails ->
+                viewModel.getPopularMovieDetails(movieId!!)
+                viewModel.popularMovieDetailResultLiveData.observe(this, Observer { popularDetails ->
                     if (popularDetails != null) {
                         bindPopularMovie(popularVo = popularDetails)
                         popularVo = popularDetails
@@ -108,7 +111,8 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
                 })
             }
             "toprated" -> {
-                viewModel.getTopRatedMovieDetails(movieId!!).observe(this, Observer { topRatedDetails ->
+                viewModel.getTopRatedMovieDetails(movieId!!)
+                viewModel.topRatedMovieDetailResultLiveData.observe(this, Observer { topRatedDetails ->
                     if (topRatedDetails != null) {
                         bindTopRatedMovie(topRatedVo = topRatedDetails)
                         topRatedVo = topRatedDetails
@@ -120,7 +124,8 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
             }
 
             "upcoming" -> {
-                viewModel.getUpComingMovieDetails(movieId!!).observe(this, Observer { upcomingDetails ->
+                viewModel.getUpComingMovieDetails(movieId!!)
+                viewModel.upcomingMovieDetailResultLiveData.observe(this, Observer { upcomingDetails ->
                     if (upcomingDetails != null) {
                         bindUpComingMovie(upComingVo = upcomingDetails)
                         upComingVo = upcomingDetails
@@ -133,7 +138,8 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
 
 
             "favourite" -> {
-                viewModel.getFavouriteMovieDetails(movieId!!).observe(this, Observer { favouriteMovieDetails ->
+                viewModel.getFavouriteMovieDetails(movieId!!)
+                viewModel.favouriteMovieDetailResultLiveData.observe(this, Observer { favouriteMovieDetails ->
                     if (favouriteMovieDetails != null) {
                         bindFavouriteMovie(favouriteVo = favouriteMovieDetails)
                         favouriteVo = favouriteMovieDetails

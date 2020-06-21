@@ -43,8 +43,6 @@ class UpcomingFragment : Fragment(), MovieDelegate, Injectable {
     lateinit var upComingAdapter: UpComingRecyclerAdapter
 
 
-
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -53,9 +51,11 @@ class UpcomingFragment : Fragment(), MovieDelegate, Injectable {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(MovieViewModel::class.java)
         setUpRecyclerView(view)
 
-        viewModel.getUpComingMovies().observe(requireActivity(), Observer { upComingList ->
+        viewModel.getUpComingMovies()
 
-            upComingList!!.let {
+        viewModel.upcomingResultLiveData.observe(requireActivity(), Observer { upComingList ->
+
+            upComingList?.let {
                 view.upProgress.visibility = View.GONE
                 upComingAdapter.setNewData(upComingList as MutableList<UpComingVo>)
             }

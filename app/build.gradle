@@ -41,6 +41,8 @@ dependencies {
 
     //ViewModel and LiveData
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation "androidx.lifecycle:lifecycle-reactivestreams-ktx:2.2.0"
+
 //    implementation "androidx.lifecycle:lifecycle-runtime:$lifecycle"
 //    kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle"
 //    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle"

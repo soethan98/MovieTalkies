@@ -24,7 +24,7 @@ import kotlinx.android.synthetic.main.fragment_top_rated.view.*
 import javax.inject.Inject
 
 
-class TopRatedFragment : Fragment(), MovieDelegate,Injectable{
+class TopRatedFragment : Fragment(), MovieDelegate, Injectable {
     override fun onTapMovie(id: Int) {
 
         var intent = Intent(activity, DetailActivity::class.java)
@@ -37,10 +37,8 @@ class TopRatedFragment : Fragment(), MovieDelegate,Injectable{
     private lateinit var viewModel: MovieViewModel
 
     @Inject
-     lateinit var viewModelFactory: MainViewModelFactory
+    lateinit var viewModelFactory: MainViewModelFactory
     lateinit var topRatedAdapter: TopRatedRecyclerAdapter
-
-
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -53,7 +51,10 @@ class TopRatedFragment : Fragment(), MovieDelegate,Injectable{
 
         setUpRecyclerView(view)
 
-        viewModel.getTopRatedMovies().observe(activity!!, Observer { topRatedList ->
+        viewModel.getTopRatedMovies()
+
+
+        viewModel.topRatedResultLiveData.observe(requireActivity(), Observer { topRatedList ->
 
 
             topRatedList!!.let {
@@ -69,7 +70,7 @@ class TopRatedFragment : Fragment(), MovieDelegate,Injectable{
 
     private fun setUpRecyclerView(view: View) {
         view.topRatedRecyclerView.layoutManager = androidx.recyclerview.widget.GridLayoutManager(activity, 2)
-        topRatedAdapter = TopRatedRecyclerAdapter(context!!, this)
+        topRatedAdapter = TopRatedRecyclerAdapter(requireContext(), this)
         view.topRatedRecyclerView.adapter = topRatedAdapter
     }
 

@@ -17,6 +17,7 @@ import com.example.soe_than.movietalkies.R
 import com.example.soe_than.movietalkies.Utils.InjectorUtils
 import com.example.soe_than.movietalkies.adapter.NowShowingRecyclerAdapter
 import com.example.soe_than.movietalkies.data.Vo.NowShowingVo
+import com.example.soe_than.movietalkies.data.repository.MoviesRepository
 import com.example.soe_than.movietalkies.delegate.MovieDelegate
 import com.example.soe_than.movietalkies.di.Injectable
 import com.example.soe_than.movietalkies.ui.ViewModel.MovieViewModel
@@ -27,7 +28,7 @@ import kotlinx.android.synthetic.main.fragment_now_showing.view.*
 import javax.inject.Inject
 
 
-class NowShowingFragment : Fragment(), MovieDelegate,Injectable{
+class NowShowingFragment : Fragment(), MovieDelegate, Injectable {
 
 
     private lateinit var viewModel: MovieViewModel
@@ -35,7 +36,6 @@ class NowShowingFragment : Fragment(), MovieDelegate,Injectable{
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     lateinit var nowShowingAdapter: NowShowingRecyclerAdapter
-
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -47,7 +47,10 @@ class NowShowingFragment : Fragment(), MovieDelegate,Injectable{
 
         setUpRecyclerView(view)
 
-        viewModel.getNowShowingMovies().observe(requireActivity(),
+        viewModel.getNowShowingMovies()
+
+
+        viewModel.nowShowingResultLiveData.observe(requireActivity(),
                 Observer { nowshowingList ->
 
 

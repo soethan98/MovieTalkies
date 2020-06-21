@@ -1,6 +1,9 @@
 package com.example.soe_than.movietalkies.ui.ViewModel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.LiveDataReactiveStreams
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.soe_than.movietalkies.data.Vo.FavouriteVo
 import com.example.soe_than.movietalkies.data.Vo.MovieDetailVo
@@ -9,17 +12,41 @@ import com.example.soe_than.movietalkies.data.Vo.TrailerVo
 import com.example.soe_than.movietalkies.data.repository.MoviesRepository
 import io.reactivex.Completable
 import io.reactivex.Single
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class SearchDetailViewModel @Inject constructor( val moviesRepository: MoviesRepository) : ViewModel() {
-
-    fun getMovieDetails(id:Int): LiveData<MovieDetailVo> = moviesRepository.getSearchMovieDetails(id)
+class SearchDetailViewModel @Inject constructor(private val moviesRepository: MoviesRepository) : ViewModel() {
 
 
-    fun getTrailers(id:Int): LiveData<List<TrailerVo>>? = moviesRepository.getTrailers(id)
+    private val compositeDisposable = CompositeDisposable()
+
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.clear()
+    }
+
+    private val _movieDetailResultLiveData = MutableLiveData<MovieDetailVo>()
+    val movieDetailResultLiveData: LiveData<MovieDetailVo>
+        get() = _movieDetailResultLiveData
 
 
-    fun checkedFavourite(id:Int): Single<Int> = moviesRepository.checkedFavouriteMovie(id!!)
+    fun getMovieDetails(id: Int) {
+        compositeDisposable.add(moviesRepository.getSearchMovieDetails(id).subscribeOn(Schedulers.io())
+                .subscribe({
+                    _movieDetailResultLiveData.postValue(it
+                    )
+                }, { t: Throwable ->
+                    Log.i("error", t.message)
+
+                }))
+    }
+
+
+    fun getTrailers(id: Int): LiveData<List<TrailerVo>>? = moviesRepository.getTrailers(id)
+
+
+    fun checkedFavourite(id: Int): Single<Int> = moviesRepository.checkedFavouriteMovie(id!!)
 
 
     fun favouriteStatus(movieDetailVo: MovieDetailVo, checked: Boolean): Completable {

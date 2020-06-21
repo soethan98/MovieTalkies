@@ -5,7 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import android.util.Log
-import com.example.soe_than.movietalkies.Utils.APIKEY
+import androidx.lifecycle.LiveDataReactiveStreams
+import com.example.soe_than.movietalkies.Utils.API_KEY
 import com.example.soe_than.movietalkies.data.Vo.*
 import com.example.soe_than.movietalkies.data.repository.MoviesRepository
 import io.reactivex.disposables.CompositeDisposable
@@ -17,28 +18,83 @@ class MovieViewModel @Inject constructor(var moviesRepository: MoviesRepository)
 
     private val compositeDisposable = CompositeDisposable()
 
-
-
-
-    fun getNowShowingMovies(): LiveData<List<NowShowingVo>> {
-        Log.i("ViewModel",moviesRepository.getNowShowingMovies().value?.size.toString()+"---")
-
-        return moviesRepository.getNowShowingMovies()
+    override fun onCleared() {
+        super.onCleared()
+        moviesRepository.onClear()
+        compositeDisposable.clear()
     }
 
 
-    fun getPopularMovies(): LiveData<List<PopularVo>> = moviesRepository.getPopularMovies()
+    fun getNowShowingMovies() {
 
 
-    fun getTopRatedMovies(): LiveData<List<TopRatedVo>> = moviesRepository.getTopRatedMovies()
+        compositeDisposable.add(moviesRepository.getNowShowingMovies().subscribeOn(Schedulers.io())
+                .subscribe({
+                    _nowShowingResultLiveData.postValue(it
+                    )
+                }, { t: Throwable ->
+                    Log.i("error", t.message)
+
+                }))
+    }
 
 
-    fun getUpComingMovies(): LiveData<List<UpComingVo>> = moviesRepository.getUpComingMovies()
+    fun getPopularMovies() {
+        compositeDisposable.add(moviesRepository.getPopularMovies().subscribeOn(Schedulers.io())
+                .subscribe({
+                    _popularResultLiveData.postValue(it
+                    )
+                }, { t: Throwable ->
+                    Log.i("error", t.message)
+
+                }))
+    }
+
+
+    fun getTopRatedMovies() {
+        compositeDisposable.add(moviesRepository.getTopRatedMovies().subscribeOn(Schedulers.io())
+                .subscribe({
+                    _topRatedResultLiveData.postValue(it
+                    )
+                }, { t: Throwable ->
+                    Log.i("error", t.message)
+
+                }))
+
+    }
+
+
+    fun getUpComingMovies() {
+        compositeDisposable.add(moviesRepository.getUpComingMovies().subscribeOn(Schedulers.io())
+                .subscribe({
+                    _upcomingResultLiveData.postValue(it
+                    )
+                }, { t: Throwable ->
+                    Log.i("error", t.message)
+
+                }))
+    }
 
 
     private val _searchResultLiveData = MutableLiveData<List<SearchVo>>()
     val searchResultLiveData: LiveData<List<SearchVo>>
         get() = _searchResultLiveData
+
+    private val _nowShowingResultLiveData = MutableLiveData<List<NowShowingVo>>()
+    val nowShowingResultLiveData: LiveData<List<NowShowingVo>>
+        get() = _nowShowingResultLiveData
+
+    private val _upcomingResultLiveData = MutableLiveData<List<UpComingVo>>()
+    val upcomingResultLiveData: LiveData<List<UpComingVo>>
+        get() = _upcomingResultLiveData
+
+    private val _topRatedResultLiveData = MutableLiveData<List<TopRatedVo>>()
+    val topRatedResultLiveData: LiveData<List<TopRatedVo>>
+        get() = _topRatedResultLiveData
+
+    private val _popularResultLiveData = MutableLiveData<List<PopularVo>>()
+    val popularResultLiveData: LiveData<List<PopularVo>>
+        get() = _popularResultLiveData
 
 
     fun getSearchList(query: String) {

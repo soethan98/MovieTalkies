@@ -25,15 +25,13 @@ import kotlinx.android.synthetic.main.fragment_popular.view.*
 import javax.inject.Inject
 
 
-class PopularFragment : Fragment(), MovieDelegate,Injectable{
+class PopularFragment : Fragment(), MovieDelegate, Injectable {
 
     private lateinit var viewModel: MovieViewModel
 
     @Inject
-     lateinit var viewModelFactory: MainViewModelFactory
+    lateinit var viewModelFactory: MainViewModelFactory
     lateinit var popularAdapter: PopularRecyclerAdapter
-
-
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -45,10 +43,12 @@ class PopularFragment : Fragment(), MovieDelegate,Injectable{
 
         setUpRecyclerView(view)
 
-        viewModel.getPopularMovies().observe(activity!!, Observer { popularList ->
+        viewModel.getPopularMovies()
+
+        viewModel.popularResultLiveData.observe(requireActivity(), Observer { popularList ->
 
             popularList!!.let {
-                view.popProgress.visibility=View.GONE
+                view.popProgress.visibility = View.GONE
                 popularAdapter.setNewData(popularList as MutableList<PopularVo>)
             }
         })
@@ -57,7 +57,7 @@ class PopularFragment : Fragment(), MovieDelegate,Injectable{
 
     private fun setUpRecyclerView(view: View) {
         view.popularRecyclerView.layoutManager = androidx.recyclerview.widget.GridLayoutManager(activity, 2)
-        popularAdapter = PopularRecyclerAdapter(context!!, this)
+        popularAdapter = PopularRecyclerAdapter(requireContext(), this)
         view.popularRecyclerView.adapter = popularAdapter
     }
 

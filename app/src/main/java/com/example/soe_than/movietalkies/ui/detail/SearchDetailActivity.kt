@@ -66,9 +66,10 @@ class SearchDetailActivity : AppCompatActivity(), View.OnClickListener, Compound
 
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(SearchDetailViewModel::class.java)
+        viewModel.getMovieDetails(movieId!!)
 
-        viewModel.getMovieDetails(movieId!!).observe(this, Observer { movieDetails ->
-            movieDetails!!.let {
+        viewModel.movieDetailResultLiveData.observe(this, Observer { movieDetails ->
+            movieDetails?.let {
                 bindMovieDetailsMovie(movieDetails)
                 movieDetailVo = movieDetails
                 checkFavouriteStatus(movieId ?: 0)

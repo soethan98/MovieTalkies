@@ -1,11 +1,9 @@
 package com.example.soe_than.movietalkies.data.repository
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import android.content.Context
 import android.util.Log
-import com.example.soe_than.movietalkies.Utils.APIKEY
-import com.example.soe_than.movietalkies.Utils.APIKEY.API_KEY
+import androidx.lifecycle.*
+import com.example.soe_than.movietalkies.Utils.API_KEY
 import com.example.soe_than.movietalkies.Utils.LOG_TAG
 import com.example.soe_than.movietalkies.Utils.Utility
 import com.example.soe_than.movietalkies.api.ApiService
@@ -13,8 +11,10 @@ import com.example.soe_than.movietalkies.data.Vo.*
 import com.example.soe_than.movietalkies.data.local.Daos.MovieDao
 import com.example.soe_than.movietalkies.data.response.SearchResponse
 import io.reactivex.Flowable
+import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -26,63 +26,70 @@ class MoviesRepository @Inject constructor(private val movieDao: MovieDao, priva
     var favouriteData: MutableLiveData<List<FavouriteVo>> = MutableLiveData()
     var movieDetailData: MutableLiveData<MovieDetailVo> = MutableLiveData()
 
-
-    fun getNowShowingMovies(): LiveData<List<NowShowingVo>> {
-
+    private val compositeDisposable = CompositeDisposable()
 
 
-        apiService.getNowShowingMovies(API_KEY)
+    fun onClear() {
+        compositeDisposable.clear()
+    }
+
+
+    fun getNowShowingMovies(): Observable<List<NowShowingVo>> {
+
+
+        compositeDisposable.add(apiService.getNowShowingMovies(API_KEY)
                 .subscribeOn(Schedulers.io())
                 .toObservable()
                 .map { nowShowingResponse ->
-                    nowShowingResponse.nowShowingVo }
+                    nowShowingResponse.nowShowingVo
+                }
                 .subscribe({ nowShowingList: List<NowShowingVo> -> movieDao.saveAllNowShowingMovies(nowShowingList) },
-                        { t: Throwable -> Log.i("error: %s", t.message) })
+                        { t: Throwable -> Log.i("error: %s", t.message) }))
 
         return movieDao.getAllNowShowingMovies()
     }
 
-    fun getPopularMovies(): LiveData<List<PopularVo>> {
-        apiService.getPopularMovies(API_KEY)
+    fun getPopularMovies(): Observable<List<PopularVo>> {
+        compositeDisposable.add(apiService.getPopularMovies(API_KEY)
                 .subscribeOn(Schedulers.io())
                 .toObservable()
                 .map { popularResponse -> popularResponse.popularVo }
                 .subscribe({ popularList: List<PopularVo> -> movieDao.saveAllPopularMovies(popularList) },
-                        { t: Throwable -> Log.i("error: %s", t.message) })
+                        { t: Throwable -> Log.i("error: %s", t.message) }))
 
         return movieDao.getAllPopularMovies()
     }
 
-    fun getTopRatedMovies(): LiveData<List<TopRatedVo>> {
-        apiService.getTopRatedMovies(API_KEY)
+    fun getTopRatedMovies(): Observable<List<TopRatedVo>> {
+        compositeDisposable.add(apiService.getTopRatedMovies(API_KEY)
                 .subscribeOn(Schedulers.io())
                 .toObservable()
                 .map { topRatedResponse -> topRatedResponse.topRatedVo }
                 .subscribe({ topRatedList: List<TopRatedVo> -> movieDao.saveAllTopRatedMovies(topRatedList) },
-                        { t: Throwable -> Log.i("error: %s", t.message) })
+                        { t: Throwable -> Log.i("error: %s", t.message) }))
 
         return movieDao.getAllTopRatedMovies()
     }
 
-    fun getUpComingMovies(): LiveData<List<UpComingVo>> {
-        apiService.getUpComingMovies(API_KEY)
+    fun getUpComingMovies(): Observable<List<UpComingVo>> {
+        compositeDisposable.add(apiService.getUpComingMovies(API_KEY)
                 .subscribeOn(Schedulers.io())
                 .toObservable()
                 .map { upComingResponse -> upComingResponse.upComingVo }
                 .subscribe({ upComingList: List<UpComingVo> ->
                     movieDao.saveAllUpComingMovies(upComingList)
                 },
-                        { t: Throwable -> Log.i("error: %s", t.message) })
+                        { t: Throwable -> Log.i("error: %s", t.message) }))
 
         return movieDao.getAllUpComingMovies()
     }
 
     fun getTrailers(id: Int): LiveData<List<TrailerVo>>? {
 
-        apiService.getTrailers(id, API_KEY)
+        compositeDisposable.add(apiService.getTrailers(id, API_KEY)
                 .subscribeOn(Schedulers.io()).toObservable().map { trailerResponse ->
                     trailerResponse.results
-                }.subscribe({ trailerList: List<TrailerVo> -> trailerData.postValue(trailerList) }, { t: Throwable -> Log.i("error: %s", t.message) })
+                }.subscribe({ trailerList: List<TrailerVo> -> trailerData.postValue(trailerList) }, { t: Throwable -> Log.i("error: %s", t.message) }))
 
         return trailerData
 //        return if (Utility.isNetworkAvailable()) {
@@ -104,24 +111,21 @@ class MoviesRepository @Inject constructor(private val movieDao: MovieDao, priva
     }
 
 
-    fun getFavourites(): LiveData<List<FavouriteVo>> {
-        movieDao.getAllFavouriteMovies().subscribeOn(Schedulers.io()).toObservable().map { t: List<FavouriteVo> -> t }
-                .subscribe({ favouriteList -> favouriteData.postValue(favouriteList) }, { t: Throwable -> Log.i("error: %s", t.message) })
-
-        return favouriteData
-    }
+    fun getFavourites() = movieDao.getAllFavouriteMovies()
 
 
-    fun getSearchMovieDetails(id: Int): LiveData<MovieDetailVo> {
-        apiService.getMovieDetail(id, API_KEY)
-                .subscribeOn(Schedulers.io())
-                .toObservable()
-                .subscribe({ movieDetail: MovieDetailVo ->
-                    movieDetailData.postValue(movieDetail)
-                }, { t: Throwable ->
-                    Log.i("error: %s", t.message)
-                })
-        return movieDetailData
+    fun getSearchMovieDetails(id: Int): Single<MovieDetailVo> {
+
+        return apiService.getMovieDetail(id, API_KEY)
+//        compositeDisposable.add(apiService.getMovieDetail(id, API_KEY)
+//                .subscribeOn(Schedulers.io())
+//                .toObservable()
+//                .subscribe({ movieDetail: MovieDetailVo ->
+//                    movieDetailData.postValue(movieDetail)
+//                }, { t: Throwable ->
+//                    Log.i("error: %s", t.message)
+//                }))
+//        return movieDetailData
     }
 
     fun addFavouriteMovie(favouriteVo: FavouriteVo) {
@@ -132,29 +136,29 @@ class MoviesRepository @Inject constructor(private val movieDao: MovieDao, priva
         movieDao.clearFavoutireMoive(favouriteVo)
     }
 
-    fun getPopularMovieDetails(id: Int): LiveData<PopularVo> {
+    fun getPopularMovieDetails(id: Int): Single<PopularVo> {
         return movieDao.getPopularMovieById(id.toString())
     }
 
-    fun getTopRatedMovieDetails(id: Int): LiveData<TopRatedVo> {
+    fun getTopRatedMovieDetails(id: Int): Single<TopRatedVo> {
         return movieDao.getTopRatedMovieByID(id.toString())
     }
 
-    fun getNowShowingMovieDetail(id: Int): LiveData<NowShowingVo> {
+    fun getNowShowingMovieDetail(id: Int): Single<NowShowingVo> {
         return movieDao.getNowShowingMovieById(id.toString())
     }
 
-    fun getUpComingMovieDetails(id: Int): LiveData<UpComingVo> {
+    fun getUpComingMovieDetails(id: Int): Single<UpComingVo> {
         return movieDao.getUpComingMovieById(id.toString())
     }
 
-    fun getFavouriteMovieDetails(id: Int): LiveData<FavouriteVo> {
+    fun getFavouriteMovieDetails(id: Int): Single<FavouriteVo> {
         return movieDao.getFavouriteMovieById(id.toString())
     }
 
     fun checkedFavouriteMovie(id: Int): Single<Int> {
 
-        return movieDao.isFavouriteMovie(id.toString()!!)
+        return movieDao.isFavouriteMovie(id.toString())
     }
 
 
