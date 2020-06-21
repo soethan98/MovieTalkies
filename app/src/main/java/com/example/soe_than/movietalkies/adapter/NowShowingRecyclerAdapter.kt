@@ -11,7 +11,7 @@ class NowShowingRecyclerAdapter(val context: Context?, val movieDelegate: MovieD
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NowShowingViewHolder {
         val view = mLayoutInflater.inflate(R.layout.movies_content, parent, false)
 
-        return NowShowingViewHolder(view,movieDelegate)
+        return NowShowingViewHolder(view, movieDelegate)
     }
 
     override fun onBindViewHolder(holder: NowShowingViewHolder, position: Int) {

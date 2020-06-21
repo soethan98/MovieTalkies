@@ -2,12 +2,9 @@ package com.example.soe_than.movietalkies.ui.ViewModel
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.LiveDataReactiveStreams
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.soe_than.movietalkies.data.Vo.FavouriteVo
-import com.example.soe_than.movietalkies.data.Vo.NowShowingVo
-import com.example.soe_than.movietalkies.data.Vo.SearchVo
 import com.example.soe_than.movietalkies.data.repository.MoviesRepository
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -33,9 +30,6 @@ class FavouriteViewModel @Inject constructor(val moviesRepository: MoviesReposit
                     )
                 }, { t: Throwable ->
                     Log.i("error", t.message)
-
                 }))
     }
-
-
 }

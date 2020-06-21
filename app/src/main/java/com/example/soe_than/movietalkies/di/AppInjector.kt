@@ -3,7 +3,6 @@ package com.example.soe_than.movietalkies.di
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
@@ -18,7 +17,7 @@ object AppInjector {
         DaggerAppComponent.builder().application(movieApp)
                 .build().inject(movieApp)
 
-        movieApp.registerActivityLifecycleCallbacks(object : Application.ActivityLifecycleCallbacks{
+        movieApp.registerActivityLifecycleCallbacks(object : Application.ActivityLifecycleCallbacks {
             override fun onActivityPaused(activity: Activity) {}
 
             override fun onActivityResumed(activity: Activity) {}
@@ -34,7 +33,6 @@ object AppInjector {
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
                 handleActivity(activity)
             }
-
         })
     }
 
@@ -42,8 +40,6 @@ object AppInjector {
         if (activity is HasAndroidInjector) {
             AndroidInjection.inject(activity)
         }
-
-
 
         if (activity is FragmentActivity) {
             activity.supportFragmentManager.registerFragmentLifecycleCallbacks(

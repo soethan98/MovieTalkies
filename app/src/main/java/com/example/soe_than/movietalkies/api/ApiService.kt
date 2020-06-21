@@ -1,23 +1,11 @@
 package com.example.soe_than.movietalkies.api
 
-import androidx.annotation.TransitionRes
-import com.example.soe_than.movietalkies.Utils.BASE_URL
-import com.example.soe_than.movietalkies.data.Vo.FavouriteVo
 import com.example.soe_than.movietalkies.data.Vo.MovieDetailVo
-import com.example.soe_than.movietalkies.data.Vo.SearchVo
-import com.example.soe_than.movietalkies.data.Vo.TrailerVo
 import com.example.soe_than.movietalkies.data.response.*
-import io.reactivex.Observable
-import retrofit2.http.GET
 import io.reactivex.Single
-import okhttp3.OkHttpClient
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
-import java.util.concurrent.TimeUnit
-
 
 interface ApiService {
     @GET("movie/popular")
@@ -32,19 +20,18 @@ interface ApiService {
     @GET("movie/now_playing")
     fun getNowShowingMovies(@Query("api_key") apiKey: String): Single<NowShowingResponse>
 
-
     @GET("movie/{id}/videos")
     fun getTrailers(@Path("id") id: Int, @Query("api_key") apiKey: String): Single<TrailerResponse>
 
     @GET("search/movie")
-    fun getSearchResult(@Query("api_key") apiKey: String,
-                        @Query("query") keyword: String): Single<SearchResponse>
-
+    fun getSearchResult(
+        @Query("api_key") apiKey: String,
+        @Query("query") keyword: String
+    ): Single<SearchResponse>
 
     @GET("movie/{id}")
-    fun getMovieDetail(@Path("id") movieId: Int,
-                       @Query("api_key") apiKey: String): Single<MovieDetailVo>
-
-
-
+    fun getMovieDetail(
+        @Path("id") movieId: Int,
+        @Query("api_key") apiKey: String
+    ): Single<MovieDetailVo>
 }

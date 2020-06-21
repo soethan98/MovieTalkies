@@ -1,17 +1,13 @@
 package com.example.soe_than.movietalkies.ViewHolder
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.View
+import androidx.recyclerview.widget.RecyclerView
 
 abstract class BaseViewHolder<T>(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
     protected var mDetechedFromWindow: Boolean = false
 
     init {
-
-
-
-
 
         itemView.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
             override fun onViewAttachedToWindow(v: View) {
@@ -25,7 +21,4 @@ abstract class BaseViewHolder<T>(itemView: View) : androidx.recyclerview.widget.
     }
 
     abstract fun bind(data: T)
-
-
-
 }

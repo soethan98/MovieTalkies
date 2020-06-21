@@ -11,7 +11,7 @@ class TopRatedRecyclerAdapter(val context: Context?, val movieDelegate: MovieDel
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TopRatedViewHolder {
         val view = mLayoutInflater.inflate(R.layout.movies_content, parent, false)
 
-        return TopRatedViewHolder(view,movieDelegate)
+        return TopRatedViewHolder(view, movieDelegate)
     }
 
     override fun onBindViewHolder(holder: TopRatedViewHolder, position: Int) {

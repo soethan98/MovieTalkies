@@ -11,7 +11,7 @@ class PopularRecyclerAdapter(val context: Context?, val movieDelegate: MovieDele
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PopularViewHolder {
         val view = mLayoutInflater.inflate(R.layout.movies_content, parent, false)
 
-        return PopularViewHolder(view,movieDelegate)
+        return PopularViewHolder(view, movieDelegate)
     }
 
     override fun onBindViewHolder(holder: PopularViewHolder, position: Int) {

@@ -1,14 +1,12 @@
 package com.example.soe_than.movietalkies.di.module
 
 import android.app.Application
-import android.util.Log
 import androidx.room.Room
 import com.example.soe_than.movietalkies.data.local.Daos.MovieDao
 import com.example.soe_than.movietalkies.data.local.MovieDatabase
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
-
 
 @Module
 class DbModule {

@@ -3,11 +3,9 @@ package com.example.soe_than.movietalkies.adapter
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 
-
-class ViewPagerAdapter(fm:FragmentManager) : FragmentPagerAdapter(fm){
+class ViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
     val mFragmentList = arrayListOf<androidx.fragment.app.Fragment>()
     val mFragmentTitleList = arrayListOf<String>()
-
 
     override fun getItem(position: Int): androidx.fragment.app.Fragment {
         return mFragmentList.get(position)

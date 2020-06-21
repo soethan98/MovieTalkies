@@ -1,22 +1,18 @@
 package com.example.soe_than.movietalkies.ui.ViewModel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
 import android.util.Log
-import android.view.View
-import androidx.lifecycle.LiveDataReactiveStreams
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.example.soe_than.movietalkies.data.Vo.*
 import com.example.soe_than.movietalkies.data.repository.MoviesRepository
 import io.reactivex.Completable
-import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class DetailViewModel @Inject constructor(private val moviesRepository: MoviesRepository) : ViewModel() {
-
 
     private val _popularMovieDatailResultLiveData = MutableLiveData<PopularVo>()
     val popularMovieDetailResultLiveData: LiveData<PopularVo>
@@ -34,11 +30,9 @@ class DetailViewModel @Inject constructor(private val moviesRepository: MoviesRe
     val upcomingMovieDetailResultLiveData: LiveData<UpComingVo>
         get() = _upcomingMovieDatailResultLiveData
 
-
     private val _favouriteMovieDatailResultLiveData = MutableLiveData<FavouriteVo>()
     val favouriteMovieDetailResultLiveData: LiveData<FavouriteVo>
         get() = _favouriteMovieDatailResultLiveData
-
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -49,7 +43,6 @@ class DetailViewModel @Inject constructor(private val moviesRepository: MoviesRe
                     )
                 }, { t: Throwable ->
                     Log.i("error", t.message)
-
                 }))
     }
 
@@ -60,7 +53,6 @@ class DetailViewModel @Inject constructor(private val moviesRepository: MoviesRe
                     )
                 }, { t: Throwable ->
                     Log.i("error", t.message)
-
                 }))
     }
 
@@ -71,7 +63,6 @@ class DetailViewModel @Inject constructor(private val moviesRepository: MoviesRe
                     )
                 }, { t: Throwable ->
                     Log.i("error", t.message)
-
                 }))
     }
 
@@ -82,10 +73,8 @@ class DetailViewModel @Inject constructor(private val moviesRepository: MoviesRe
                     )
                 }, { t: Throwable ->
                     Log.i("error", t.message)
-
                 }))
     }
-
 
     fun getTrailers(id: Int): LiveData<List<TrailerVo>>? {
         return moviesRepository.getTrailers(id)
@@ -98,19 +87,15 @@ class DetailViewModel @Inject constructor(private val moviesRepository: MoviesRe
                     )
                 }, { t: Throwable ->
                     Log.i("error", t.message)
-
                 }))
     }
 
-
     fun checkedFavourite(id: Int): Single<Int> = moviesRepository.checkedFavouriteMovie(id!!)
-
 
     fun favouriteStatus(nowShowingVo: NowShowingVo, checked: Boolean): Completable {
 
         Log.i("DetailViewModel", "${nowShowingVo.genreids.get(1)}")
         val favourite = FavouriteVo(nowShowingVo.id, nowShowingVo.posterPath, nowShowingVo.overview, nowShowingVo.title, nowShowingVo.releasedDate, nowShowingVo.voteAverage, nowShowingVo.backdrop_path, nowShowingVo.genreids, nowShowingVo.originalLang)
-
 
         return if (checked) {
             Completable.fromAction {
@@ -122,8 +107,6 @@ class DetailViewModel @Inject constructor(private val moviesRepository: MoviesRe
                 moviesRepository.removeFavouriteMovie(favourite)
             }
         }
-
-
     }
 
     fun favouriteStatus(upComingVo: UpComingVo, checked: Boolean): Completable {
@@ -181,6 +164,4 @@ class DetailViewModel @Inject constructor(private val moviesRepository: MoviesRe
             }
         }
     }
-
-
 }

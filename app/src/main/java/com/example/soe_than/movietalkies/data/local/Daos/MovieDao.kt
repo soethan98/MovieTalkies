@@ -1,14 +1,9 @@
 package com.example.soe_than.movietalkies.data.local.Daos
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
-import androidx.annotation.MainThread
-import com.example.soe_than.movietalkies.ViewHolder.PopularViewHolder
 import com.example.soe_than.movietalkies.data.Vo.*
-import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
-
 
 @Dao
 interface MovieDao {
@@ -30,7 +25,6 @@ interface MovieDao {
 
     @Delete
     fun clearFavoutireMoive(movies: FavouriteVo)
-
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun saveAllNowShowingMovies(movies: List<NowShowingVo>)
@@ -61,7 +55,6 @@ interface MovieDao {
 
     @Query("SELECT * FROM favourite WHERE id=:id")
     fun getFavouriteMovieById(id: String): Single<FavouriteVo>
-
 
     @Query("SELECT COUNT(*) FROM favourite WHERE id =:id")
     fun isFavouriteMovie(id: String): Single<Int>

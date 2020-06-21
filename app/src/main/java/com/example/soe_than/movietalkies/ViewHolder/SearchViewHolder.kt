@@ -1,21 +1,16 @@
 package com.example.soe_than.movietalkies.ViewHolder
 
-import androidx.appcompat.widget.AppCompatTextView
-import android.util.Log
 import android.view.View
 import com.example.soe_than.movietalkies.Utils.IMAGES_BASE_URL
 import com.example.soe_than.movietalkies.Utils.Utility
 import com.example.soe_than.movietalkies.data.Vo.SearchVo
-import com.example.soe_than.movietalkies.data.Vo.TopRatedVo
-import com.example.soe_than.movietalkies.delegate.MovieDelegate
 import com.example.soe_than.movietalkies.delegate.SearchDelegate
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.movies_content.view.*
 import kotlinx.android.synthetic.main.search_content.view.*
 
-class SearchViewHolder( itemView: View,val mSearchDelegate: SearchDelegate):BaseViewHolder<SearchVo>(itemView) {
+class SearchViewHolder(itemView: View, val mSearchDelegate: SearchDelegate) : BaseViewHolder<SearchVo>(itemView) {
     override fun onClick(v: View?) {
-
     }
 
     private val movieLanguage = itemView.search_language
@@ -37,9 +32,5 @@ class SearchViewHolder( itemView: View,val mSearchDelegate: SearchDelegate):Base
         itemView.setOnClickListener {
             mSearchDelegate.onTapSearchResult(data)
         }
-
-
     }
-
-
 }

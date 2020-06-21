@@ -1,17 +1,15 @@
 package com.example.soe_than.movietalkies.ui.detail
 
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.util.Log
-import android.view.MenuItem
 import android.view.View
 import android.widget.CompoundButton
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.example.soe_than.movietalkies.R
 import com.example.soe_than.movietalkies.Utils.*
 import com.example.soe_than.movietalkies.data.Vo.MovieDetailVo
@@ -19,25 +17,23 @@ import com.example.soe_than.movietalkies.data.Vo.TrailerVo
 import com.example.soe_than.movietalkies.ui.ViewModel.SearchDetailViewModel
 import com.example.soe_than.movietalkies.ui.ViewModelFactory.MainViewModelFactory
 import com.squareup.picasso.Picasso
-import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.activity_search_detail.*
 import kotlinx.android.synthetic.main.detail_movies_content.*
 import kotlinx.android.synthetic.main.trailers.*
-import javax.inject.Inject
 
 class SearchDetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton.OnCheckedChangeListener, HasAndroidInjector {
 
     @Inject
     lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Any>
-
 
     override fun onClick(v: View?) {
         var url = v!!.tag.toString()
@@ -51,19 +47,15 @@ class SearchDetailActivity : AppCompatActivity(), View.OnClickListener, Compound
     lateinit var viewModelFactory: MainViewModelFactory
     var movieDetailVo: MovieDetailVo? = null
 
-
     private val disposable = CompositeDisposable()
     var movieId: Int? = null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search_detail)
         movieId = intent.getIntExtra("Search", 0)
 
-
         add_search_favourite.setOnCheckedChangeListener(this)
-
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(SearchDetailViewModel::class.java)
         viewModel.getMovieDetails(movieId!!)
@@ -73,9 +65,7 @@ class SearchDetailActivity : AppCompatActivity(), View.OnClickListener, Compound
                 bindMovieDetailsMovie(movieDetails)
                 movieDetailVo = movieDetails
                 checkFavouriteStatus(movieId ?: 0)
-
             }
-
         })
 
         viewModel.getTrailers(movieId!!)?.observe(this, Observer { trailerList ->
@@ -91,11 +81,9 @@ class SearchDetailActivity : AppCompatActivity(), View.OnClickListener, Compound
         btn_exit_search.setOnClickListener {
             finish()
         }
-
     }
 
     fun bindMovieDetailsMovie(searchDetailVo: MovieDetailVo) {
-
 
         Picasso.with(this).load(BACKDROP_BASE_URL + searchDetailVo.backdrop_path).into(search_image)
         Picasso.with(this).load(IMAGES_BASE_URL + searchDetailVo.poster_path).transform(RoundedCornersTransformation(18, 4)).into(poster_image)
@@ -107,7 +95,6 @@ class SearchDetailActivity : AppCompatActivity(), View.OnClickListener, Compound
         movie_release.text = searchDetailVo.release_date
         movie_rat.text = "${searchDetailVo.vote_average}"
         movie_lang.text = searchDetailVo.original_language.toUpperCase()
-
     }
 
     private fun bindTrailers(trailerList: List<TrailerVo>) {
@@ -125,8 +112,6 @@ class SearchDetailActivity : AppCompatActivity(), View.OnClickListener, Compound
                 Picasso.with(this).load(Utility.getThumbnailUrl(trailer)).into(thubview)
                 this.trailer_container.addView(thumbContainer)
             }
-
-
         }
     }
 
@@ -137,14 +122,11 @@ class SearchDetailActivity : AppCompatActivity(), View.OnClickListener, Compound
                 .subscribe({ movieCount ->
                     Log.i("SearchDetail", "$movieCount checkFavourite")
                     add_search_favourite.isChecked = movieCount != 0
-
                 },
                         { throwable -> Log.e("SearchDetailViewModel", "Unable to count", throwable) }))
-
     }
 
     override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
-
 
         disposable.add(viewModel.favouriteStatus(movieDetailVo!!, isChecked)
                 .subscribeOn(Schedulers.io())
@@ -152,7 +134,6 @@ class SearchDetailActivity : AppCompatActivity(), View.OnClickListener, Compound
                 .subscribe({ add_search_favourite.isChecked = isChecked },
                         { error -> Log.e("SearchDetailViewModel", "Unable to Perform", error) }))
     }
-
 
     override fun onDestroy() {
         super.onDestroy()
@@ -162,6 +143,4 @@ class SearchDetailActivity : AppCompatActivity(), View.OnClickListener, Compound
     override fun androidInjector(): AndroidInjector<Any> {
         return dispatchingAndroidInjector
     }
-
-
 }

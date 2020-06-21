@@ -1,42 +1,39 @@
 package com.example.soe_than.movietalkies
 
-import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.viewpager.widget.ViewPager
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
+import androidx.viewpager.widget.ViewPager
 import com.example.soe_than.movietalkies.adapter.ViewPagerAdapter
-import com.example.soe_than.movietalkies.ui.fragment.*
+import com.example.soe_than.movietalkies.ui.fragment.FavouriteFragment
+import com.example.soe_than.movietalkies.ui.fragment.NowShowingFragment
+import com.example.soe_than.movietalkies.ui.fragment.PopularFragment
+import com.example.soe_than.movietalkies.ui.fragment.TopRatedFragment
+import com.example.soe_than.movietalkies.ui.fragment.UpcomingFragment
 import com.example.soe_than.movietalkies.ui.search.SearchActivity
 import dagger.android.*
-import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
+import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(),HasAndroidInjector{
+class MainActivity : AppCompatActivity(), HasAndroidInjector {
 
     @Inject
     lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Any>
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
-
         setSupportActionBar(toolbar)
-
 
         setUpViewPager(viewpager)
 
         tabLayout.setupWithViewPager(viewpager)
-
     }
 
-    fun setUpViewPager(viewPager: androidx.viewpager.widget.ViewPager) {
+    fun setUpViewPager(viewPager: ViewPager) {
         var adapter = ViewPagerAdapter(supportFragmentManager)
         adapter.addFrag(NowShowingFragment(), "NowShowing Movies")
         adapter.addFrag(UpcomingFragment(), "Upcoming Movies")
@@ -46,7 +43,6 @@ class MainActivity : AppCompatActivity(),HasAndroidInjector{
 
         viewPager.adapter = adapter
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.search, menu)
@@ -61,10 +57,7 @@ class MainActivity : AppCompatActivity(),HasAndroidInjector{
         return true
     }
 
-
     override fun androidInjector(): AndroidInjector<Any> {
         return dispatchingAndroidInjector
     }
-
-
 }

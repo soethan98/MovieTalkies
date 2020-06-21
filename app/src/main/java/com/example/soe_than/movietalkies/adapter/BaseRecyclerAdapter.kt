@@ -1,11 +1,9 @@
 package com.example.soe_than.movietalkies.adapter
 
 import android.content.Context
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
+import androidx.recyclerview.widget.RecyclerView
 import com.example.soe_than.movietalkies.ViewHolder.BaseViewHolder
-
-
 import java.util.ArrayList
 
 abstract class BaseRecyclerAdapter<T : BaseViewHolder<*>, W>(context: Context) : androidx.recyclerview.widget.RecyclerView.Adapter<T>() {
@@ -38,7 +36,6 @@ abstract class BaseRecyclerAdapter<T : BaseViewHolder<*>, W>(context: Context) :
 
     fun getItemAt(position: Int): W? {
         return if (position < mData!!.size - 1) mData!![position] else null
-
     }
 
     fun removeData(data: W) {

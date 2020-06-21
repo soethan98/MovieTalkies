@@ -15,10 +15,8 @@ class UpComingViewHolder(itemView: View, private val mMovieDelegate: MovieDelega
     private val movieRating = itemView.ratingCircle
     private val movieTitle = itemView.movie_title
 
-
     override fun bind(data: UpComingVo) {
-        Log.i("Hi",data.title + data.posterPath)
-
+        Log.i("Hi", data.title + data.posterPath)
 
         Glide.with(itemView.context).load("${IMAGES_BASE_URL + data.posterPath}").into(posterImage)
         movieRating.text = "${data.voteAverage}"
@@ -27,11 +25,8 @@ class UpComingViewHolder(itemView: View, private val mMovieDelegate: MovieDelega
         posterCard.setOnClickListener {
             mMovieDelegate.onTapMovie(data.id)
         }
-
-
     }
 
     override fun onClick(v: View?) {
-
     }
 }

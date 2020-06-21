@@ -1,48 +1,38 @@
 package com.example.soe_than.movietalkies.ui.detail
 
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import com.example.soe_than.movietalkies.R
-import com.example.soe_than.movietalkies.data.Vo.*
-import com.example.soe_than.movietalkies.ui.ViewModel.DetailViewModel
-import kotlinx.android.synthetic.main.activity_detail.*
-import kotlinx.android.synthetic.main.detail_movies_content.*
-import kotlinx.android.synthetic.main.trailers.*
-import android.content.Intent
-import android.net.Uri
-import androidx.fragment.app.Fragment
-import android.view.Menu
-import android.view.MenuItem
-import android.widget.CheckBox
 import android.widget.CompoundButton
 import android.widget.ImageView
-import androidx.lifecycle.ViewModel
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import com.example.soe_than.movietalkies.R
 import com.example.soe_than.movietalkies.Utils.*
-import com.example.soe_than.movietalkies.ui.ViewModelFactory.MainViewModelFactory
-import com.example.soe_than.movietalkies.ui.search.SearchActivity
+import com.example.soe_than.movietalkies.data.Vo.*
+import com.example.soe_than.movietalkies.ui.ViewModel.DetailViewModel
 import com.squareup.picasso.Picasso
-import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
-import kotlinx.android.synthetic.main.activity_search_detail.*
 import javax.inject.Inject
-
+import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
+import kotlinx.android.synthetic.main.activity_detail.*
+import kotlinx.android.synthetic.main.activity_search_detail.*
+import kotlinx.android.synthetic.main.detail_movies_content.*
+import kotlinx.android.synthetic.main.trailers.*
 
 class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton.OnCheckedChangeListener, HasAndroidInjector {
 
     @Inject
     lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Any>
-
 
     override fun onClick(v: View?) {
         var url = v!!.tag.toString()
@@ -65,23 +55,15 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
     var movieId: Int? = null
     var movieType: String? = null
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
-
-
-
 
         movieId = intent.getIntExtra("ID", 0)
         movieType = intent.getStringExtra("TYPE")
         add_favourite.setOnCheckedChangeListener(this)
 
-
-
-
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(DetailViewModel::class.java)
-
 
         when (movieType) {
             "nowshowing" -> {
@@ -93,11 +75,7 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
                         bindNowShowingMovie(nowShowingVo = nowShowingDetails)
                         checkFavouriteStatus()
                     }
-
-
                 })
-
-
             }
             "popular" -> {
                 viewModel.getPopularMovieDetails(movieId!!)
@@ -106,7 +84,6 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
                         bindPopularMovie(popularVo = popularDetails)
                         popularVo = popularDetails
                         checkFavouriteStatus()
-
                     }
                 })
             }
@@ -117,8 +94,6 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
                         bindTopRatedMovie(topRatedVo = topRatedDetails)
                         topRatedVo = topRatedDetails
                         checkFavouriteStatus()
-
-
                     }
                 })
             }
@@ -130,12 +105,9 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
                         bindUpComingMovie(upComingVo = upcomingDetails)
                         upComingVo = upcomingDetails
                         checkFavouriteStatus()
-
                     }
                 })
-
             }
-
 
             "favourite" -> {
                 viewModel.getFavouriteMovieDetails(movieId!!)
@@ -146,10 +118,7 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
                         add_favourite!!.isChecked = true
                     }
                 })
-
-
             }
-
         }
 
         viewModel.getTrailers(movieId!!)?.observe(this, Observer { trailerList ->
@@ -166,9 +135,7 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
         btn_exit_preview.setOnClickListener {
             finish()
         }
-
     }
-
 
     private fun bindNowShowingMovie(nowShowingVo: NowShowingVo) {
 
@@ -183,11 +150,8 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
             movie_lang.text = this.originalLang
 
             genresChip.setText(Utility.setGenresTypeForMovie(this.genreids))
-
-
         }
     }
-
 
     private fun bindPopularMovie(popularVo: PopularVo) {
 
@@ -202,10 +166,7 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
             movie_lang.text = this.originalLang
 
             genresChip.setText(Utility.setGenresTypeForMovie(this.genreids))
-
-
         }
-
     }
 
     private fun bindUpComingMovie(upComingVo: UpComingVo) {
@@ -221,9 +182,7 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
             movie_lang.text = this.originalLang
 
             genresChip.setText(Utility.setGenresTypeForMovie(this.genreids))
-
         }
-
     }
 
     private fun bindTopRatedMovie(topRatedVo: TopRatedVo) {
@@ -238,14 +197,10 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
             movie_lang.text = this.originalLang
 
             genresChip.setText(Utility.setGenresTypeForMovie(this.genreids))
-
-
         }
-
     }
 
     private fun bindFavouriteMovie(favouriteVo: FavouriteVo) {
-
 
         with(favouriteVo) {
             Picasso.with(this@DetailActivity).load(BACKDROP_BASE_URL + this.backdrop_path).into(image)
@@ -258,11 +213,7 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
             movie_lang.text = this.originalLang
 
             genresChip.setText(Utility.setGenresTypeForMovie(this.genreids))
-
-
         }
-
-
     }
 
     private fun bindTrailers(trailerList: List<TrailerVo>) {
@@ -277,15 +228,10 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
             thubview.setOnClickListener(this)
             thubview.tag = Utility.getUrl(trailer)
 
-
-
-
             if (trailer.type.equals("Trailer", true) || trailer.type.equals("Teaser", true)) {
                 Picasso.with(this).load(Utility.getThumbnailUrl(trailer)).into(thubview)
                 this.trailer_container.addView(thumbContainer)
             }
-
-
         }
     }
 
@@ -296,10 +242,8 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
                 .subscribe({ movieCount ->
                     Log.i("checkFavoutite", "$movieCount")
                     add_favourite.isChecked = movieCount != 0
-
                 },
                         { throwable -> Log.e(LOG_TAG, "Unable to count", throwable) }))
-
     }
 
     override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
@@ -318,7 +262,6 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
                         .subscribe({ add_favourite.isChecked = isChecked }, { error ->
                             Log.i(LOG_TAG, "Unable to Perform", error)
                         }))
-
             }
             "popular" -> {
                 disposable.add(viewModel.favouriteStatus(popularVo!!, isChecked)
@@ -346,13 +289,8 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
                             Log.i(LOG_TAG, "Unable to remove movie", error)
                         }))
             }
-
-
         }
-
-
     }
-
 
     override fun onDestroy() {
         super.onDestroy()
@@ -362,6 +300,4 @@ class DetailActivity : AppCompatActivity(), View.OnClickListener, CompoundButton
     override fun androidInjector(): AndroidInjector<Any> {
         return dispatchingAndroidInjector
     }
-
-
 }

@@ -7,7 +7,6 @@ import dagger.android.ContributesAndroidInjector
 @Module
 abstract class FragmentModule {
 
-
     @ContributesAndroidInjector
     abstract fun contributeNowShowingFragment(): NowShowingFragment
 
@@ -22,5 +21,4 @@ abstract class FragmentModule {
 
     @ContributesAndroidInjector
     abstract fun contributeFavouriteFragment(): FavouriteFragment
-
 }

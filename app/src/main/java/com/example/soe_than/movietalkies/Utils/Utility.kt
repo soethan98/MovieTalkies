@@ -3,11 +3,6 @@ package com.example.soe_than.movietalkies.Utils
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
-import com.bumptech.glide.load.engine.bitmap_recycle.IntegerArrayAdapter
-import com.example.soe_than.movietalkies.Utils.EMPTY
-import com.example.soe_than.movietalkies.Utils.SITE_YOUTUBE
-import com.example.soe_than.movietalkies.Utils.YOUTUBE_THUMBNAIL_URL
-import com.example.soe_than.movietalkies.Utils.YOUTUBE_VIDEO_URL
 import com.example.soe_than.movietalkies.data.Vo.GenresVo
 import com.example.soe_than.movietalkies.data.Vo.TrailerVo
 
@@ -22,21 +17,19 @@ object Utility {
 
     fun getUrl(video: TrailerVo): String {
         return if (SITE_YOUTUBE.equals(video.site, true)) {
-             String.format(YOUTUBE_VIDEO_URL, video.key)
-        } else {
-             EMPTY
-        }
-
-    }
-
-    fun getThumbnailUrl(video: TrailerVo): String {
-        return if (SITE_YOUTUBE.equals(video.site, true)) {
-            String.format(YOUTUBE_THUMBNAIL_URL, video.key);
+            String.format(YOUTUBE_VIDEO_URL, video.key)
         } else {
             EMPTY
         }
     }
 
+    fun getThumbnailUrl(video: TrailerVo): String {
+        return if (SITE_YOUTUBE.equals(video.site, true)) {
+            String.format(YOUTUBE_THUMBNAIL_URL, video.key)
+        } else {
+            EMPTY
+        }
+    }
 
     fun getGeneresnames(code: Int): String {
         var type = ""
@@ -61,8 +54,6 @@ object Utility {
             10752 -> type = "War"
             37 -> type = "Western"
             else -> type = ""
-
-
         }
         return type
     }
@@ -71,13 +62,11 @@ object Utility {
 
         var idsList: ArrayList<String> = ArrayList<String>()
 
-
         ids.map {
             idsList.add(getGeneresnames(it))
         }
         return idsList
     }
-
 
     fun setGenresTypeForMovie1(ids: List<GenresVo>): ArrayList<String> {
 

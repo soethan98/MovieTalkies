@@ -1,11 +1,8 @@
 package com.example.soe_than.movietalkies.data.local
 
 import androidx.room.TypeConverter
-import android.util.Log
-import com.google.gson.reflect.TypeToken
 import com.google.gson.Gson
 import java.util.*
-
 
 class Converters {
 

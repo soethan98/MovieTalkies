@@ -1,19 +1,14 @@
 package com.example.soe_than.movietalkies.data.repository
 
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.soe_than.movietalkies.Utils.API_KEY
-import com.example.soe_than.movietalkies.Utils.LOG_TAG
-import com.example.soe_than.movietalkies.Utils.Utility
 import com.example.soe_than.movietalkies.api.ApiService
 import com.example.soe_than.movietalkies.data.Vo.*
 import com.example.soe_than.movietalkies.data.local.Daos.MovieDao
 import com.example.soe_than.movietalkies.data.response.SearchResponse
-import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -28,14 +23,11 @@ class MoviesRepository @Inject constructor(private val movieDao: MovieDao, priva
 
     private val compositeDisposable = CompositeDisposable()
 
-
     fun onClear() {
         compositeDisposable.clear()
     }
 
-
     fun getNowShowingMovies(): Observable<List<NowShowingVo>> {
-
 
         compositeDisposable.add(apiService.getNowShowingMovies(API_KEY)
                 .subscribeOn(Schedulers.io())
@@ -102,17 +94,13 @@ class MoviesRepository @Inject constructor(private val movieDao: MovieDao, priva
 //        } else {
 //            null
 //        }
-
     }
-
 
     fun getSearchMovie(query: String): Single<SearchResponse> {
         return apiService.getSearchResult(API_KEY, query)
     }
 
-
     fun getFavourites() = movieDao.getAllFavouriteMovies()
-
 
     fun getSearchMovieDetails(id: Int): Single<MovieDetailVo> {
 
@@ -160,6 +148,4 @@ class MoviesRepository @Inject constructor(private val movieDao: MovieDao, priva
 
         return movieDao.isFavouriteMovie(id.toString())
     }
-
-
 }
