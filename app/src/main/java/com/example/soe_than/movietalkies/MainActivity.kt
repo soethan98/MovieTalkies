@@ -35,8 +35,8 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector {
 
     fun setUpViewPager(viewPager: ViewPager) {
         var adapter = ViewPagerAdapter(supportFragmentManager)
-        adapter.addFrag(NowShowingFragment(), "NowShowing Movies")
-        adapter.addFrag(UpcomingFragment(), "Upcoming Movies")
+        adapter.addFrag(NowShowingFragment(), "NowShowing Movie")
+        adapter.addFrag(UpcomingFragment(), "Upcoming Movie")
         adapter.addFrag(PopularFragment(), "Popular Movies")
         adapter.addFrag(TopRatedFragment(), "TopRated Movies")
         adapter.addFrag(FavouriteFragment(), "Favourite Movies")
