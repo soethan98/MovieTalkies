@@ -5,5 +5,5 @@ import com.google.gson.annotations.SerializedName
 
 data class TopRatedResponse(
     @SerializedName("results")
-var topRatedVo: List<TopRatedVo>
+    var topRatedVo: List<TopRatedVo>
 )

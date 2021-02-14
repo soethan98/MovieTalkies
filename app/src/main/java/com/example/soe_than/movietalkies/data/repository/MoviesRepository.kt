@@ -18,35 +18,41 @@ import javax.inject.Singleton
 class MoviesRepository @Inject constructor(private val movieDao: MovieDao, private val apiService: ApiService) : RepositoryInterface {
 
     var trailerData: MutableLiveData<List<TrailerVo>> = MutableLiveData()
-    
+
     private val compositeDisposable = CompositeDisposable()
 
     override fun onClear() {
         compositeDisposable.clear()
-
     }
 
-
     override fun getNowShowingMovies(): Observable<List<NowShowingVo>> {
-        compositeDisposable.add(apiService.getNowShowingMovies(API_KEY)
-            .subscribeOn(Schedulers.io())
-            .toObservable()
-            .map { nowShowingResponse ->
-                nowShowingResponse.nowShowingVo
-            }
-            .subscribe({ nowShowingList: List<NowShowingVo> -> movieDao.saveAllNowShowingMovies(nowShowingList) },
-                { t: Throwable -> Log.i("error: %s", t.message) }))
+        compositeDisposable.add(
+            apiService.getNowShowingMovies(API_KEY)
+                .subscribeOn(Schedulers.io())
+                .toObservable()
+                .map { nowShowingResponse ->
+                    nowShowingResponse.nowShowingVo
+                }
+                .subscribe(
+                    { nowShowingList: List<NowShowingVo> -> movieDao.saveAllNowShowingMovies(nowShowingList) },
+                    { t: Throwable -> Log.i("error: %s", t.message) }
+                )
+        )
 
         return movieDao.getAllNowShowingMovies()
     }
 
     override fun getPopularMovies(): Observable<List<PopularVo>> {
-        compositeDisposable.add(apiService.getPopularMovies(API_KEY)
-            .subscribeOn(Schedulers.io())
-            .toObservable()
-            .map { popularResponse -> popularResponse.popularVo }
-            .subscribe({ popularList: List<PopularVo> -> movieDao.saveAllPopularMovies(popularList) },
-                { t: Throwable -> Log.i("error: %s", t.message) }))
+        compositeDisposable.add(
+            apiService.getPopularMovies(API_KEY)
+                .subscribeOn(Schedulers.io())
+                .toObservable()
+                .map { popularResponse -> popularResponse.popularVo }
+                .subscribe(
+                    { popularList: List<PopularVo> -> movieDao.saveAllPopularMovies(popularList) },
+                    { t: Throwable -> Log.i("error: %s", t.message) }
+                )
+        )
 
         return movieDao.getAllPopularMovies()
     }
@@ -56,35 +62,44 @@ class MoviesRepository @Inject constructor(private val movieDao: MovieDao, priva
 //    }
 
     override fun getTopRatedMovies(): Observable<List<TopRatedVo>> {
-        compositeDisposable.add(apiService.getTopRatedMovies(API_KEY)
-            .subscribeOn(Schedulers.io())
-            .toObservable()
-            .map { topRatedResponse -> topRatedResponse.topRatedVo }
-            .subscribe({ topRatedList: List<TopRatedVo> -> movieDao.saveAllTopRatedMovies(topRatedList) },
-                { t: Throwable -> Log.i("error: %s", t.message) }))
+        compositeDisposable.add(
+            apiService.getTopRatedMovies(API_KEY)
+                .subscribeOn(Schedulers.io())
+                .toObservable()
+                .map { topRatedResponse -> topRatedResponse.topRatedVo }
+                .subscribe(
+                    { topRatedList: List<TopRatedVo> -> movieDao.saveAllTopRatedMovies(topRatedList) },
+                    { t: Throwable -> Log.i("error: %s", t.message) }
+                )
+        )
 
         return movieDao.getAllTopRatedMovies()
     }
 
     override fun getUpComingMovies(): Observable<List<UpComingVo>> {
-        compositeDisposable.add(apiService.getUpComingMovies(API_KEY)
-            .subscribeOn(Schedulers.io())
-            .toObservable()
-            .map { upComingResponse -> upComingResponse.upComingVo }
-            .subscribe({ upComingList: List<UpComingVo> ->
-                movieDao.saveAllUpComingMovies(upComingList)
-            },
-                { t: Throwable -> Log.i("error: %s", t.message) }))
+        compositeDisposable.add(
+            apiService.getUpComingMovies(API_KEY)
+                .subscribeOn(Schedulers.io())
+                .toObservable()
+                .map { upComingResponse -> upComingResponse.upComingVo }
+                .subscribe(
+                    { upComingList: List<UpComingVo> ->
+                        movieDao.saveAllUpComingMovies(upComingList)
+                    },
+                    { t: Throwable -> Log.i("error: %s", t.message) }
+                )
+        )
 
         return movieDao.getAllUpComingMovies()
     }
 
-
     override fun getTrailers(id: Int): LiveData<List<TrailerVo>> {
-        compositeDisposable.add(apiService.getTrailers(id, API_KEY)
-            .subscribeOn(Schedulers.io()).toObservable().map { trailerResponse ->
-                trailerResponse.results
-            }.subscribe({ trailerList: List<TrailerVo> -> trailerData.postValue(trailerList) }, { t: Throwable -> Log.i("error: %s", t.message) }))
+        compositeDisposable.add(
+            apiService.getTrailers(id, API_KEY)
+                .subscribeOn(Schedulers.io()).toObservable().map { trailerResponse ->
+                    trailerResponse.results
+                }.subscribe({ trailerList: List<TrailerVo> -> trailerData.postValue(trailerList) }, { t: Throwable -> Log.i("error: %s", t.message) })
+        )
 
         return trailerData
 //        return if (Utility.isNetworkAvailable()) {

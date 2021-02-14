@@ -63,13 +63,16 @@ class FavouriteFragment : Fragment(), MovieDelegate, Injectable {
 
     private fun getFavouriteMovies() {
 
-        viewModel.favouriteResultLiveData.observe(requireActivity(), Observer { favouriteList ->
+        viewModel.favouriteResultLiveData.observe(
+            requireActivity(),
+            Observer { favouriteList ->
 
-            favouriteList?.let {
+                favouriteList?.let {
 
-                favouriteAdapter.setNewData(favouriteList as MutableList<FavouriteVo>)
+                    favouriteAdapter.setNewData(favouriteList as MutableList<FavouriteVo>)
+                }
             }
-        })
+        )
     }
 
     override fun onResume() {

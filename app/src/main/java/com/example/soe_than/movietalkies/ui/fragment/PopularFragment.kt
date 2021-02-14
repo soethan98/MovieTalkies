@@ -42,13 +42,16 @@ class PopularFragment : Fragment(), MovieDelegate, Injectable {
 
         viewModel.getPopularMovies()
 
-        viewModel.popularResultLiveData.observe(requireActivity(), Observer { popularList ->
+        viewModel.popularResultLiveData.observe(
+            requireActivity(),
+            Observer { popularList ->
 
-            popularList!!.let {
-                view.popProgress.visibility = View.GONE
-                popularAdapter.setNewData(popularList as MutableList<PopularVo>)
+                popularList!!.let {
+                    view.popProgress.visibility = View.GONE
+                    popularAdapter.setNewData(popularList as MutableList<PopularVo>)
+                }
             }
-        })
+        )
         return view
     }
 

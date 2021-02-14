@@ -24,12 +24,18 @@ class FavouriteViewModel @Inject constructor(val moviesRepository: MoviesReposit
     }
 
     fun getFavouriteMovies() {
-        compositeDisposable.add(moviesRepository.getFavourites().subscribeOn(Schedulers.io())
-                .subscribe({
-                    _favouriteResultLiveData.postValue(it
-                    )
-                }, { t: Throwable ->
-                    Log.i("error", t.message)
-                }))
+        compositeDisposable.add(
+            moviesRepository.getFavourites().subscribeOn(Schedulers.io())
+                .subscribe(
+                    {
+                        _favouriteResultLiveData.postValue(
+                            it
+                        )
+                    },
+                    { t: Throwable ->
+                        Log.i("error", t.message)
+                    }
+                )
+        )
     }
 }

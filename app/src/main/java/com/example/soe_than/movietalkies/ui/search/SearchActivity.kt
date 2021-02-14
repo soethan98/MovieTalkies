@@ -60,13 +60,15 @@ class SearchActivity : AppCompatActivity(), SearchDelegate, HasAndroidInjector {
         setUpRecyclerView()
         observeSearchView()
 
-        viewModel.searchResultLiveData.observe(this,
-                Observer { searchList ->
-                    if (searchList!!.isNotEmpty()) {
-                        searchAdapter.setNewData(searchList as MutableList<SearchVo>)
-                        search_progress.visibility = View.GONE
-                    }
-                })
+        viewModel.searchResultLiveData.observe(
+            this,
+            Observer { searchList ->
+                if (searchList!!.isNotEmpty()) {
+                    searchAdapter.setNewData(searchList as MutableList<SearchVo>)
+                    search_progress.visibility = View.GONE
+                }
+            }
+        )
     }
 
     private fun setUpRecyclerView() {
@@ -77,7 +79,8 @@ class SearchActivity : AppCompatActivity(), SearchDelegate, HasAndroidInjector {
     }
 
     private fun observeSearchView() {
-        disposable.add(RxTextView.textChangeEvents(input_search)
+        disposable.add(
+            RxTextView.textChangeEvents(input_search)
                 .debounce(300, TimeUnit.MILLISECONDS)
                 .filter {
                     it.text().isNotEmpty()

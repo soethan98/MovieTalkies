@@ -9,15 +9,17 @@ abstract class BaseViewHolder<T>(itemView: View) : androidx.recyclerview.widget.
 
     init {
 
-        itemView.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
-            override fun onViewAttachedToWindow(v: View) {
-                mDetechedFromWindow = false
-            }
+        itemView.addOnAttachStateChangeListener(
+            object : View.OnAttachStateChangeListener {
+                override fun onViewAttachedToWindow(v: View) {
+                    mDetechedFromWindow = false
+                }
 
-            override fun onViewDetachedFromWindow(v: View) {
-                mDetechedFromWindow = true
+                override fun onViewDetachedFromWindow(v: View) {
+                    mDetechedFromWindow = true
+                }
             }
-        })
+        )
     }
 
     abstract fun bind(data: T)

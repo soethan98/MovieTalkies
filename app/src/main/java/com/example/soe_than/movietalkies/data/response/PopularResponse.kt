@@ -5,5 +5,5 @@ import com.google.gson.annotations.SerializedName
 
 data class PopularResponse(
     @SerializedName("results")
-var popularVo: List<PopularVo>
+    var popularVo: List<PopularVo>
 )

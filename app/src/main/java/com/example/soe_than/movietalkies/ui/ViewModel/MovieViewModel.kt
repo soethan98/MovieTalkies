@@ -22,43 +22,67 @@ class MovieViewModel @Inject constructor(var moviesRepository: MoviesRepository)
 
     fun getNowShowingMovies() {
 
-        compositeDisposable.add(moviesRepository.getNowShowingMovies().subscribeOn(Schedulers.io())
-                .subscribe({
-                    _nowShowingResultLiveData.postValue(it
-                    )
-                }, { t: Throwable ->
-                    Log.i("error", t.message)
-                }))
+        compositeDisposable.add(
+            moviesRepository.getNowShowingMovies().subscribeOn(Schedulers.io())
+                .subscribe(
+                    {
+                        _nowShowingResultLiveData.postValue(
+                            it
+                        )
+                    },
+                    { t: Throwable ->
+                        Log.i("error", t.message)
+                    }
+                )
+        )
     }
 
     fun getPopularMovies() {
-        compositeDisposable.add(moviesRepository.getPopularMovies().subscribeOn(Schedulers.io())
-                .subscribe({
-                    _popularResultLiveData.postValue(it
-                    )
-                }, { t: Throwable ->
-                    Log.i("error", t.message)
-                }))
+        compositeDisposable.add(
+            moviesRepository.getPopularMovies().subscribeOn(Schedulers.io())
+                .subscribe(
+                    {
+                        _popularResultLiveData.postValue(
+                            it
+                        )
+                    },
+                    { t: Throwable ->
+                        Log.i("error", t.message)
+                    }
+                )
+        )
     }
 
     fun getTopRatedMovies() {
-        compositeDisposable.add(moviesRepository.getTopRatedMovies().subscribeOn(Schedulers.io())
-                .subscribe({
-                    _topRatedResultLiveData.postValue(it
-                    )
-                }, { t: Throwable ->
-                    Log.i("error", t.message)
-                }))
+        compositeDisposable.add(
+            moviesRepository.getTopRatedMovies().subscribeOn(Schedulers.io())
+                .subscribe(
+                    {
+                        _topRatedResultLiveData.postValue(
+                            it
+                        )
+                    },
+                    { t: Throwable ->
+                        Log.i("error", t.message)
+                    }
+                )
+        )
     }
 
     fun getUpComingMovies() {
-        compositeDisposable.add(moviesRepository.getUpComingMovies().subscribeOn(Schedulers.io())
-                .subscribe({
-                    _upcomingResultLiveData.postValue(it
-                    )
-                }, { t: Throwable ->
-                    Log.i("error", t.message)
-                }))
+        compositeDisposable.add(
+            moviesRepository.getUpComingMovies().subscribeOn(Schedulers.io())
+                .subscribe(
+                    {
+                        _upcomingResultLiveData.postValue(
+                            it
+                        )
+                    },
+                    { t: Throwable ->
+                        Log.i("error", t.message)
+                    }
+                )
+        )
     }
 
     private val _searchResultLiveData = MutableLiveData<List<SearchVo>>()
@@ -82,13 +106,18 @@ class MovieViewModel @Inject constructor(var moviesRepository: MoviesRepository)
         get() = _popularResultLiveData
 
     fun getSearchList(query: String) {
-        compositeDisposable.add(moviesRepository.getSearchMovie(query)
+        compositeDisposable.add(
+            moviesRepository.getSearchMovie(query)
                 .subscribeOn(Schedulers.io()).toObservable().map { searchResponse ->
                     searchResponse.searchResult
-                }.subscribe({ searchList: List<SearchVo> ->
-                    _searchResultLiveData.postValue(searchList)
-                }, { t: Throwable ->
-                    Log.i("error: %s", t.message)
-                }))
+                }.subscribe(
+                    { searchList: List<SearchVo> ->
+                        _searchResultLiveData.postValue(searchList)
+                    },
+                    { t: Throwable ->
+                        Log.i("error: %s", t.message)
+                    }
+                )
+        )
     }
 }

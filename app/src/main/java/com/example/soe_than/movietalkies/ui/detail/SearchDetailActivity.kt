@@ -60,23 +60,29 @@ class SearchDetailActivity : AppCompatActivity(), View.OnClickListener, Compound
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(SearchDetailViewModel::class.java)
         viewModel.getMovieDetails(movieId!!)
 
-        viewModel.movieDetailResultLiveData.observe(this, Observer { movieDetails ->
-            movieDetails?.let {
-                bindMovieDetailsMovie(movieDetails)
-                movieDetailVo = movieDetails
-                checkFavouriteStatus(movieId ?: 0)
+        viewModel.movieDetailResultLiveData.observe(
+            this,
+            Observer { movieDetails ->
+                movieDetails?.let {
+                    bindMovieDetailsMovie(movieDetails)
+                    movieDetailVo = movieDetails
+                    checkFavouriteStatus(movieId ?: 0)
+                }
             }
-        })
+        )
 
-        viewModel.getTrailers(movieId!!)?.observe(this, Observer { trailerList ->
-            if (trailerList!!.isEmpty()) {
-                trailer_label.visibility = View.GONE
-                trailer_scroll.visibility = View.GONE
-                trailer_container.visibility = View.GONE
-            } else {
-                bindTrailers(trailerList)
+        viewModel.getTrailers(movieId!!)?.observe(
+            this,
+            Observer { trailerList ->
+                if (trailerList!!.isEmpty()) {
+                    trailer_label.visibility = View.GONE
+                    trailer_scroll.visibility = View.GONE
+                    trailer_container.visibility = View.GONE
+                } else {
+                    bindTrailers(trailerList)
+                }
             }
-        })
+        )
 
         btn_exit_search.setOnClickListener {
             finish()
@@ -87,8 +93,10 @@ class SearchDetailActivity : AppCompatActivity(), View.OnClickListener, Compound
 
         Picasso.with(this).load(BACKDROP_BASE_URL + searchDetailVo.backdrop_path).into(search_image)
         Picasso.with(this).load(IMAGES_BASE_URL + searchDetailVo.poster_path).transform(RoundedCornersTransformation(18, 4)).into(poster_image)
-        genresChip.setText(Utility
-                .setGenresTypeForMovie1(searchDetailVo.genreids))
+        genresChip.setText(
+            Utility
+                .setGenresTypeForMovie1(searchDetailVo.genreids)
+        )
 
         movie_title.text = searchDetailVo.title
         movie_overview.text = searchDetailVo.overview
@@ -116,23 +124,31 @@ class SearchDetailActivity : AppCompatActivity(), View.OnClickListener, Compound
     }
 
     private fun checkFavouriteStatus(movieId: Int) {
-        disposable.add(viewModel.checkedFavourite(movieId)
+        disposable.add(
+            viewModel.checkedFavourite(movieId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ movieCount ->
-                    Log.i("SearchDetail", "$movieCount checkFavourite")
-                    add_search_favourite.isChecked = movieCount != 0
-                },
-                        { throwable -> Log.e("SearchDetailViewModel", "Unable to count", throwable) }))
+                .subscribe(
+                    { movieCount ->
+                        Log.i("SearchDetail", "$movieCount checkFavourite")
+                        add_search_favourite.isChecked = movieCount != 0
+                    },
+                    { throwable -> Log.e("SearchDetailViewModel", "Unable to count", throwable) }
+                )
+        )
     }
 
     override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
 
-        disposable.add(viewModel.favouriteStatus(movieDetailVo!!, isChecked)
+        disposable.add(
+            viewModel.favouriteStatus(movieDetailVo!!, isChecked)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ add_search_favourite.isChecked = isChecked },
-                        { error -> Log.e("SearchDetailViewModel", "Unable to Perform", error) }))
+                .subscribe(
+                    { add_search_favourite.isChecked = isChecked },
+                    { error -> Log.e("SearchDetailViewModel", "Unable to Perform", error) }
+                )
+        )
     }
 
     override fun onDestroy() {

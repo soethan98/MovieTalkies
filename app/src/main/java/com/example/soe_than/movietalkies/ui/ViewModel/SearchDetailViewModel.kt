@@ -28,13 +28,19 @@ class SearchDetailViewModel @Inject constructor(private val moviesRepository: Mo
         get() = _movieDetailResultLiveData
 
     fun getMovieDetails(id: Int) {
-        compositeDisposable.add(moviesRepository.getSearchMovieDetails(id).subscribeOn(Schedulers.io())
-                .subscribe({
-                    _movieDetailResultLiveData.postValue(it
-                    )
-                }, { t: Throwable ->
-                    Log.i("error", t.message)
-                }))
+        compositeDisposable.add(
+            moviesRepository.getSearchMovieDetails(id).subscribeOn(Schedulers.io())
+                .subscribe(
+                    {
+                        _movieDetailResultLiveData.postValue(
+                            it
+                        )
+                    },
+                    { t: Throwable ->
+                        Log.i("error", t.message)
+                    }
+                )
+        )
     }
 
     fun getTrailers(id: Int): LiveData<List<TrailerVo>>? = moviesRepository.getTrailers(id)

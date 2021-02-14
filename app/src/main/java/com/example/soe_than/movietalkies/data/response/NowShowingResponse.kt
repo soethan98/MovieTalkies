@@ -5,5 +5,5 @@ import com.google.gson.annotations.SerializedName
 
 data class NowShowingResponse(
     @SerializedName("results")
-var nowShowingVo: List<NowShowingVo>
+    var nowShowingVo: List<NowShowingVo>
 )

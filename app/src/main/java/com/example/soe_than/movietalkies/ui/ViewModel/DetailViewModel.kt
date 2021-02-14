@@ -37,43 +37,67 @@ class DetailViewModel @Inject constructor(private val moviesRepository: MoviesRe
     private val compositeDisposable = CompositeDisposable()
 
     fun getPopularMovieDetails(id: Int) {
-        compositeDisposable.add(moviesRepository.getPopularMovieDetails(id).subscribeOn(Schedulers.io())
-                .subscribe({
-                    _popularMovieDatailResultLiveData.postValue(it
-                    )
-                }, { t: Throwable ->
-                    Log.i("error", t.message)
-                }))
+        compositeDisposable.add(
+            moviesRepository.getPopularMovieDetails(id).subscribeOn(Schedulers.io())
+                .subscribe(
+                    {
+                        _popularMovieDatailResultLiveData.postValue(
+                            it
+                        )
+                    },
+                    { t: Throwable ->
+                        Log.i("error", t.message)
+                    }
+                )
+        )
     }
 
     fun getNowShowingMovieDetails(id: Int) {
-        compositeDisposable.add(moviesRepository.getNowShowingMovieDetail(id).subscribeOn(Schedulers.io())
-                .subscribe({
-                    _nowShowingMovieDatailResultLiveData.postValue(it
-                    )
-                }, { t: Throwable ->
-                    Log.i("error", t.message)
-                }))
+        compositeDisposable.add(
+            moviesRepository.getNowShowingMovieDetail(id).subscribeOn(Schedulers.io())
+                .subscribe(
+                    {
+                        _nowShowingMovieDatailResultLiveData.postValue(
+                            it
+                        )
+                    },
+                    { t: Throwable ->
+                        Log.i("error", t.message)
+                    }
+                )
+        )
     }
 
     fun getTopRatedMovieDetails(id: Int) {
-        compositeDisposable.add(moviesRepository.getTopRatedMovieDetails(id).subscribeOn(Schedulers.io())
-                .subscribe({
-                    _topRatedMovieDatailResultLiveData.postValue(it
-                    )
-                }, { t: Throwable ->
-                    Log.i("error", t.message)
-                }))
+        compositeDisposable.add(
+            moviesRepository.getTopRatedMovieDetails(id).subscribeOn(Schedulers.io())
+                .subscribe(
+                    {
+                        _topRatedMovieDatailResultLiveData.postValue(
+                            it
+                        )
+                    },
+                    { t: Throwable ->
+                        Log.i("error", t.message)
+                    }
+                )
+        )
     }
 
     fun getUpComingMovieDetails(id: Int) {
-        compositeDisposable.add(moviesRepository.getUpComingMovieDetails(id).subscribeOn(Schedulers.io())
-                .subscribe({
-                    _upcomingMovieDatailResultLiveData.postValue(it
-                    )
-                }, { t: Throwable ->
-                    Log.i("error", t.message)
-                }))
+        compositeDisposable.add(
+            moviesRepository.getUpComingMovieDetails(id).subscribeOn(Schedulers.io())
+                .subscribe(
+                    {
+                        _upcomingMovieDatailResultLiveData.postValue(
+                            it
+                        )
+                    },
+                    { t: Throwable ->
+                        Log.i("error", t.message)
+                    }
+                )
+        )
     }
 
     fun getTrailers(id: Int): LiveData<List<TrailerVo>>? {
@@ -81,13 +105,19 @@ class DetailViewModel @Inject constructor(private val moviesRepository: MoviesRe
     }
 
     fun getFavouriteMovieDetails(id: Int) {
-        compositeDisposable.add(moviesRepository.getFavouriteMovieDetails(id).subscribeOn(Schedulers.io())
-                .subscribe({
-                    _favouriteMovieDatailResultLiveData.postValue(it
-                    )
-                }, { t: Throwable ->
-                    Log.i("error", t.message)
-                }))
+        compositeDisposable.add(
+            moviesRepository.getFavouriteMovieDetails(id).subscribeOn(Schedulers.io())
+                .subscribe(
+                    {
+                        _favouriteMovieDatailResultLiveData.postValue(
+                            it
+                        )
+                    },
+                    { t: Throwable ->
+                        Log.i("error", t.message)
+                    }
+                )
+        )
     }
 
     fun checkedFavourite(id: Int): Single<Int> = moviesRepository.checkedFavouriteMovie(id!!)

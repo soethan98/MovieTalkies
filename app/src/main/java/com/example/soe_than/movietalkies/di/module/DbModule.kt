@@ -16,8 +16,8 @@ class DbModule {
     fun provideMovieDb(app: Application): MovieDatabase {
 
         return Room
-                .databaseBuilder(app, MovieDatabase::class.java, "Movies.db")
-                .build()
+            .databaseBuilder(app, MovieDatabase::class.java, "Movies.db")
+            .build()
     }
 
     @Singleton

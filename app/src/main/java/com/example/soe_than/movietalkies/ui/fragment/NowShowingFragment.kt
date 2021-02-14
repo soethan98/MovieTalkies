@@ -42,15 +42,17 @@ class NowShowingFragment : Fragment(), MovieDelegate, Injectable {
 
         viewModel.getNowShowingMovies()
 
-        viewModel.nowShowingResultLiveData.observe(requireActivity(),
-                Observer { nowshowingList ->
+        viewModel.nowShowingResultLiveData.observe(
+            requireActivity(),
+            Observer { nowshowingList ->
 
-                    nowshowingList!!.let {
-                        view.nowProgress.visibility = View.GONE
+                nowshowingList!!.let {
+                    view.nowProgress.visibility = View.GONE
 
-                        nowShowingAdapter.setNewData(nowshowingList as MutableList<NowShowingVo>)
-                    }
-                })
+                    nowShowingAdapter.setNewData(nowshowingList as MutableList<NowShowingVo>)
+                }
+            }
+        )
         return view
     }
 

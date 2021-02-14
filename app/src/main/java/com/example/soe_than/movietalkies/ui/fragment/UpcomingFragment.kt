@@ -48,13 +48,16 @@ class UpcomingFragment : Fragment(), MovieDelegate, Injectable {
 
         viewModel.getUpComingMovies()
 
-        viewModel.upcomingResultLiveData.observe(requireActivity(), Observer { upComingList ->
+        viewModel.upcomingResultLiveData.observe(
+            requireActivity(),
+            Observer { upComingList ->
 
-            upComingList?.let {
-                view.upProgress.visibility = View.GONE
-                upComingAdapter.setNewData(upComingList as MutableList<UpComingVo>)
+                upComingList?.let {
+                    view.upProgress.visibility = View.GONE
+                    upComingAdapter.setNewData(upComingList as MutableList<UpComingVo>)
+                }
             }
-        })
+        )
         return view
     }
 

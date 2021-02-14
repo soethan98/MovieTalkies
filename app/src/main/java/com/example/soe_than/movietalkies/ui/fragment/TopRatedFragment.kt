@@ -49,14 +49,17 @@ class TopRatedFragment : Fragment(), MovieDelegate, Injectable {
 
         viewModel.getTopRatedMovies()
 
-        viewModel.topRatedResultLiveData.observe(requireActivity(), Observer { topRatedList ->
+        viewModel.topRatedResultLiveData.observe(
+            requireActivity(),
+            Observer { topRatedList ->
 
-            topRatedList!!.let {
-                view.topProgress.visibility = View.GONE
+                topRatedList!!.let {
+                    view.topProgress.visibility = View.GONE
 
-                topRatedAdapter.setNewData(topRatedList as MutableList<TopRatedVo>)
+                    topRatedAdapter.setNewData(topRatedList as MutableList<TopRatedVo>)
+                }
             }
-        })
+        )
 
         return view
     }
