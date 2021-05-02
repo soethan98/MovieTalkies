@@ -1,1 +1,7 @@
 /build
+/fastlane
+api-play-store-key.json
+Gemfile
+Gemfile.lock
+keystore.properties
+gradle.properties
